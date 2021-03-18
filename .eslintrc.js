@@ -30,21 +30,18 @@ module.exports = {
         'config/**/*.js',
         'packages/*/.ember-cli.js',
         'packages/*/ember-cli-build.js',
-        'packages/*/index.js',
+        'packages/*/ember-addon-main.js',
         'packages/*/testem.js',
-        'packages/*/blueprints/*/index.js',
         'packages/*/config/**/*.js',
         'packages/*/tests/dummy/config/**/*.js',
         'packages/**/tailwind.config.js',
         'packages/**/tailwind/*.js',
-        'packages/tailwindcss-plugin-helpers/**/*.js',
         'site/ember-cli-build.js',
         'site/testem.js',
         'site/config/**/*.js',
         'site/tests/dummy/config/**/*.js',
         'site/**/tailwind.config.js',
-        'site/.docfy-config.js',
-        'site/lib/docfy-theme/*.js'
+        'site/.docfy-config.js'
       ],
       extends: ['@underline/eslint-config-node'],
       rules: {}
