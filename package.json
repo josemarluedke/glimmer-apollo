@@ -1,0 +1,19 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint:js": "eslint . --ext .js,.ts",
+    "start": "echo 'TODO'",
+    "test": "echo 'TODO'"
+  },
+  "devDependencies": {
+    "@underline/eslint-config-ember-typescript": "^0.10.3",
+    "@underline/eslint-config-node": "^0.10.2",
+    "@underline/eslint-config-typescript": "^0.10.2",
+    "eslint": "^7.18.0",
+    "typescript": "^4.1.3"
+  }
+}
