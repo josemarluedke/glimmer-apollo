@@ -151,7 +151,7 @@ export class QueryResource<
   }
 
   private updateResult(result: ApolloQueryResult<TData>): void {
-    this.loading = result.loading;
+    this.loading = false;
     const { error, ...rest } = result;
     this.error = error;
     this.result = rest;
