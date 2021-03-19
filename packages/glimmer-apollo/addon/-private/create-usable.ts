@@ -2,12 +2,12 @@ import { Resource } from 'ember-could-get-used-to-this';
 import { invokeHelper, TemplateArgs } from '@ember/helper';
 import { getValue, Cache } from '@glimmer/tracking/primitives/cache';
 
-type Thunk =
+type Args =
   | TemplateArgs
   | NonNullable<TemplateArgs['positional']>
   | NonNullable<TemplateArgs['named']>;
 
-function normalizeArgs(args: Thunk): TemplateArgs {
+function normalizeArgs(args: Args): TemplateArgs {
   if (Array.isArray(args)) {
     return { positional: args };
   }
@@ -24,7 +24,7 @@ function normalizeArgs(args: Thunk): TemplateArgs {
 }
 
 export function createUsable<
-  TArgs = Thunk,
+  TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(resourceDefinition: unknown) {
   return (parentDestroyable: unknown, args?: () => TArgs): { value: T } => {
@@ -49,7 +49,7 @@ export function createUsable<
 }
 
 export function createProxiedUsable<
-  TArgs = Thunk,
+  TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(resourceDefinition: unknown) {
   return (parentDestroyable: unknown, args?: () => TArgs): T => {
