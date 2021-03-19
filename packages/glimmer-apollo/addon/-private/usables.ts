@@ -1,6 +1,6 @@
 import { OperationVariables } from '@apollo/client/core';
 import { createProxiedUsable } from './create-usable';
-import { PositionalArgs, QueryResource } from './resources/query';
+import { PositionalArgs, QueryResource } from './query';
 
 export function useQuery<TData = unknown, TVariables = OperationVariables>(
   parentDestroyable: unknown,

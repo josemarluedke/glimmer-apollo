@@ -12,7 +12,7 @@ import {
 } from '@apollo/client/core';
 import type Fastboot from 'ember-cli-fastboot/services/fastboot';
 import { equal } from '@wry/equality'; // Same as @apollo/client/react
-import { getClient } from '../client';
+import { getClient } from './client';
 
 interface QueryFunctionOptions<TData> {
   onComplete?: (data: TData | undefined) => void;
