@@ -3,7 +3,7 @@ declare module 'ember-could-get-used-to-this' {
 
   type ConstructorFn<Args extends TemplateArgs> = () => Args;
 
-  class Resource<Args extends TemplateArgs> {
+  class Resource<Args extends TemplateArgs = TemplateArgs> {
     protected args: Args;
 
     constructor(fn: ConstructorFn<Args>);

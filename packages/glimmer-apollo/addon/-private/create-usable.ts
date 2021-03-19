@@ -27,7 +27,7 @@ export function createUsable<
   TArgs = Thunk,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(resourceDefinition: unknown) {
-  return (parentDestroyable: unknown, args: () => TArgs): { value: T } => {
+  return (parentDestroyable: unknown, args?: () => TArgs): { value: T } => {
     let resource: Cache<T>;
 
     return {
@@ -37,7 +37,7 @@ export function createUsable<
             parentDestroyable,
             resourceDefinition as object, // eslint-disable-line
             () => {
-              return normalizeArgs(args());
+              return normalizeArgs(args?.() || {});
             }
           );
         }
@@ -52,7 +52,7 @@ export function createProxiedUsable<
   TArgs = Thunk,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(resourceDefinition: unknown) {
-  return (parentDestroyable: unknown, args: () => TArgs): T => {
+  return (parentDestroyable: unknown, args?: () => TArgs): T => {
     const target = createUsable<TArgs, T>(resourceDefinition)(
       parentDestroyable,
       args
