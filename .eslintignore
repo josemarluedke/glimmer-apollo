@@ -18,6 +18,8 @@
 /packages/**/bower_components/
 /packages/**/node_modules/
 
+/packages/*/types/
+
 /site/bower_components/
 /site/node_modules/
 
