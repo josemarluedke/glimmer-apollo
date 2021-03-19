@@ -1,10 +1,16 @@
 import { registerDestructor } from '@ember/destroyable';
 import { setClient, clearClients } from 'glimmer-apollo';
-import { ApolloClient, InMemoryCache } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client/core';
 
 export function initialize(appInstance) {
-  const cache = new InMemoryCache();
-  setClient(new ApolloClient({ cache }));
+  setClient(
+    new ApolloClient({
+      cache: new InMemoryCache(),
+      link: new HttpLink({
+        uri: '/graphql'
+      })
+    })
+  );
 
   registerDestructor(appInstance, () => {
     clearClients();
