@@ -27,13 +27,14 @@ export default class PlaygroundExperiment extends Component {
     {
       variables: {
         // username: 'non-existing'
+      },
+      onComplete(data) {
+        console.log('OnComplete', data);
       }
     }
   ]);
 
   bla = (): void => {
-    this.login.mutate().then((result) => {
-      console.log(result);
-    });
+    this.login.mutate();
   };
 }
