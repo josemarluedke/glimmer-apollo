@@ -32,6 +32,8 @@ export default class PlaygroundExperiment extends Component {
   ]);
 
   bla = (): void => {
-    this.login.mutate();
+    this.login.mutate().then((result) => {
+      console.log(result);
+    });
   };
 }

@@ -9,14 +9,16 @@ import {
 } from '@apollo/client/core';
 import { getClient } from './client';
 
+type Maybe<T> = T | undefined | null;
+
 interface MutationFunctionOptions<TData> {
-  onComplete?: (data: TData | undefined) => void;
+  onComplete?: (data: Maybe<TData>) => void;
   onError?: (error: ApolloError) => void;
 }
 
 interface BaseMutationOptions<TData, TVariables>
-  extends Omit<MutationOptions<TData, TVariables>, 'mutation'>,
-    MutationFunctionOptions<TData> {}
+  extends MutationFunctionOptions<TData>,
+    Omit<MutationOptions<TData, TVariables>, 'mutation'> {}
 
 export type PositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
@@ -33,7 +35,7 @@ export class MutationResource<
 > extends Resource<Args<TData, TVariables>> {
   @tracked loading = false;
   @tracked error?: ApolloError;
-  @tracked data: TData | null | undefined = undefined;
+  @tracked data: Maybe<TData>;
 
   async mutate(
     variables?: TVariables | undefined,
@@ -41,7 +43,7 @@ export class MutationResource<
       MutationOptions<TData, TVariables>,
       'variables' | 'mutation'
     > = {}
-  ): Promise<unknown> {
+  ): Promise<Maybe<TData>> {
     this.loading = true;
     const client = getClient();
     const [mutation, originalOptions] = this.args.positional;
@@ -63,22 +65,38 @@ export class MutationResource<
         variables
       })
       .then((result) => {
-        this.onSuccess(result);
+        this.onComplete(result);
+        return this.data;
       })
       .catch((error) => {
         this.onError(error);
+        return error;
       });
   }
 
-  private onSuccess(result: FetchResult<TData>): void {
+  private onComplete(result: FetchResult<TData>): void {
     this.error = undefined;
     this.loading = false;
     this.data = result.data;
+    this.onCompleteOrError();
   }
 
   private onError(error: ApolloError): void {
     this.error = error;
     this.loading = false;
     this.data = undefined;
+    this.onCompleteOrError();
+  }
+
+  private onCompleteOrError(): void {
+    const [, options] = this.args.positional;
+    const { onComplete, onError } = options || {};
+    const { data, error } = this;
+
+    if (onComplete && !error) {
+      onComplete(data);
+    } else if (onError && error) {
+      onError(error);
+    }
   }
 }
