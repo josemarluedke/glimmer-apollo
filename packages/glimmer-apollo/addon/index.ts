@@ -1,2 +1,2 @@
 export { getClient, setClient, clearClients } from './-private/client';
-export { useQuery } from './-private/usables';
+export { useQuery, useMutation } from './-private/usables';
