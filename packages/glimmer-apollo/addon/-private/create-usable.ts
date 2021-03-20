@@ -60,7 +60,10 @@ export function createProxiedUsable<
 
     return (new Proxy(target, {
       get(target, key): unknown {
-        return Reflect.get(target.value, key);
+        const instance = target.value;
+        const value = Reflect.get(instance, key, instance);
+
+        return typeof value === 'function' ? value.bind(instance) : value;
       },
       ownKeys(target): (string | symbol)[] {
         return Reflect.ownKeys(target.value);
