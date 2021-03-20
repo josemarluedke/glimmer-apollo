@@ -7,6 +7,7 @@ export const handlers = [
 
     if (username === 'non-existing') {
       return res(
+        ctx.delay(2000),
         ctx.errors([
           {
             message: 'User not found',
@@ -19,6 +20,8 @@ export const handlers = [
     }
 
     return res(
+      ctx.delay(2000),
+
       ctx.data({
         user: {
           __typename: 'User',
@@ -34,6 +37,7 @@ export const handlers = [
   // Handles a "GetUserInfo" query
   graphql.query('GetUserInfo', (_, res, ctx) => {
     return res(
+      ctx.delay(200),
       ctx.data({
         user: {
           __typename: 'User',
