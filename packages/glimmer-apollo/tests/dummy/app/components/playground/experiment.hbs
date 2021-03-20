@@ -1,0 +1,14 @@
+{{this.userInfo.loading}}
+{{this.userInfo.data.user.firstName}}
+
+<button type="button" {{on "click" this.bla}}>
+  Login
+</button>
+
+{{this.login.loading}}
+
+{{#if this.login.error}}
+  {{this.login.error.message}}
+{{/if}}
+
+{{this.login.data.user.firstName}}

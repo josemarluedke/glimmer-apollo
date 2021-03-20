@@ -1,0 +1,11 @@
+<button type="button" {{on "click" this.toggle}}>
+  Toggle Experiment
+</button>
+
+<br />
+<hr />
+<br />
+
+{{#if this.isExperimenting}}
+  <Playground::Experiment />
+{{/if}}
