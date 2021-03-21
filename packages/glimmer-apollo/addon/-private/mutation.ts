@@ -1,6 +1,7 @@
 import { Resource } from 'ember-could-get-used-to-this';
 import { tracked } from '@glimmer/tracking';
 import { isDestroying, isDestroyed } from '@ember/destroyable';
+import { waitForPromise } from '@ember/test-waiters';
 import {
   OperationVariables,
   DocumentNode,
@@ -59,13 +60,14 @@ export class MutationResource<
       };
     }
 
-    return client
-      .mutate<TData, TVariables>({
+    return waitForPromise(
+      client.mutate<TData, TVariables>({
         mutation,
         ...originalOptions,
         ...overrideOptions,
         variables
       })
+    )
       .then((result) => {
         this.onComplete(result);
         return this.data;

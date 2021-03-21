@@ -12,6 +12,7 @@ import {
 import type Fastboot from 'ember-cli-fastboot/services/fastboot';
 import { getClient } from './client';
 import ObservableResource from './observable';
+import { waitForPromise } from '@ember/test-waiters';
 
 interface QueryFunctionOptions<TData> {
   onComplete?: (data: TData | undefined) => void;
@@ -82,7 +83,7 @@ export class QueryResource<
       }
     );
 
-    promise.catch(() => {
+    waitForPromise(promise).catch(() => {
       // We catch by default as the promise is only meant to be used
       // as an indicator if the query is being initially fetched.
     });
