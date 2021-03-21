@@ -21,16 +21,20 @@ const LOGIN = gql`
 `;
 
 export default class PlaygroundExperiment extends Component {
-  userInfo = useQuery(this, () => [USER_INFO]);
+  userInfo = useQuery(this, () => [
+    USER_INFO,
+    {
+      errorPolicy: 'all'
+    }
+  ]);
+
   login = useMutation(this, () => [
     LOGIN,
     {
       variables: {
         // username: 'non-existing'
       },
-      onComplete(data) {
-        console.log('OnComplete', data);
-      }
+      errorPolicy: 'all'
     }
   ]);
 

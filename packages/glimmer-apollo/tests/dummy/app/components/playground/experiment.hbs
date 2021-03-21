@@ -1,14 +1,29 @@
-{{this.userInfo.loading}}
-{{this.userInfo.data.user.firstName}}
+<h2>
+  User Info
+</h2>
 
+loading: {{this.userInfo.loading}}
+<br />
+firstName: {{this.userInfo.data.user.firstName}}
+
+{{#if this.userInfo.error}}
+  Error: {{this.userInfo.error.message}}
+{{/if}}
+
+<hr />
+<h2>
+  Login
+</h2>
 <button type="button" {{on "click" this.bla}}>
   Login
 </button>
 
-{{this.login.loading}}
+<br />
+loading: {{this.login.loading}}
+
+<br />
+firstName: {{this.login.data.user.firstName}}
 
 {{#if this.login.error}}
-  {{this.login.error.message}}
+  Error: {{this.login.error.message}}
 {{/if}}
-
-{{this.login.data.user.firstName}}
