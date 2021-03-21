@@ -1,6 +1,7 @@
 import { Resource } from 'ember-could-get-used-to-this';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
+import { isDestroying, isDestroyed } from '@ember/destroyable';
 import {
   ApolloQueryResult,
   NetworkStatus,
@@ -49,7 +50,7 @@ export class QueryResource<
     networkStatus: NetworkStatus.loading
   };
 
-  @tracked promise!: Promise<TData>;
+  @tracked promise!: Promise<void>;
 
   get data(): TData | undefined {
     return this.result.data;
@@ -61,19 +62,6 @@ export class QueryResource<
   // }
 
   private subscription?: ZenObservable.Subscription;
-
-  // get value(): Omit<ApolloQueryResult<TData>, 'errors' | 'data'> & {
-  // data: TData | undefined;
-  // promise: Promise<TData>;
-  // } {
-  // return {
-  // data: undefined,
-  // ...this.result,
-  // error: this.result.error || this.error,
-  // loading: this.loading ? this.loading : this.result.loading,
-  // promise: this.promise
-  // };
-  // }
 
   async setup(): Promise<void> {
     const [query, options] = this.args.positional;
@@ -97,41 +85,18 @@ export class QueryResource<
 
     this.subscription = observable.subscribe({
       next: (result) => {
-        const { loading, networkStatus, data } = result;
-        const previousResult = this.result;
-
-        // Make sure we're not attempting to re-render similar results
-        if (
-          previousResult &&
-          previousResult.loading === loading &&
-          previousResult.networkStatus === networkStatus &&
-          equal(previousResult.data, data)
-        ) {
-          return;
-        }
-
-        this.updateResult(result);
-        this.onCompleteOrError(options);
-
-        if (typeof resolve === 'function') {
-          resolve(this.data!); //eslint-disable-line
-        }
+        this.onComplete(result);
+        resolve();
       },
       error: (error) => {
-        this.loading = false;
-        if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors'))
-          throw error;
-
-        const previousResult = this.result;
-        if (
-          (previousResult && previousResult.loading) ||
-          !equal(error, previousResult.error)
-        ) {
-          this.error = error;
-        }
-        this.onCompleteOrError(options);
-        reject(error);
+        this.onError(error);
+        reject();
       }
+    });
+
+    promise.catch(() => {
+      // We catch by default as the promise is only meant to be used
+      // as an indicator if the query is being initially fetched.
     });
 
     if (fastboot && fastboot.isFastBoot && options && options.ssr !== false) {
@@ -150,15 +115,52 @@ export class QueryResource<
     }
   }
 
-  private updateResult(result: ApolloQueryResult<TData>): void {
-    this.loading = false;
-    const { error, ...rest } = result;
+  private onComplete(result: ApolloQueryResult<TData>): void {
+    const previousResult = this.result;
+
+    const { loading, networkStatus, data, errors } = result;
+    let { error } = result;
+
+    // Make sure we're not attempting to re-render similar results
+    if (
+      previousResult &&
+      previousResult.loading === loading &&
+      previousResult.networkStatus === networkStatus &&
+      equal(previousResult.data, data)
+    ) {
+      return;
+    }
+
+    this.result = result;
+
+    error =
+      errors && errors.length > 0
+        ? new ApolloError({ graphQLErrors: errors })
+        : undefined;
+
     this.error = error;
-    this.result = rest;
+    this.handleOnCompleteOrOnError();
   }
 
-  private onCompleteOrError(options: QueryFunctionOptions<TData> = {}): void {
-    const { onComplete, onError } = options;
+  private onError(error: ApolloError): void {
+    if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors'))
+      throw error;
+
+    this.error = error;
+    this.handleOnCompleteOrOnError();
+  }
+
+  private handleOnCompleteOrOnError(): void {
+    this.loading = false;
+
+    // We want to avoid calling the callbacks when this is destroyed.
+    // If the resource is destroyed, the callback context might not be defined anymore.
+    if (isDestroyed(this) || isDestroying(this)) {
+      return;
+    }
+
+    const [, options] = this.args.positional;
+    const { onComplete, onError } = options || {};
     const { data, error } = this;
 
     if (onComplete && !error) {
@@ -169,13 +171,13 @@ export class QueryResource<
   }
 
   private createPromise(): [
-    Promise<TData>,
-    (data: TData) => void | undefined,
-    (error?: unknown) => void | undefined
+    Promise<void>,
+    () => void | undefined,
+    () => void | undefined
   ] {
     let resolvePromise: (val?: unknown) => void | undefined;
     let rejectPromise: (val?: undefined) => void | undefined;
-    const promise = new Promise<TData>((resolve, reject) => {
+    const promise = new Promise<void>((resolve, reject) => {
       resolvePromise = resolve;
       rejectPromise = reject;
     });
