@@ -21,13 +21,13 @@ interface BaseMutationOptions<TData, TVariables>
   extends MutationFunctionOptions<TData>,
     Omit<MutationOptions<TData, TVariables>, 'mutation'> {}
 
-export type PositionalArgs<TData, TVariables = OperationVariables> = [
+export type MutationPositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
   BaseMutationOptions<TData, TVariables>?
 ];
 
 interface Args<TData, TVariables> {
-  positional: PositionalArgs<TData, TVariables>;
+  positional: MutationPositionalArgs<TData, TVariables>;
 }
 
 export class MutationResource<

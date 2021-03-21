@@ -1,24 +1,24 @@
 import { OperationVariables } from '@apollo/client/core';
-import { createProxiedUsable } from './create-usable';
-import { MutationResource } from './mutation';
-import { PositionalArgs, QueryResource } from './query';
+import { useResource } from './use-resource';
+import { MutationPositionalArgs, MutationResource } from './mutation';
+import { QueryPositionalArgs, QueryResource } from './query';
 
 export function useQuery<TData = unknown, TVariables = OperationVariables>(
   parentDestroyable: unknown,
-  args: () => PositionalArgs<TData, TVariables>
+  args: () => QueryPositionalArgs<TData, TVariables>
 ): QueryResource<TData, TVariables> {
-  return createProxiedUsable<
-    PositionalArgs<TData, TVariables>,
+  return useResource<
+    QueryPositionalArgs<TData, TVariables>,
     QueryResource<TData, TVariables>
-  >(QueryResource)(parentDestroyable, args);
+  >(parentDestroyable, QueryResource, args);
 }
 
 export function useMutation<TData = unknown, TVariables = OperationVariables>(
   parentDestroyable: unknown,
-  args: () => PositionalArgs<TData, TVariables>
+  args: () => MutationPositionalArgs<TData, TVariables>
 ): MutationResource<TData, TVariables> {
-  return createProxiedUsable<
-    PositionalArgs<TData, TVariables>,
+  return useResource<
+    MutationPositionalArgs<TData, TVariables>,
     MutationResource<TData, TVariables>
-  >(MutationResource)(parentDestroyable, args);
+  >(parentDestroyable, MutationResource, args);
 }

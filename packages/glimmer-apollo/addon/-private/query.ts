@@ -24,13 +24,13 @@ interface BaseQueryOptions<TData, TVariables>
   ssr?: boolean;
 }
 
-export type PositionalArgs<TData, TVariables = OperationVariables> = [
+export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
   BaseQueryOptions<TData, TVariables>?
 ];
 
 interface Args<TData, TVariables> {
-  positional: PositionalArgs<TData, TVariables>;
+  positional: QueryPositionalArgs<TData, TVariables>;
 }
 
 export class QueryResource<
