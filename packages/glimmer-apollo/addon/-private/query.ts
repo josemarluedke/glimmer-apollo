@@ -1,4 +1,3 @@
-import { Resource } from 'ember-could-get-used-to-this';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
 import { isDestroying, isDestroyed } from '@ember/destroyable';
@@ -8,12 +7,11 @@ import {
   OperationVariables,
   DocumentNode,
   WatchQueryOptions,
-  ObservableQuery,
   ApolloError
 } from '@apollo/client/core';
 import type Fastboot from 'ember-cli-fastboot/services/fastboot';
-import { equal } from '@wry/equality'; // Same as @apollo/client/react
 import { getClient } from './client';
+import ObservableResource from './observable';
 
 interface QueryFunctionOptions<TData> {
   onComplete?: (data: TData | undefined) => void;
@@ -38,19 +36,12 @@ interface Args<TData, TVariables> {
 export class QueryResource<
   TData,
   TVariables = OperationVariables
-> extends Resource<Args<TData, TVariables>> {
+> extends ObservableResource<TData, TVariables, Args<TData, TVariables>> {
   @tracked loading = true;
   @tracked error?: ApolloError;
   @tracked data: TData | undefined;
   @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
-
-  private observable?: ObservableQuery<TData>;
-
-  get refetch(): ObservableQuery<TData>['refetch'] {
-    // TODO ensure this is not undefined
-    return this.observable!.refetch.bind(this.observable);
-  }
 
   private subscription?: ZenObservable.Subscription;
 
@@ -72,7 +63,7 @@ export class QueryResource<
       ...(options || {})
     });
 
-    this.observable = observable;
+    this._setObservable(observable);
 
     this.subscription = observable.subscribe(
       (result) => {
