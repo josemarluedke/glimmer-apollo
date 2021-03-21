@@ -1,30 +1,23 @@
 import type { ApolloClient } from '@apollo/client/core';
 
-const CLIENTS: Map<string, unknown> = new Map();
+const CLIENTS: Map<string, ApolloClient<unknown>> = new Map();
+const DEFAULT_CLIENT_ID = 'default';
 
 export function setClient<TCache = unknown>(
   client: ApolloClient<TCache>,
-  name?: string
+  clientId: string = DEFAULT_CLIENT_ID
 ): void {
-  if (typeof name === 'undefined') {
-    name = 'default';
-  }
-
-  CLIENTS.set(name, client);
+  CLIENTS.set(clientId, client);
 }
 
 export function getClient<TCache = unknown>(
-  name?: string
+  clientId: string = DEFAULT_CLIENT_ID
 ): ApolloClient<TCache> {
-  if (typeof name === 'undefined') {
-    name = 'default';
-  }
-
-  const client = CLIENTS.get(name);
+  const client = CLIENTS.get(clientId);
 
   if (!client) {
     throw new Error(
-      `${name} ApolloClient has not been set yet, use setClient(new ApolloClient({ ... }, '${name}')) to define it`
+      `Apollo client with id ${clientId} has not been set yet, use setClient(new ApolloClient({ ... }, '${clientId}')) to define it`
     );
   }
 
@@ -32,5 +25,8 @@ export function getClient<TCache = unknown>(
 }
 
 export function clearClients(): void {
+  CLIENTS.forEach((client) => {
+    client.clearStore();
+  });
   CLIENTS.clear();
 }

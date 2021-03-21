@@ -23,12 +23,12 @@ module('setClient & getClient', function (hooks) {
   test('getting a client without setting before throws error', function (assert) {
     assert.throws(
       () => getClient(),
-      /default ApolloClient has not been set yet, use setClient/
+      /Apollo client with id default has not been set yet, use setClient/
     );
 
     assert.throws(
       () => getClient('customClient'),
-      /customClient ApolloClient has not been set yet, use setClient/
+      /Apollo client with id customClient has not been set yet, use setClient/
     );
   });
 });
