@@ -40,26 +40,17 @@ export class QueryResource<
   TVariables = OperationVariables
 > extends Resource<Args<TData, TVariables>> {
   @tracked loading = true;
-  @tracked private observable?: ObservableQuery<TData>;
   @tracked error?: ApolloError;
-  @tracked result: Omit<ApolloQueryResult<TData>, 'errors' | 'data'> & {
-    data: TData | undefined;
-  } = {
-    data: undefined,
-    loading: false,
-    networkStatus: NetworkStatus.loading
-  };
-
+  @tracked data: TData | undefined;
+  @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
 
-  get data(): TData | undefined {
-    return this.result.data;
-  }
+  private observable?: ObservableQuery<TData>;
 
-  // get refetch(): ObservableQuery<TData>['refetch'] {
-  // // TODO ensure this is not undefined
-  // return this.observable!.refetch.bind(this.observable);
-  // }
+  get refetch(): ObservableQuery<TData>['refetch'] {
+    // TODO ensure this is not undefined
+    return this.observable!.refetch.bind(this.observable);
+  }
 
   private subscription?: ZenObservable.Subscription;
 
@@ -74,7 +65,7 @@ export class QueryResource<
       return;
     }
 
-    const [promise, resolve, reject] = this.createPromise();
+    let [promise, firstResolve, firstReject] = this.createPromise(); // eslint-disable-line prefer-const
     this.promise = promise;
     const observable = client.watchQuery({
       query,
@@ -83,16 +74,22 @@ export class QueryResource<
 
     this.observable = observable;
 
-    this.subscription = observable.subscribe({
-      next: (result) => {
+    this.subscription = observable.subscribe(
+      (result) => {
         this.onComplete(result);
-        resolve();
+        if (firstResolve) {
+          firstResolve();
+          firstResolve = undefined;
+        }
       },
-      error: (error) => {
+      (error) => {
         this.onError(error);
-        reject();
+        if (firstReject) {
+          firstReject();
+          firstReject = undefined;
+        }
       }
-    });
+    );
 
     promise.catch(() => {
       // We catch by default as the promise is only meant to be used
@@ -116,28 +113,17 @@ export class QueryResource<
   }
 
   private onComplete(result: ApolloQueryResult<TData>): void {
-    const previousResult = this.result;
-
-    const { loading, networkStatus, data, errors } = result;
+    const { loading, errors, data, networkStatus } = result;
     let { error } = result;
-
-    // Make sure we're not attempting to re-render similar results
-    if (
-      previousResult &&
-      previousResult.loading === loading &&
-      previousResult.networkStatus === networkStatus &&
-      equal(previousResult.data, data)
-    ) {
-      return;
-    }
-
-    this.result = result;
 
     error =
       errors && errors.length > 0
         ? new ApolloError({ graphQLErrors: errors })
         : undefined;
 
+    this.loading = loading;
+    this.data = data;
+    this.networkStatus = networkStatus;
     this.error = error;
     this.handleOnCompleteOrOnError();
   }
@@ -146,13 +132,14 @@ export class QueryResource<
     if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors'))
       throw error;
 
+    this.loading = false;
+    this.data = undefined;
+    this.networkStatus = NetworkStatus.error;
     this.error = error;
     this.handleOnCompleteOrOnError();
   }
 
   private handleOnCompleteOrOnError(): void {
-    this.loading = false;
-
     // We want to avoid calling the callbacks when this is destroyed.
     // If the resource is destroyed, the callback context might not be defined anymore.
     if (isDestroyed(this) || isDestroying(this)) {
@@ -172,8 +159,8 @@ export class QueryResource<
 
   private createPromise(): [
     Promise<void>,
-    () => void | undefined,
-    () => void | undefined
+    (() => void) | undefined,
+    (() => void) | undefined
   ] {
     let resolvePromise: (val?: unknown) => void | undefined;
     let rejectPromise: (val?: undefined) => void | undefined;

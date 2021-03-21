@@ -9,6 +9,9 @@ firstName: {{this.userInfo.data.user.firstName}}
 {{#if this.userInfo.error}}
   Error: {{this.userInfo.error.message}}
 {{/if}}
+<button type="button" {{on "click" this.userInfo.refetch}}>
+  refetch
+</button>
 
 <hr />
 <h2>
