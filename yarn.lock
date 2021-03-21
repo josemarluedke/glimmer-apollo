@@ -1930,13 +1930,6 @@
   dependencies:
     tslib "^1.14.1"
 
-"@wry/equality@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.4.0.tgz#474491869a8d0590f4a33fd2a4850a77a0f63408"
-  integrity sha512-DxN/uawWfhRbgYE55zVCPOoe+jvsQ4m7PT1Wlxjyb/LCCLuU1UsucV2BbCxFAX8bjcSueFBbB5Qfj1Zfe8e7Fw==
-  dependencies:
-    tslib "^2.1.0"
-
 "@wry/trie@^0.2.1":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@wry/trie/-/trie-0.2.2.tgz#99f20f0fcbbcda17006069b155c826cbabfc402f"
