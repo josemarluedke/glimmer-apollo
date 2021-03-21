@@ -77,7 +77,6 @@ export class MutationResource<
   }
 
   private onComplete(result: FetchResult<TData>): void {
-    this.onCompleteOrError();
     const { data, errors } = result;
     const error =
       errors && errors.length > 0
@@ -87,17 +86,26 @@ export class MutationResource<
     this.data = data;
     this.error = error;
 
+    this.handleOnCompleteOrOnError();
   }
 
   private onError(error: ApolloError): void {
     this.error = error;
     this.data = undefined;
-    this.onCompleteOrError();
+
+    this.handleOnCompleteOrOnError();
   }
 
-  private onCompleteOrError(): void {
+  private handleOnCompleteOrOnError(): void {
     this.loading = false;
     this.called = true;
+
+    // We want to avoid calling the callbacks when this is destroyed.
+    // If the resource is destroyed, the callback context might not be defined anymore.
+    if (isDestroyed(this) || isDestroying(this)) {
+      return;
+    }
+
     const [, options] = this.args.positional;
     const { onComplete, onError } = options || {};
     const { data, error } = this;
