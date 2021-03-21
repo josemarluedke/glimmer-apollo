@@ -1,5 +1,6 @@
 import { Resource } from 'ember-could-get-used-to-this';
 import { tracked } from '@glimmer/tracking';
+import { isDestroying, isDestroyed } from '@ember/destroyable';
 import {
   OperationVariables,
   DocumentNode,
@@ -34,6 +35,7 @@ export class MutationResource<
   TVariables = OperationVariables
 > extends Resource<Args<TData, TVariables>> {
   @tracked loading = false;
+  @tracked called = false;
   @tracked error?: ApolloError;
   @tracked data: Maybe<TData>;
 
@@ -75,20 +77,27 @@ export class MutationResource<
   }
 
   private onComplete(result: FetchResult<TData>): void {
-    this.error = undefined;
-    this.loading = false;
-    this.data = result.data;
     this.onCompleteOrError();
+    const { data, errors } = result;
+    const error =
+      errors && errors.length > 0
+        ? new ApolloError({ graphQLErrors: errors })
+        : undefined;
+
+    this.data = data;
+    this.error = error;
+
   }
 
   private onError(error: ApolloError): void {
     this.error = error;
-    this.loading = false;
     this.data = undefined;
     this.onCompleteOrError();
   }
 
   private onCompleteOrError(): void {
+    this.loading = false;
+    this.called = true;
     const [, options] = this.args.positional;
     const { onComplete, onError } = options || {};
     const { data, error } = this;
