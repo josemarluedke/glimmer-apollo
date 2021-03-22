@@ -22,6 +22,17 @@ export type UserInfoQuery = {
   >;
 };
 
+export type LoginMutationVariables = Exact<{
+  username: string;
+}>;
+
+export type LoginMutation = {
+  __typename?: 'Mutation';
+  user: Maybe<
+    { __typename?: 'User' } & Pick<User, 'id' | 'firstName' | 'lastName'>
+  >;
+};
+
 const USERS: User[] = [
   {
     id: '1',
@@ -85,11 +96,9 @@ export const handlers = [
 
     if (username === 'non-existing') {
       return res(
-        ctx.delay(2000),
-
         ctx.errors([
           {
-            message: 'User not found',
+            message: 'User not found with given username',
             extensions: {
               id: 'f79e82e8-c34a-4dc7-a49e-9fadc0979fda'
             }
@@ -99,14 +108,10 @@ export const handlers = [
     }
 
     return res(
-      ctx.delay(2000),
       ctx.data({
         user: {
           __typename: 'User',
-
-          id: 'f79e82e8-c34a-4dc7-a49e-9fadc0979fda',
-          firstName: 'John',
-          lastName: 'Maverick'
+          ...USERS[1]
         }
       })
     );
