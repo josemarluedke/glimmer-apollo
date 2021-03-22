@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import { settled } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
@@ -109,4 +109,8 @@ module('useQuery', function (hooks) {
     assert.equal(query.error?.message, 'User not found');
     assert.equal(query.data, undefined);
   });
+
+  skip('it calls onComplete');
+  skip('it calls onError');
+  skip('it returns error with data');
 });

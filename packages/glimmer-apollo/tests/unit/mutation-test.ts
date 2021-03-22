@@ -1,4 +1,4 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import { settled } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';
 import { setClient, clearClients, useMutation } from 'glimmer-apollo';
@@ -54,6 +54,7 @@ module('useMutation', function (hooks) {
     );
 
     assert.equal(mutation.loading, false);
+    assert.equal(mutation.called, false);
     assert.equal(mutation.data, undefined);
 
     mutation.mutate();
@@ -61,6 +62,7 @@ module('useMutation', function (hooks) {
     await settled();
 
     assert.equal(mutation.loading, false);
+    assert.equal(mutation.called, true);
     assert.equal(mutation.error, undefined);
     assert.deepEqual(mutation.data, {
       user: {
@@ -72,7 +74,7 @@ module('useMutation', function (hooks) {
     });
   });
 
-  test('it returns the error', async function (assert) {
+  test('it returns error', async function (assert) {
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(
       ctx,
       () => [
@@ -84,6 +86,7 @@ module('useMutation', function (hooks) {
     );
 
     assert.equal(mutation.loading, false);
+    assert.equal(mutation.called, false);
     assert.equal(mutation.data, undefined);
 
     mutation.mutate();
@@ -91,7 +94,14 @@ module('useMutation', function (hooks) {
     await settled();
 
     assert.equal(mutation.loading, false);
+    assert.equal(mutation.called, true);
     assert.equal(mutation.data, undefined);
     assert.equal(mutation.error?.message, 'User not found with given username');
   });
+
+  skip('it uses variables passed into mutate');
+  skip('it calls onComplete');
+  skip('it calls onError');
+  skip('it returns error with data');
+  skip('it updates when args changes');
 });
