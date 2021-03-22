@@ -48,7 +48,7 @@ export default class Todos extends Component {
       Loading...
     {{/if}}
 
-    {{#ach this.todos.data as |todo|}}
+    {{#each this.todos.data as |todo|}}
       <Todo @todo={{todo}} />
     {{/each}}
   `;
