@@ -1,10 +1,11 @@
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { settled } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 import { setClient, clearClients, useQuery } from 'glimmer-apollo';
 import {
   ApolloClient,
+  ApolloError,
   InMemoryCache,
   createHttpLink,
   gql
@@ -110,7 +111,92 @@ module('useQuery', function (hooks) {
     assert.equal(query.data, undefined);
   });
 
-  skip('it calls onComplete');
-  skip('it calls onError');
-  skip('it returns error with data');
+  test('it calls onComplete', async function (assert) {
+    let onCompleteCalled: unknown;
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '2' },
+        onComplete: (data) => {
+          onCompleteCalled = data;
+        }
+      }
+    ]);
+
+    assert.equal(query.data, undefined);
+    await settled();
+
+    const expectedData = {
+      user: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick'
+      }
+    };
+
+    assert.deepEqual(query.data as unknown, expectedData);
+    assert.deepEqual(onCompleteCalled, expectedData);
+  });
+
+  test('it calls onError', async function (assert) {
+    let onErrorCalled: ApolloError;
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: 'NOT_FOUND' },
+        onError: (error) => {
+          onErrorCalled = error;
+        }
+      }
+    ]);
+
+    assert.equal(query.error, undefined);
+    await settled();
+
+    const expectedError = 'User not found';
+    assert.equal(query.error?.message, expectedError);
+    assert.equal(onErrorCalled!.message, expectedError);
+  });
+
+  test('it returns error with data', async function (assert) {
+    let onCompleteCalled: unknown;
+    let onErrorCalled: ApolloError;
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '2-with-error' },
+        errorPolicy: 'all',
+        onComplete: (data) => {
+          onCompleteCalled = data;
+        },
+        onError: (error) => {
+          onErrorCalled = error;
+        }
+      }
+    ]);
+
+    assert.equal(query.data, undefined);
+    await settled();
+
+    const expectedData = {
+      user: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick'
+      }
+    };
+
+    assert.deepEqual(query.data as unknown, expectedData);
+    assert.equal(
+      onCompleteCalled,
+      undefined,
+      'onComplete should not be called when there are errors'
+    );
+
+    const expectedError = 'Data With Error';
+    assert.equal(query.error?.message, expectedError);
+    assert.equal(onErrorCalled!.message, expectedError);
+  });
 });
