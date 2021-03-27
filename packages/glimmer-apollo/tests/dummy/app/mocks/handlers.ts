@@ -79,10 +79,7 @@ export const handlers = [
         return res(
           ctx.errors([
             {
-              message: 'User not found',
-              extensions: {
-                id: 'f79e82e8-c34a-4dc7-a49e-9fadc0979fda'
-              }
+              message: 'User not found'
             }
           ])
         );
@@ -98,12 +95,25 @@ export const handlers = [
       return res(
         ctx.errors([
           {
-            message: 'User not found with given username',
-            extensions: {
-              id: 'f79e82e8-c34a-4dc7-a49e-9fadc0979fda'
-            }
+            message: 'User not found with given username'
           }
         ])
+      );
+    }
+
+    if (username === 'with-error') {
+      return res(
+        ctx.errors([
+          {
+            message: 'Error with Data'
+          }
+        ]),
+        ctx.data({
+          user: {
+            __typename: 'User',
+            ...USERS[1]
+          }
+        })
       );
     }
 
@@ -125,7 +135,7 @@ export const handlers = [
         user: {
           __typename: 'User',
 
-          id: 'f79e82e8-c34a-4dc7-a49e-9fadc0979fda',
+          id: '1',
           firstName: 'John',
           lastName: 'Maverick'
         }
