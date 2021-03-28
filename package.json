@@ -6,8 +6,8 @@
   ],
   "scripts": {
     "lint:js": "eslint . --ext .js,.ts",
-    "start": "echo 'TODO'",
-    "test": "echo 'TODO'"
+    "start": "yarn workspace glimmer-apollo ember start",
+    "test": "yarn workspace glimmer-apollo ember test"
   },
   "devDependencies": {
     "@underline/eslint-config-ember-typescript": "^0.10.3",
