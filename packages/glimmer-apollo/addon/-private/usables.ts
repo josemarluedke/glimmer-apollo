@@ -1,7 +1,7 @@
-import { OperationVariables } from '@apollo/client/core';
 import { useResource } from './use-resource';
 import { MutationPositionalArgs, MutationResource } from './mutation';
 import { QueryPositionalArgs, QueryResource } from './query';
+import type { OperationVariables } from '@apollo/client/core';
 
 export function useQuery<TData = unknown, TVariables = OperationVariables>(
   parentDestroyable: unknown,

@@ -1,6 +1,6 @@
-import { Resource } from 'ember-could-get-used-to-this';
-import { invokeHelper, TemplateArgs } from '@ember/helper';
-import { getValue, Cache } from '@glimmer/tracking/primitives/cache';
+import { invokeHelper, getValue } from './environment';
+import type { Resource } from './environment';
+import type { TemplateArgs, Cache } from './types';
 
 type Args =
   | TemplateArgs
@@ -27,7 +27,7 @@ export function useUnproxiedResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(destroyable: unknown, definition: unknown, args?: () => TArgs): { value: T } {
-  let resource: Cache<T>;
+  let resource: Cache;
 
   return {
     get value(): T {

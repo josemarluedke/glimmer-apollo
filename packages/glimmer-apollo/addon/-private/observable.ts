@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type */
-
-import { Resource } from 'ember-could-get-used-to-this';
-import {
-  ObservableQuery,
-  FetchMoreQueryOptions,
+import { Resource } from './environment';
+import type {
   FetchMoreOptions,
-  UpdateQueryOptions,
-  SubscribeToMoreOptions
+  FetchMoreQueryOptions,
+  ObservableQuery,
+  SubscribeToMoreOptions,
+  UpdateQueryOptions
 } from '@apollo/client/core';
 
 export default class ObservableResource<

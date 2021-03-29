@@ -5,8 +5,9 @@ import {
   InMemoryCache,
   createHttpLink
 } from '@apollo/client/core';
+import type Application from '@ember/application';
 
-export function initialize(appInstance) {
+export function initialize(appInstance: Application): void {
   setClient(
     new ApolloClient({
       cache: new InMemoryCache(),

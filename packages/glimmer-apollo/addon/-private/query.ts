@@ -1,18 +1,20 @@
-import { tracked } from '@glimmer/tracking';
-import { getOwner } from '@ember/application';
-import { isDestroying, isDestroyed } from '@ember/destroyable';
-import {
-  ApolloQueryResult,
-  NetworkStatus,
-  OperationVariables,
-  DocumentNode,
-  WatchQueryOptions,
-  ApolloError
-} from '@apollo/client/core';
-import type Fastboot from 'ember-cli-fastboot/services/fastboot';
 import { getClient } from './client';
+import {
+  getOwner,
+  isDestroyed,
+  isDestroying,
+  tracked,
+  waitForPromise
+} from './environment';
 import ObservableResource from './observable';
-import { waitForPromise } from '@ember/test-waiters';
+import { NetworkStatus, ApolloError } from '@apollo/client/core';
+import type {
+  ApolloQueryResult,
+  DocumentNode,
+  OperationVariables,
+  WatchQueryOptions
+} from '@apollo/client/core';
+import type { Fastboot } from './types';
 
 interface QueryFunctionOptions<TData> {
   onComplete?: (data: TData | undefined) => void;

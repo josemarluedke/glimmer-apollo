@@ -1,15 +1,18 @@
-import { Resource } from 'ember-could-get-used-to-this';
-import { tracked } from '@glimmer/tracking';
-import { isDestroying, isDestroyed } from '@ember/destroyable';
-import { waitForPromise } from '@ember/test-waiters';
-import {
-  OperationVariables,
-  DocumentNode,
-  MutationOptions,
-  FetchResult,
-  ApolloError
-} from '@apollo/client/core';
 import { getClient } from './client';
+import {
+  Resource,
+  isDestroyed,
+  isDestroying,
+  tracked,
+  waitForPromise
+} from './environment';
+import { ApolloError } from '@apollo/client/core';
+import type {
+  DocumentNode,
+  FetchResult,
+  MutationOptions,
+  OperationVariables
+} from '@apollo/client/core';
 
 type Maybe<T> = T | undefined | null;
 
