@@ -95,6 +95,12 @@ export class QueryResource<
     }
   }
 
+  settled(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.promise.then(resolve).catch(resolve);
+    });
+  }
+
   update(): void {
     this.teardown();
     this.setup();

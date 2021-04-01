@@ -1,5 +1,4 @@
 import { module, test } from 'qunit';
-import { settled } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 import { setClient, clearClients, useQuery } from 'glimmer-apollo';
@@ -54,7 +53,7 @@ module('useQuery', function (hooks) {
 
     assert.equal(query.loading, true);
     assert.equal(query.data, undefined);
-    await query.promise;
+    await query.settled();
     assert.equal(query.loading, false);
     assert.equal(query.error, undefined);
     assert.deepEqual(query.data, {
@@ -105,7 +104,7 @@ module('useQuery', function (hooks) {
     assert.equal(query.loading, true);
     assert.equal(query.data, undefined);
     assert.equal(query.error, undefined);
-    await settled();
+    await query.settled();
     assert.equal(query.loading, false);
     assert.equal(query.error?.message, 'User not found');
     assert.equal(query.data, undefined);
@@ -124,7 +123,7 @@ module('useQuery', function (hooks) {
     ]);
 
     assert.equal(query.data, undefined);
-    await settled();
+    await query.settled();
 
     const expectedData = {
       user: {
@@ -152,7 +151,7 @@ module('useQuery', function (hooks) {
     ]);
 
     assert.equal(query.error, undefined);
-    await settled();
+    await query.settled();
 
     const expectedError = 'User not found';
     assert.equal(query.error?.message, expectedError);
@@ -177,7 +176,7 @@ module('useQuery', function (hooks) {
     ]);
 
     assert.equal(query.data, undefined);
-    await settled();
+    await query.settled();
 
     const expectedData = {
       user: {

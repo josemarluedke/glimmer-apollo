@@ -42,6 +42,7 @@ export class MutationResource<
   @tracked called = false;
   @tracked error?: ApolloError;
   @tracked data: Maybe<TData>;
+  @tracked promise!: Promise<Maybe<TData>>;
 
   async mutate(
     variables?: TVariables | undefined,
@@ -63,7 +64,7 @@ export class MutationResource<
       };
     }
 
-    return waitForPromise(
+    this.promise = waitForPromise(
       client.mutate<TData, TVariables>({
         mutation,
         ...originalOptions,
@@ -79,6 +80,18 @@ export class MutationResource<
         this.onError(error);
         return error;
       });
+
+    return this.promise;
+  }
+
+  settled(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (this.promise) {
+        this.promise.then(() => resolve()).catch(() => resolve());
+      } else {
+        resolve();
+      }
+    });
   }
 
   private onComplete(result: FetchResult<TData>): void {
