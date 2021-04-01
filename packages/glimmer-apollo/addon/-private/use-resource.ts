@@ -1,5 +1,5 @@
 import { invokeHelper, getValue } from './environment';
-import type { Resource } from './environment';
+import type { IResource } from './types';
 import type { TemplateArgs, Cache } from './types';
 
 type Args =
@@ -25,7 +25,7 @@ function normalizeArgs(args: Args): TemplateArgs {
 
 export function useUnproxiedResource<
   TArgs = Args,
-  T extends Resource<TemplateArgs> = Resource<TemplateArgs>
+  T extends IResource<TemplateArgs> = IResource<TemplateArgs>
 >(destroyable: unknown, definition: unknown, args?: () => TArgs): { value: T } {
   let resource: Cache;
 
@@ -41,14 +41,14 @@ export function useUnproxiedResource<
         );
       }
 
-      return getValue(resource);
+      return getValue<T>(resource);
     }
   };
 }
 
 export function useResource<
   TArgs = Args,
-  T extends Resource<TemplateArgs> = Resource<TemplateArgs>
+  T extends IResource<TemplateArgs> = IResource<TemplateArgs>
 >(destroyable: unknown, definition: unknown, args?: () => TArgs): T {
   const target = useUnproxiedResource<TArgs, T>(destroyable, definition, args);
 
