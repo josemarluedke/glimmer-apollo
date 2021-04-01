@@ -32,6 +32,7 @@
     "@ember/test-waiters": "^2.4.3",
     "@glimmer/destroyable": "^0.77.6",
     "@glimmer/env": "^0.1.7",
+    "@glimmer/interfaces": "^0.77.6",
     "@glimmer/owner": "^0.77.6",
     "@glimmer/runtime": "^0.77.6",
     "@glimmer/validator": "^0.77.6",

@@ -3,29 +3,54 @@ import { DEBUG } from '@glimmer/env';
 import type {
   IResource,
   IInvokeHelper,
+  ICreateCache,
   IGetValue,
   IWaitForPromise
 } from './types';
+import type {
+  setHelperManager as ISetHelperManager,
+  helperCapabilities as IHelperCapabilities
+} from '@glimmer/manager';
+
+import type {
+  isDestroying as IIsDestroying,
+  isDestroyed as IIsDestroyed,
+  destroy as IDestroy,
+  registerDestructor as IRegisterDestructor,
+  associateDestroyableChild as IAssociateDestroyableChild
+} from '@glimmer/destroyable';
 
 interface EnviromentContext {
   Resource: typeof IResource;
   setOwner: (object: any, owner: any) => void; // eslint-disable-line
   getOwner: (object: any) => any; // eslint-disable-line
   getValue: typeof IGetValue;
+  createCache: typeof ICreateCache;
   invokeHelper: typeof IInvokeHelper;
-  isDestroying: (destroyable: object) => boolean; // eslint-disable-line
-  isDestroyed: (destroyable: object) => boolean; // eslint-disable-line
+  isDestroying: typeof IIsDestroying;
+  isDestroyed: typeof IIsDestroyed;
+  destroy: typeof IDestroy;
+  registerDestructor: typeof IRegisterDestructor;
+  associateDestroyableChild: typeof IAssociateDestroyableChild;
   waitForPromise: typeof IWaitForPromise;
+  setHelperManager: typeof ISetHelperManager;
+  helperCapabilities: typeof IHelperCapabilities;
 }
 
 export let Resource: EnviromentContext['Resource'];
 export let getOwner: EnviromentContext['getOwner'];
 export let setOwner: EnviromentContext['setOwner'];
+export let createCache: EnviromentContext['createCache'];
 export let getValue: EnviromentContext['getValue'];
 export let invokeHelper: EnviromentContext['invokeHelper'];
 export let isDestroyed: EnviromentContext['isDestroyed'];
 export let isDestroying: EnviromentContext['isDestroying'];
+export let destroy: EnviromentContext['destroy'];
+export let registerDestructor: EnviromentContext['registerDestructor'];
+export let associateDestroyableChild: EnviromentContext['associateDestroyableChild'];
 export let waitForPromise: EnviromentContext['waitForPromise'];
+export let setHelperManager: EnviromentContext['setHelperManager'];
+export let helperCapabilities: EnviromentContext['helperCapabilities'];
 
 let environmentContextWasSet = false;
 
@@ -43,9 +68,16 @@ export function setEnviromentContext(env: EnviromentContext): void {
   Resource = env.Resource;
   setOwner = env.setOwner;
   getOwner = env.getOwner;
+  createCache = env.createCache;
   getValue = env.getValue;
   invokeHelper = env.invokeHelper;
+  waitForPromise = env.waitForPromise;
+  setHelperManager = env.setHelperManager;
+  helperCapabilities = env.helperCapabilities;
+
   isDestroying = env.isDestroying;
   isDestroyed = env.isDestroyed;
-  waitForPromise = env.waitForPromise;
+  destroy = env.destroy;
+  registerDestructor = env.registerDestructor;
+  associateDestroyableChild = env.associateDestroyableChild;
 }

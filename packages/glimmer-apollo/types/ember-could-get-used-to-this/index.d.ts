@@ -1,5 +1,8 @@
 declare module 'ember-could-get-used-to-this' {
-  import { TemplateArgs } from '@ember/helper';
+  interface TemplateArgs {
+    positional?: unknown[];
+    named?: Record<string, unknown>;
+  }
 
   type ConstructorFn<Args extends TemplateArgs> = () => Args;
 

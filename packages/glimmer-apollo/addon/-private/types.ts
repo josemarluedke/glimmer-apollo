@@ -31,6 +31,10 @@ export declare function IInvokeHelper<T = unknown>(
   computeArgs?: (context: object) => TemplateArgs // eslint-disable-line
 ): Cache<T>;
 
+export declare function ICreateCache<T>(
+  fn: () => T,
+  debuggingLabel?: string | false
+): Cache<T>;
 export declare function IGetValue<T>(cache: Cache<T>): T | undefined;
 
 export declare function IWaitForPromise<T, KindOfPromise extends Promise<T>>(
