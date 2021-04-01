@@ -27,7 +27,7 @@ export function useUnproxiedResource<
   TArgs = Args,
   T extends IResource<TemplateArgs> = IResource<TemplateArgs>
 >(destroyable: unknown, definition: unknown, args?: () => TArgs): { value: T } {
-  let resource: Cache;
+  let resource: Cache<T>;
 
   return {
     get value(): T {
@@ -41,7 +41,7 @@ export function useUnproxiedResource<
         );
       }
 
-      return getValue<T>(resource);
+      return getValue<T>(resource)!; // eslint-disable-line
     }
   };
 }
