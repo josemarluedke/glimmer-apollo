@@ -9,7 +9,8 @@ module.exports = {
   extends: ['@underline/eslint-config-ember-typescript'],
   rules: {
     '@typescript-eslint/no-empty-interface': 'off',
-    'ember/no-empty-glimmer-component-classes': 'off'
+    'ember/no-empty-glimmer-component-classes': 'off',
+    '@typescript-eslint/ban-types': ['off', { types: { object: null } }]
   },
   overrides: [
     {

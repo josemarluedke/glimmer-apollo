@@ -1,11 +1,12 @@
-export { tracked } from '@glimmer/tracking';
 import { DEBUG } from '@glimmer/env';
+export { tracked } from '@glimmer/tracking';
+
+import type { IWaitForPromise } from './types';
 import type {
-  IInvokeHelper,
-  ICreateCache,
-  IGetValue,
-  IWaitForPromise
-} from './types';
+  getOwner as IGetOwner,
+  setOwner as ISetOwner
+} from '@glimmer/owner';
+
 import type {
   setHelperManager as ISetHelperManager,
   helperCapabilities as IHelperCapabilities
@@ -19,9 +20,16 @@ import type {
   associateDestroyableChild as IAssociateDestroyableChild
 } from '@glimmer/destroyable';
 
+import type { invokeHelper as IInvokeHelper } from '@glimmer/runtime';
+
+import type {
+  getValue as IGetValue,
+  createCache as ICreateCache
+} from '@glimmer/validator';
+
 interface EnviromentContext {
-  setOwner: (object: any, owner: any) => void; // eslint-disable-line
-  getOwner: (object: any) => any; // eslint-disable-line
+  setOwner: typeof ISetOwner;
+  getOwner: typeof IGetOwner;
   getValue: typeof IGetValue;
   createCache: typeof ICreateCache;
   invokeHelper: typeof IInvokeHelper;

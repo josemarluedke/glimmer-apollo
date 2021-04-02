@@ -19,7 +19,7 @@ import {
 setEnviromentContext({
   getOwner,
   setOwner,
-  createCache,
+  createCache: createCache as never,
   getValue,
   invokeHelper,
   waitForPromise,

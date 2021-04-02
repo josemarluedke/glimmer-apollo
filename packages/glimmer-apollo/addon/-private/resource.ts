@@ -14,7 +14,7 @@ declare const HELPER_DEFINITION: unique symbol;
 type HelperDefinition<T = unknown> = T & {
   readonly [HELPER_DEFINITION]: true;
 };
-type Owner = unknown;
+type Owner = object;
 
 type Thunk = (...args: any[]) => void; // eslint-disable-line
 

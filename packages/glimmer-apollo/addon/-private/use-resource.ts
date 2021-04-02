@@ -26,19 +26,19 @@ function normalizeArgs(args: Args): TemplateArgs {
 export function useUnproxiedResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
->(destroyable: unknown, definition: unknown, args?: () => TArgs): { value: T } {
+>(destroyable: object, definition: object, args?: () => TArgs): { value: T } {
   let resource: Cache<T>;
 
   return {
     get value(): T {
       if (!resource) {
-        resource = invokeHelper<T>(
+        resource = invokeHelper(
           destroyable,
-          definition as object, // eslint-disable-line
+          definition, // eslint-disable-line
           () => {
             return normalizeArgs(args?.() || {});
           }
-        );
+        ) as Cache<T>;
       }
 
       return getValue<T>(resource)!; // eslint-disable-line
@@ -49,7 +49,7 @@ export function useUnproxiedResource<
 export function useResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
->(destroyable: unknown, definition: unknown, args?: () => TArgs): T {
+>(destroyable: object, definition: object, args?: () => TArgs): T {
   const target = useUnproxiedResource<TArgs, T>(destroyable, definition, args);
 
   return (new Proxy(target, {
