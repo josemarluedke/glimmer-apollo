@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type */
-import { Resource } from './environment';
+import { Resource } from './resource';
 import type {
   FetchMoreOptions,
   FetchMoreQueryOptions,
@@ -7,11 +7,12 @@ import type {
   SubscribeToMoreOptions,
   UpdateQueryOptions
 } from '@apollo/client/core';
+import type { TemplateArgs } from './types';
 
 export default class ObservableResource<
   TData,
   TVariables,
-  Args
+  Args extends TemplateArgs
 > extends Resource<Args> {
   private observable?: ObservableQuery<TData>;
 

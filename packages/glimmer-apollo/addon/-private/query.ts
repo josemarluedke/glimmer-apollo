@@ -34,6 +34,7 @@ export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
 
 interface Args<TData, TVariables> {
   positional: QueryPositionalArgs<TData, TVariables>;
+  named: Record<string, unknown>;
 }
 
 export class QueryResource<

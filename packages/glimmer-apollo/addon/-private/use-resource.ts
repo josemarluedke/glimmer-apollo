@@ -1,23 +1,23 @@
 import { invokeHelper, getValue } from './environment';
-import type { IResource } from './types';
+import type { Resource } from './resource';
 import type { TemplateArgs, Cache } from './types';
 
-type Args =
-  | TemplateArgs
-  | NonNullable<TemplateArgs['positional']>
-  | NonNullable<TemplateArgs['named']>;
+type Args = TemplateArgs | TemplateArgs['positional'] | TemplateArgs['named'];
 
 function normalizeArgs(args: Args): TemplateArgs {
   if (Array.isArray(args)) {
-    return { positional: args };
+    return { positional: args, named: {} };
   }
 
   if ('positional' in args || 'named' in args) {
-    return args;
+    return {
+      positional: (args.positional as TemplateArgs['positional']) || [],
+      named: (args.named as TemplateArgs['named']) || {}
+    };
   }
 
   if (typeof args === 'object') {
-    return { named: args as TemplateArgs['named'] };
+    return { named: args as TemplateArgs['named'], positional: [] };
   }
 
   return args;
@@ -25,7 +25,7 @@ function normalizeArgs(args: Args): TemplateArgs {
 
 export function useUnproxiedResource<
   TArgs = Args,
-  T extends IResource<TemplateArgs> = IResource<TemplateArgs>
+  T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(destroyable: unknown, definition: unknown, args?: () => TArgs): { value: T } {
   let resource: Cache<T>;
 
@@ -48,7 +48,7 @@ export function useUnproxiedResource<
 
 export function useResource<
   TArgs = Args,
-  T extends IResource<TemplateArgs> = IResource<TemplateArgs>
+  T extends Resource<TemplateArgs> = Resource<TemplateArgs>
 >(destroyable: unknown, definition: unknown, args?: () => TArgs): T {
   const target = useUnproxiedResource<TArgs, T>(destroyable, definition, args);
 

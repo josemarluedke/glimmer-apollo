@@ -1,6 +1,6 @@
+import { Resource } from './resource';
 import { getClient } from './client';
 import {
-  Resource,
   isDestroyed,
   isDestroying,
   tracked,
@@ -32,6 +32,7 @@ export type MutationPositionalArgs<TData, TVariables = OperationVariables> = [
 
 interface Args<TData, TVariables> {
   positional: MutationPositionalArgs<TData, TVariables>;
+  named: Record<string, unknown>;
 }
 
 export class MutationResource<

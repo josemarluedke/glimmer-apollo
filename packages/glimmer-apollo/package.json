@@ -32,14 +32,12 @@
     "@ember/test-waiters": "^2.4.3",
     "@glimmer/destroyable": "^0.77.6",
     "@glimmer/env": "^0.1.7",
-    "@glimmer/interfaces": "^0.77.6",
     "@glimmer/owner": "^0.77.6",
     "@glimmer/runtime": "^0.77.6",
     "@glimmer/validator": "^0.77.6",
     "ember-auto-import": "^1.10.1",
     "ember-cli-babel": "^7.26.2",
-    "ember-cli-typescript": "^4.1.0",
-    "ember-could-get-used-to-this": "pzuraq/ember-could-get-used-to-this"
+    "ember-cli-typescript": "^4.1.0"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",

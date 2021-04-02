@@ -1,6 +1,6 @@
 export interface TemplateArgs {
-  positional?: unknown[];
-  named?: Record<string, unknown>;
+  positional: readonly unknown[];
+  named: Record<string, unknown>;
 }
 
 // eslint-disable-next-line

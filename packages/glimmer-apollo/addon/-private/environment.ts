@@ -1,7 +1,6 @@
 export { tracked } from '@glimmer/tracking';
 import { DEBUG } from '@glimmer/env';
 import type {
-  IResource,
   IInvokeHelper,
   ICreateCache,
   IGetValue,
@@ -21,7 +20,6 @@ import type {
 } from '@glimmer/destroyable';
 
 interface EnviromentContext {
-  Resource: typeof IResource;
   setOwner: (object: any, owner: any) => void; // eslint-disable-line
   getOwner: (object: any) => any; // eslint-disable-line
   getValue: typeof IGetValue;
@@ -37,7 +35,6 @@ interface EnviromentContext {
   helperCapabilities: typeof IHelperCapabilities;
 }
 
-export let Resource: EnviromentContext['Resource'];
 export let getOwner: EnviromentContext['getOwner'];
 export let setOwner: EnviromentContext['setOwner'];
 export let createCache: EnviromentContext['createCache'];
@@ -65,7 +62,6 @@ export function setEnviromentContext(env: EnviromentContext): void {
     environmentContextWasSet = true;
   }
 
-  Resource = env.Resource;
   setOwner = env.setOwner;
   getOwner = env.getOwner;
   createCache = env.createCache;
