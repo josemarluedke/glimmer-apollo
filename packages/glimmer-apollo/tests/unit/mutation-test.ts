@@ -1,5 +1,4 @@
 import { module, test } from 'qunit';
-import { settled } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';
 import {
   setClient,
@@ -67,7 +66,7 @@ module('useMutation', function (hooks) {
 
     mutation.mutate();
     assert.equal(mutation.loading, true);
-    await settled();
+    await mutation.settled();
 
     assert.equal(mutation.loading, false);
     assert.equal(mutation.called, true);
@@ -99,7 +98,7 @@ module('useMutation', function (hooks) {
 
     mutation.mutate();
     assert.equal(mutation.loading, true);
-    await settled();
+    await mutation.settled();
 
     assert.equal(mutation.loading, false);
     assert.equal(mutation.called, true);
@@ -198,7 +197,7 @@ module('useMutation', function (hooks) {
 
     assert.equal(mutation.data, undefined);
     mutation.mutate();
-    await settled();
+    await mutation.settled();
 
     const expectedData = {
       user: {
@@ -230,7 +229,7 @@ module('useMutation', function (hooks) {
 
     assert.equal(mutation.error, undefined);
     mutation.mutate();
-    await settled();
+    await mutation.settled();
 
     assert.equal(mutation.error?.message, 'User not found with given username');
     assert.equal(onErrorCalled!.message, 'User not found with given username');
@@ -258,7 +257,7 @@ module('useMutation', function (hooks) {
 
     assert.equal(mutation.error, undefined);
     mutation.mutate();
-    await settled();
+    await mutation.settled();
 
     const expectedData = {
       user: {

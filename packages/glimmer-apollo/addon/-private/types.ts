@@ -1,10 +1,16 @@
+export type { Cache } from '@glimmer/validator';
+
 export interface TemplateArgs {
-  positional?: unknown[];
-  named?: Record<string, unknown>;
+  positional: readonly unknown[];
+  named: Record<string, unknown>;
 }
-export type Cache = {}; // eslint-disable-line
 
 export interface Fastboot {
   isFastBoot: boolean;
   deferRendering(promise: Promise<unknown>): unknown;
 }
+
+export declare function IWaitForPromise<T, KindOfPromise extends Promise<T>>(
+  promise: KindOfPromise,
+  label?: string
+): KindOfPromise;

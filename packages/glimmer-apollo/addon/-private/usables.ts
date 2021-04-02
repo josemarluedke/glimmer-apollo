@@ -4,7 +4,7 @@ import { QueryPositionalArgs, QueryResource } from './query';
 import type { OperationVariables } from '@apollo/client/core';
 
 export function useQuery<TData = unknown, TVariables = OperationVariables>(
-  parentDestroyable: unknown,
+  parentDestroyable: object,
   args: () => QueryPositionalArgs<TData, TVariables>
 ): QueryResource<TData, TVariables> {
   return useResource<
@@ -14,7 +14,7 @@ export function useQuery<TData = unknown, TVariables = OperationVariables>(
 }
 
 export function useMutation<TData = unknown, TVariables = OperationVariables>(
-  parentDestroyable: unknown,
+  parentDestroyable: object,
   args: () => MutationPositionalArgs<TData, TVariables>
 ): MutationResource<TData, TVariables> {
   return useResource<

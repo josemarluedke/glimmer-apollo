@@ -1,23 +1,23 @@
 import { invokeHelper, getValue } from './environment';
-import type { Resource } from './environment';
+import type { Resource } from './resource';
 import type { TemplateArgs, Cache } from './types';
 
-type Args =
-  | TemplateArgs
-  | NonNullable<TemplateArgs['positional']>
-  | NonNullable<TemplateArgs['named']>;
+type Args = TemplateArgs | TemplateArgs['positional'] | TemplateArgs['named'];
 
 function normalizeArgs(args: Args): TemplateArgs {
   if (Array.isArray(args)) {
-    return { positional: args };
+    return { positional: args, named: {} };
   }
 
   if ('positional' in args || 'named' in args) {
-    return args;
+    return {
+      positional: (args.positional as TemplateArgs['positional']) || [],
+      named: (args.named as TemplateArgs['named']) || {}
+    };
   }
 
   if (typeof args === 'object') {
-    return { named: args as TemplateArgs['named'] };
+    return { named: args as TemplateArgs['named'], positional: [] };
   }
 
   return args;
@@ -26,22 +26,22 @@ function normalizeArgs(args: Args): TemplateArgs {
 export function useUnproxiedResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
->(destroyable: unknown, definition: unknown, args?: () => TArgs): { value: T } {
-  let resource: Cache;
+>(destroyable: object, definition: object, args?: () => TArgs): { value: T } {
+  let resource: Cache<T>;
 
   return {
     get value(): T {
       if (!resource) {
-        resource = invokeHelper<T>(
+        resource = invokeHelper(
           destroyable,
-          definition as object, // eslint-disable-line
+          definition, // eslint-disable-line
           () => {
             return normalizeArgs(args?.() || {});
           }
-        );
+        ) as Cache<T>;
       }
 
-      return getValue(resource);
+      return getValue<T>(resource)!; // eslint-disable-line
     }
   };
 }
@@ -49,7 +49,7 @@ export function useUnproxiedResource<
 export function useResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
->(destroyable: unknown, definition: unknown, args?: () => TArgs): T {
+>(destroyable: object, definition: object, args?: () => TArgs): T {
   const target = useUnproxiedResource<TArgs, T>(destroyable, definition, args);
 
   return (new Proxy(target, {
