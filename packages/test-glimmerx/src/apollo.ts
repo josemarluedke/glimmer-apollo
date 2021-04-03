@@ -12,6 +12,6 @@ export default function createClient(): void {
       link: createHttpLink({
         uri: '/graphql'
       })
-    }) as never
+    })
   );
 }

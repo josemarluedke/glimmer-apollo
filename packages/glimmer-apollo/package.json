@@ -38,7 +38,7 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.12",
+    "@apollo/client": "^3.3.13",
     "@ember/test-waiters": "^2.4.3",
     "@glimmer/destroyable": "^0.77.6",
     "@glimmer/env": "^0.1.7",

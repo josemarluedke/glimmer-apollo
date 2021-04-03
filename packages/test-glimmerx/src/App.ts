@@ -5,8 +5,8 @@ import { useQuery } from 'glimmer-apollo';
 import { gql } from '@apollo/client/core';
 import './App.css';
 
-export default class App extends Component {
-  constructor(owner, args) {
+export default class App extends Component<{}> {
+  constructor(owner: object, args: {}) {
     super(owner, args);
     createApollo();
   }
@@ -26,10 +26,7 @@ export class Todos extends Component {
           description
         }
       }
-    `,
-    {
-      variables: { isDone: this.isDone }
-    }
+    `
   ]);
 
   static template = hbs`
