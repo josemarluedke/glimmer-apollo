@@ -29,6 +29,7 @@ module.exports = {
         '.prettierrc.js',
         '.template-lintrc.js',
         'testem.js',
+        'webpack.config.js',
         'config/**/*.js',
         'packages/*/.ember-cli.js',
         'packages/*/ember-cli-build.js',

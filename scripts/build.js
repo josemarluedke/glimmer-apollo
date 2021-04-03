@@ -24,7 +24,7 @@ if (require.main === module) {
 
   for (const filepath of srcFiles) {
     const srcPath = path.join(SRC_PATH, filepath);
-    const destMJSPath = path.join(DIST_PATH, 'module', filepath);
+    const destMJSPath = path.join(DIST_PATH, 'modules', filepath);
     const destCJSPath = path.join(DIST_PATH, 'commonjs', filepath);
 
     const cjs = babelBuild(srcPath, { envName: 'cjs' });

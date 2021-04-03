@@ -1,18 +1,8 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es6",
-    "module": "es2015",
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "types": [
-      "qunit"
-    ]
+    "baseUrl": ".",
+    "types": ["qunit"]
   },
-  "exclude": [
-    "node_modules",
-    "tmp",
-    "dist"
-  ]
+  "exclude": ["node_modules", "tmp", "dist"]
 }
