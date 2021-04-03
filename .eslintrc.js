@@ -24,6 +24,7 @@ module.exports = {
     // node files
     {
       files: [
+        './scripts/**/*.js',
         '.eslintrc.js',
         '.prettierrc.js',
         '.template-lintrc.js',
