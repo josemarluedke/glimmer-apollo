@@ -28,6 +28,7 @@ module.exports = {
         '.eslintrc.js',
         '.prettierrc.js',
         '.template-lintrc.js',
+        '.babelrc.js',
         'testem.js',
         'webpack.config.js',
         'config/**/*.js',

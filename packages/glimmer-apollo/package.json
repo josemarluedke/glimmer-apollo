@@ -21,15 +21,15 @@
   "exports": {
     ".": {
       "require": "./build/commonjs/addon/index.js",
-      "module": "./build/modules/addon/index.js",
-      "environment-glimmer": {
-        "require": "./build/commonjs/addon/environment-glimmer.js",
-        "module": "./build/modules/addon/environment-glimmer.js"
-      },
-      "environment-ember": {
-        "require": "./build/commonjs/addon/environment-ember.js",
-        "default": "./build/modules/addon/environment-ember.js"
-      }
+      "module": "./build/modules/addon/index.js"
+    },
+    "./environment-glimmer": {
+      "require": "./build/commonjs/addon/environment-glimmer.js",
+      "module": "./build/modules/addon/environment-glimmer.js"
+    },
+    "./environment-ember": {
+      "require": "./build/commonjs/addon/environment-ember.js",
+      "default": "./build/modules/addon/environment-ember.js"
     }
   },
   "scripts": {

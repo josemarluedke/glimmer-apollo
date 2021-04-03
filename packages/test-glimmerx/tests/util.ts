@@ -2,7 +2,7 @@ import {
   renderComponent as glimmerRenderComponent,
   ComponentDefinition,
   RenderComponentOptions,
-  didRender,
+  didRender
 } from '@glimmerx/core';
 
 // Bootstrap QUnit

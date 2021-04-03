@@ -2,7 +2,6 @@ const path = require('path');
 const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = () => {
   const IS_PRODUCTION = process.env.NODE_ENV === 'production';
@@ -12,12 +11,11 @@ module.exports = () => {
   };
 
   const plugins = [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
       excludeChunks: ['tests']
     }),
-    new CopyPlugin([{ from: 'public', to: 'public' }])
+    new CopyPlugin({ patterns: [{ from: 'public', to: 'public' }] })
   ];
 
   // Include tests in development builds
@@ -71,15 +69,16 @@ module.exports = () => {
       ]
     },
     resolve: {
-      extensions: ['.ts', '.js', '.json', '.gts', '.gjs'],
-      alias: {
-        'glimmer-apollo/environment-glimmer':
-          'glimmer-apollo/build/modules/addon/environment-glimmer.js'
-      }
+      extensions: ['.ts', '.js', '.json', '.gts', '.gjs']
+      // alias: {
+      // 'glimmer-apollo/environment-glimmer':
+      // 'glimmer-apollo/build/modules/addon/environment-glimmer.js'
+      // }
     },
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
+      clean: true,
       publicPath: '/'
     },
     devServer: {
