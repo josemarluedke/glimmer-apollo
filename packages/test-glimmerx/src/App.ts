@@ -1,5 +1,4 @@
 import Component, { hbs } from '@glimmerx/component';
-import 'glimmer-apollo/environment-glimmer';
 import createApollo from './apollo';
 import { useQuery } from 'glimmer-apollo';
 import { gql } from '@apollo/client/core';

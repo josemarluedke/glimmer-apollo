@@ -1,9 +1,10 @@
+import 'glimmer-apollo/environment-glimmer';
+import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
   InMemoryCache,
   createHttpLink
 } from '@apollo/client/core';
-import { setClient } from 'glimmer-apollo';
 
 export default function createClient(): void {
   setClient(
