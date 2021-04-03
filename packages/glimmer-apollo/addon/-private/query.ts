@@ -56,7 +56,7 @@ export class QueryResource<
 
   async setup(): Promise<void> {
     const [query, options] = this.args.positional;
-    const client = getClient();
+    const client = getClient(this);
 
     this.loading = true;
     const fastboot = this.getFastboot();

@@ -6,8 +6,9 @@ import {
   createHttpLink
 } from '@apollo/client/core';
 
-export default function createClient(): void {
+export default function createClient(ctx: object): void {
   setClient(
+    ctx,
     new ApolloClient({
       cache: new InMemoryCache(),
       link: createHttpLink({
