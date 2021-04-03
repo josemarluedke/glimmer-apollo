@@ -1,6 +1,6 @@
 {
   "name": "glimmer-apollo",
-  "version": "0.0.1",
+  "version": "0.0.2-beta.1",
   "description": "Ember and Glimmer integration for Apollo Client",
   "keywords": [
     "ember-addon",
@@ -47,11 +47,11 @@
     "@glimmer/env": "^0.1.7",
     "@glimmer/owner": "^0.77.6",
     "@glimmer/runtime": "^0.77.6",
+    "@glimmer/tracking": "^2.0.0-beta.15",
     "@glimmer/validator": "^0.77.6",
     "ember-auto-import": "^1.10.1",
     "ember-cli-babel": "^7.26.2",
-    "ember-cli-typescript": "^4.1.0",
-    "@glimmer/tracking": "^2.0.0-beta.15"
+    "ember-cli-typescript": "^4.1.0"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
