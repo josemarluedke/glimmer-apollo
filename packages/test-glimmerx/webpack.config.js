@@ -7,7 +7,7 @@ module.exports = () => {
   const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
   const entry = {
-    app: './src/index.js'
+    app: './src/index.ts'
   };
 
   const plugins = [
