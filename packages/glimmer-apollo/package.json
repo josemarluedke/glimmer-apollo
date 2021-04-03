@@ -15,6 +15,20 @@
   "main": "dist/commonjs/addon/index.js",
   "module": "dist/modules/addon/index.js",
   "typings": "dist/types/addon/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/commonjs/addon/index.js",
+      "module": "./dist/modules/addon/index.js",
+      "environment-glimmer": {
+        "require": "./dist/commonjs/addon/environment-glimmer.js",
+        "module": "./dist/modules/addon/environment-glimmer.js"
+      },
+      "environment-ember": {
+        "require": "./dist/commonjs/addon/environment-ember.js",
+        "default": "./dist/modules/addon/environment-ember.js"
+      }
+    }
+  },
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build": "node ../../scripts/build.js && yarn build:types",
