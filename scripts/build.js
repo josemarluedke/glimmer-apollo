@@ -3,10 +3,10 @@
 const babel = require('@babel/core');
 const fs = require('fs');
 const path = require('path');
-const fg = require('fast-glob');
+const glob = require('fast-glob');
 
-const DIST_PATH = path.join(__dirname, '../packages/glimmer-apollo/build');
 const SRC_PATH = path.join(__dirname, '../packages/glimmer-apollo');
+const OUTPUT_PATH = path.join(__dirname, '../packages/glimmer-apollo/build');
 
 function babelBuild(srcPath, options = {}) {
   options.comments = false;
@@ -17,22 +17,26 @@ function babelBuild(srcPath, options = {}) {
   }).code;
 }
 
+function buildFile(srcPath) {
+  const fullPath = path.join(SRC_PATH, srcPath);
+
+  writeFile(
+    path.join(OUTPUT_PATH, 'commonjs', srcPath),
+    babelBuild(fullPath, { envName: 'cjs' })
+  );
+  writeFile(
+    path.join(OUTPUT_PATH, 'modules', srcPath),
+    babelBuild(fullPath, { envName: 'mjs' })
+  );
+}
+
+function writeFile(filePath, content) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath.replace(/\.ts$/, '.js'), content);
+}
 if (require.main === module) {
-  fs.mkdirSync(DIST_PATH);
+  fs.mkdirSync(OUTPUT_PATH);
 
-  const srcFiles = fg.sync('./(addon|app)/**/*.{js,ts}', { cwd: SRC_PATH });
-
-  for (const filepath of srcFiles) {
-    const srcPath = path.join(SRC_PATH, filepath);
-    const destMJSPath = path.join(DIST_PATH, 'modules', filepath);
-    const destCJSPath = path.join(DIST_PATH, 'commonjs', filepath);
-
-    const cjs = babelBuild(srcPath, { envName: 'cjs' });
-    const mjs = babelBuild(srcPath, { envName: 'mjs' });
-
-    fs.mkdirSync(path.dirname(destMJSPath), { recursive: true });
-    fs.mkdirSync(path.dirname(destCJSPath), { recursive: true });
-    fs.writeFileSync(destCJSPath.replace(/\.ts$/, '.js'), cjs);
-    fs.writeFileSync(destMJSPath.replace(/\.ts$/, '.js'), mjs);
-  }
+  const srcFiles = glob.sync('./(addon|app)/**/*.{js,ts}', { cwd: SRC_PATH });
+  srcFiles.map(buildFile);
 }
