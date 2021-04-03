@@ -10,6 +10,9 @@
     "start": "yarn workspace glimmer-apollo ember start",
     "test": "yarn workspace glimmer-apollo ember test"
   },
+  "resolutions": {
+    "babel-plugin-htmlbars-inline-precompile": "^5.2.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
