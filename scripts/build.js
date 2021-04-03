@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
 
-const DIST_PATH = path.join(__dirname, '../packages/glimmer-apollo/dist');
+const DIST_PATH = path.join(__dirname, '../packages/glimmer-apollo/build');
 const SRC_PATH = path.join(__dirname, '../packages/glimmer-apollo');
 
 function babelBuild(srcPath, options = {}) {

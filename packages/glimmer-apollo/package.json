@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "Ember and Glimmer integration for Apollo Client",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "glimmer",
+    "apollo",
+    "graphql"
   ],
   "repository": "http://github.com/josemarluedke/glimmer-apollo",
   "license": "MIT",
@@ -12,27 +15,27 @@
     "doc": "doc",
     "test": "tests"
   },
-  "main": "dist/commonjs/addon/index.js",
-  "module": "dist/modules/addon/index.js",
-  "typings": "dist/types/addon/index.d.ts",
+  "main": "build/commonjs/addon/index.js",
+  "module": "build/modules/addon/index.js",
+  "typings": "build/types/addon/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/commonjs/addon/index.js",
-      "module": "./dist/modules/addon/index.js",
+      "require": "./build/commonjs/addon/index.js",
+      "module": "./build/modules/addon/index.js",
       "environment-glimmer": {
-        "require": "./dist/commonjs/addon/environment-glimmer.js",
-        "module": "./dist/modules/addon/environment-glimmer.js"
+        "require": "./build/commonjs/addon/environment-glimmer.js",
+        "module": "./build/modules/addon/environment-glimmer.js"
       },
       "environment-ember": {
-        "require": "./dist/commonjs/addon/environment-ember.js",
-        "default": "./dist/modules/addon/environment-ember.js"
+        "require": "./build/commonjs/addon/environment-ember.js",
+        "default": "./build/modules/addon/environment-ember.js"
       }
     }
   },
   "scripts": {
-    "prebuild": "rm -rf ./dist",
+    "prebuild": "rm -rf ./build",
     "build": "node ../../scripts/build.js && yarn build:types",
-    "build:types": "tsc --noEmit false --declaration --declarationDir ./dist/types --emitDeclarationOnly --allowJs false && rm -rf ../../dist/types/tests",
+    "build:types": "tsc --noEmit false --declaration --declarationDir ./build/types --emitDeclarationOnly --allowJs false && rm -rf ./build/types/tests",
     "start": "ember serve",
     "test": "ember test",
     "prepack": "yarn build"

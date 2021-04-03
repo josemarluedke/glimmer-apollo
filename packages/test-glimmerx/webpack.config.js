@@ -74,7 +74,7 @@ module.exports = () => {
       extensions: ['.ts', '.js', '.json', '.gts', '.gjs'],
       alias: {
         'glimmer-apollo/environment-glimmer':
-          'glimmer-apollo/dist/modules/addon/environment-glimmer.js'
+          'glimmer-apollo/build/modules/addon/environment-glimmer.js'
       }
     },
     output: {
