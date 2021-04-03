@@ -1668,7 +1668,7 @@
     "@handlebars/parser" "^1.1.0"
     simple-html-tokenizer "^0.5.10"
 
-"@glimmer/tracking@2.0.0-beta.15", "@glimmer/tracking@^2.0.0-beta.15", "@glimmer/tracking@^^2.0.0-beta.15":
+"@glimmer/tracking@2.0.0-beta.15", "@glimmer/tracking@^2.0.0-beta.15":
   version "2.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/@glimmer/tracking/-/tracking-2.0.0-beta.15.tgz#a35b98be9306aa00cc49206d4ae406758f419e46"
   integrity sha512-VXf7wF5vlYEF+uNPl/m3mnyoqDZ4MjD6qZYXTU++TQiedPAtpmJ2J2jCZ02nGSFXn5GEFRncB+vIQO+m7a7Y3A==
