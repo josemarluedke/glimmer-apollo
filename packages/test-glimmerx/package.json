@@ -54,59 +54,6 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   },
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaVersion": 2019,
-      "sourceType": "module"
-    },
-    "env": {
-      "browser": true
-    },
-    "plugins": [
-      "@glimmerx",
-      "@typescript-eslint",
-      "prettier"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:prettier/recommended"
-    ],
-    "ignorePatterns": [
-      "dist/",
-      "node_modules/",
-      "!.*"
-    ],
-    "rules": {
-      "@glimmerx/template-vars": "error"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts"
-        ],
-        "extends": [
-          "plugin:@typescript-eslint/eslint-recommended",
-          "plugin:@typescript-eslint/recommended",
-          "prettier/@typescript-eslint"
-        ]
-      },
-      {
-        "files": [
-          ".babelrc.js",
-          "testem.js",
-          "webpack.config.js"
-        ],
-        "env": {
-          "node": true
-        }
-      }
-    ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "browserslist": {
     "production": [
       "last 2 Edge versions",
