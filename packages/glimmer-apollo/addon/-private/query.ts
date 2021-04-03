@@ -135,8 +135,9 @@ export class QueryResource<
   }
 
   private onError(error: ApolloError): void {
-    if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors'))
-      throw error;
+    if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors')) {
+      error = new ApolloError({ networkError: error });
+    }
 
     this.loading = false;
     this.data = undefined;
