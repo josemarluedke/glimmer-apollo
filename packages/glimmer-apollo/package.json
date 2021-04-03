@@ -1,9 +1,12 @@
 {
   "name": "glimmer-apollo",
-  "version": "0.0.1",
+  "version": "0.0.2-beta.1",
   "description": "Ember and Glimmer integration for Apollo Client",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "glimmer",
+    "apollo",
+    "graphql"
   ],
   "repository": "http://github.com/josemarluedke/glimmer-apollo",
   "license": "MIT",
@@ -12,28 +15,39 @@
     "doc": "doc",
     "test": "tests"
   },
+  "main": "build/commonjs/addon/index.js",
+  "module": "build/modules/addon/index.js",
+  "typings": "build/types/addon/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./build/commonjs/addon/index.js",
+      "module": "./build/modules/addon/index.js"
+    },
+    "./environment-glimmer": {
+      "require": "./build/commonjs/addon/environment-glimmer.js",
+      "module": "./build/modules/addon/environment-glimmer.js"
+    },
+    "./environment-ember": {
+      "require": "./build/commonjs/addon/environment-ember.js",
+      "default": "./build/modules/addon/environment-ember.js"
+    }
+  },
   "scripts": {
-    "build": "ember build --environment=production",
-    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
-    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
-    "lint:hbs": "ember-template-lint .",
-    "lint:hbs:fix": "ember-template-lint . --fix",
-    "lint:js": "eslint . --cache",
-    "lint:js:fix": "eslint . --fix",
+    "prebuild": "rm -rf ./build",
+    "build": "node ../../scripts/build.js && yarn build:types",
+    "build:types": "tsc --noEmit false --declaration --declarationDir ./build/types --emitDeclarationOnly --allowJs false && rm -rf ./build/types/tests",
     "start": "ember serve",
-    "test": "npm-run-all lint test:*",
-    "test:ember": "ember test",
-    "test:ember-compatibility": "ember try:each",
-    "prepack": "ember ts:precompile",
-    "postpack": "ember ts:clean"
+    "test": "ember test",
+    "prepack": "yarn build"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.12",
+    "@apollo/client": "^3.3.13",
     "@ember/test-waiters": "^2.4.3",
     "@glimmer/destroyable": "^0.77.6",
     "@glimmer/env": "^0.1.7",
     "@glimmer/owner": "^0.77.6",
     "@glimmer/runtime": "^0.77.6",
+    "@glimmer/tracking": "^2.0.0-beta.15",
     "@glimmer/validator": "^0.77.6",
     "ember-auto-import": "^1.10.1",
     "ember-cli-babel": "^7.26.2",
@@ -43,7 +57,6 @@
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.0",
     "@glimmer/component": "^1.0.3",
-    "@glimmer/tracking": "^1.0.3",
     "@types/ember-qunit": "^3.4.13",
     "@types/ember-resolver": "^5.0.10",
     "@types/ember__application": "^3.16.2",
@@ -67,7 +80,6 @@
     "@types/qunit": "^2.11.1",
     "@types/rsvp": "^4.0.3",
     "@types/sinon": "^9.0.11",
-    "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-cli": "~3.25.0",
     "ember-cli-dependency-checker": "^3.2.0",

@@ -8,6 +8,7 @@
 # compiled output
 /packages/**/dist/
 /packages/**/tmp/
+/packages/glimmer-apollo/build/
 
 /site/dist/
 /site/tmp/
