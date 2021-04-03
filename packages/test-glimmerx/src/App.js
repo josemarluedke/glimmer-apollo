@@ -1,27 +1,40 @@
-import Component from '@glimmer/component';
-import { setComponentTemplate, precompileTemplate } from '@glimmer/core';
-
-import logo from './logo.svg';
+import Component, { hbs } from '@glimmerx/component';
+import 'glimmer-apollo/environment-glimmer';
+import createApollo from './apollo';
+import { useQuery } from 'glimmer-apollo';
+import { gql } from '@apollo/client/core';
 import './App.css';
 
 export default class App extends Component {
-  logo = logo;
+  constructor(owner, args) {
+    super(owner, args);
+    createApollo();
+  }
+
+  static template = hbs`
+    <h1>hello, glimmer!</h1>
+    <Todos />
+  `;
 }
 
-setComponentTemplate(
-  precompileTemplate(
-    `
-    <div id="intro">
-      <img src={{this.logo}}/>
+export class Todos extends Component {
+  todos = useQuery(this, () => [
+    gql`
+      query($isDone: Boolean) {
+        todos(isDone: $isDone) {
+          id
+          description
+        }
+      }
+    `,
+    {
+      variables: { isDone: this.isDone }
+    }
+  ]);
 
-      <h1>hello, glimmer!</h1>
-      <h3>
-        you can get started by editing <code>src/App.js</code>,
-        and run tests by visiting <a href="./tests">/tests</a>
-      </h3>
-    </div>
-  `,
-    { strictMode: true }
-  ),
-  App
-);
+  static template = hbs`
+    Loading: {{this.todos.loading}}
+    <br />
+    Error: {{this.todos.error}}
+  `;
+}

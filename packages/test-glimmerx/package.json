@@ -1,6 +1,7 @@
 {
   "name": "test-glimmerx",
   "version": "0.0.0",
+  "private": true,
   "description": "A brand new Glimmer app.",
   "directories": {
     "doc": "doc",
@@ -14,15 +15,29 @@
     "test:browsers": "testem ci",
     "test:watch": "testem"
   },
+  "browserslist": {
+    "production": [
+      "last 2 Edge versions",
+      "last 2 Chrome versions",
+      "last 2 Firefox versions",
+      "last 2 Safari versions"
+    ],
+    "development": [
+      "last 1 Chrome version",
+      "last 1 Firefox version",
+      "last 1 Safari version"
+    ]
+  },
   "resolutions": {
     "babel-plugin-htmlbars-inline-precompile": "^5.2.1"
   },
   "devDependencies": {
-    "@glimmer/tracking": "^2.0.0-beta.15",
+    "@apollo/client": "^3.3.13",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-typescript": "^7.9.0",
     "@glimmer/env": "^0.1.7",
+    "@glimmer/tracking": "^2.0.0-beta.15",
     "@glimmerx/babel-preset": "^0.6.0",
     "@glimmerx/component": "^0.6.0",
     "@glimmerx/core": "^0.6.0",
@@ -41,7 +56,9 @@
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-prettier": "^3.1.2",
     "file-loader": "^6.0.0",
+    "glimmer-apollo": "^0.0.1",
     "glob": "7.1.6",
+    "graphql": "^15.5.0",
     "html-webpack-plugin": "^4.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.2",
@@ -54,21 +71,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   },
-  "browserslist": {
-    "production": [
-      "last 2 Edge versions",
-      "last 2 Chrome versions",
-      "last 2 Firefox versions",
-      "last 2 Safari versions"
-    ],
-    "development": [
-      "last 1 Chrome version",
-      "last 1 Firefox version",
-      "last 1 Safari version"
-    ]
-  },
   "engines": {
     "node": ">= 12.0"
-  },
-  "private": true
+  }
 }
