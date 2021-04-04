@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 import { setClient, clearClients, useQuery } from 'glimmer-apollo';
-import { setOwner } from 'glimmer-apollo/-private/environment';
 import {
   ApolloClient,
   ApolloError,
@@ -27,8 +26,6 @@ const USER_INFO = gql`
 
 module('useQuery', function (hooks) {
   let ctx = {};
-  const owner = {};
-
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: createHttpLink({
@@ -37,11 +34,9 @@ module('useQuery', function (hooks) {
   });
 
   hooks.beforeEach(() => {
+    clearClients();
+    setClient(client);
     ctx = {};
-    setOwner(ctx, owner);
-
-    clearClients(ctx);
-    setClient(ctx, client);
   });
 
   hooks.afterEach(() => {

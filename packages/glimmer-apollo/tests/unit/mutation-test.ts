@@ -6,7 +6,6 @@ import {
   useMutation,
   getClient
 } from 'glimmer-apollo';
-import { setOwner } from 'glimmer-apollo/-private/environment';
 import { tracked } from '@glimmer/tracking';
 import {
   ApolloClient,
@@ -33,8 +32,6 @@ const LOGIN = gql`
 
 module('useMutation', function (hooks) {
   let ctx = {};
-  const owner = {};
-
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: createHttpLink({
@@ -43,11 +40,9 @@ module('useMutation', function (hooks) {
   });
 
   hooks.beforeEach(() => {
+    clearClients();
+    setClient(client);
     ctx = {};
-    setOwner(ctx, owner);
-
-    clearClients(ctx);
-    setClient(ctx, client);
   });
 
   hooks.afterEach(() => {
@@ -113,7 +108,7 @@ module('useMutation', function (hooks) {
 
   test('it uses variables passed into mutate', async function (assert) {
     const sandbox = sinon.createSandbox();
-    const client = getClient(ctx);
+    const client = getClient();
 
     const mutate = sandbox.spy(client, 'mutate');
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(
@@ -136,7 +131,7 @@ module('useMutation', function (hooks) {
 
   test('it merges variables passed into mutate', async function (assert) {
     const sandbox = sinon.createSandbox();
-    const client = getClient(ctx);
+    const client = getClient();
 
     const mutate = sandbox.spy(client, 'mutate');
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(
@@ -162,7 +157,7 @@ module('useMutation', function (hooks) {
 
   test('it merges options passed into mutate', async function (assert) {
     const sandbox = sinon.createSandbox();
-    const client = getClient(ctx);
+    const client = getClient();
 
     const mutate = sandbox.spy(client, 'mutate');
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(
@@ -289,7 +284,7 @@ module('useMutation', function (hooks) {
     }
     const vars = new Obj();
     const sandbox = sinon.createSandbox();
-    const client = getClient(ctx);
+    const client = getClient();
 
     const mutate = sandbox.spy(client, 'mutate');
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(

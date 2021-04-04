@@ -5,15 +5,10 @@ import {
   InMemoryCache,
   createHttpLink
 } from '@apollo/client/core';
-import { setOwner } from '@ember/application';
 import type Application from '@ember/application';
 
 export function initialize(appInstance: Application): void {
-  const ctx = {};
-  setOwner(ctx, appInstance);
-
   setClient(
-    ctx,
     new ApolloClient({
       cache: new InMemoryCache(),
       link: createHttpLink({
@@ -23,7 +18,7 @@ export function initialize(appInstance: Application): void {
   );
 
   registerDestructor(appInstance, () => {
-    clearClients(ctx);
+    clearClients();
   });
 }
 

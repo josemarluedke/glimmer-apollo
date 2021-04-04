@@ -7,7 +7,7 @@ import './App.css';
 export default class App extends Component<{}> {
   constructor(owner: object, args: {}) {
     super(owner, args);
-    createApollo(this);
+    createApollo();
   }
 
   static template = hbs`
