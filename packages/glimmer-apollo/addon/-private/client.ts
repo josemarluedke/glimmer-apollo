@@ -1,45 +1,20 @@
-import { getOwner } from './environment';
 import type { ApolloClient } from '@apollo/client/core';
 
-const CLIENTS: WeakMap<
-  object,
-  Map<string, ApolloClient<unknown>>
-> = new WeakMap();
+const CLIENTS: Map<string, ApolloClient<unknown>> = new Map();
 const DEFAULT_CLIENT_ID = 'default';
 
 export function setClient<TCache = unknown>(
-  context: object,
   client: ApolloClient<TCache>,
   clientId: string = DEFAULT_CLIENT_ID
 ): void {
-  const owner = getOwner(context);
-
-  if (!owner) {
-    throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo setClient'
-    );
-  }
-
-  if (!CLIENTS.has(owner)) {
-    CLIENTS.set(owner, new Map());
-  }
-
-  CLIENTS.get(owner)?.set(clientId, client);
+  CLIENTS.set(clientId, client);
 }
 
 export function getClient<TCache = unknown>(
-  context: object,
   clientId: string = DEFAULT_CLIENT_ID
 ): ApolloClient<TCache> {
-  const owner = getOwner(context);
+  const client = CLIENTS.get(clientId);
 
-  if (!owner) {
-    throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo getClient'
-    );
-  }
-
-  const client = CLIENTS.get(owner)?.get(clientId);
   if (!client) {
     throw new Error(
       `Apollo client with id ${clientId} has not been set yet, use setClient(new ApolloClient({ ... }, '${clientId}')) to define it`
@@ -49,18 +24,9 @@ export function getClient<TCache = unknown>(
   return client as ApolloClient<TCache>;
 }
 
-export function clearClients(context: object): void {
-  const owner = getOwner(context);
-  if (!owner) {
-    throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo getClient'
-    );
-  }
-
-  const bucket = CLIENTS.get(owner);
-  bucket?.forEach((client) => {
+export function clearClients(): void {
+  CLIENTS.forEach((client) => {
     client.clearStore();
   });
-
-  bucket?.clear();
+  CLIENTS.clear();
 }

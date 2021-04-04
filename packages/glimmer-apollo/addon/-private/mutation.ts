@@ -53,7 +53,7 @@ export class MutationResource<
     > = {}
   ): Promise<Maybe<TData>> {
     this.loading = true;
-    const client = getClient(this);
+    const client = getClient();
     const [mutation, originalOptions] = this.args.positional;
 
     if (!variables) {
