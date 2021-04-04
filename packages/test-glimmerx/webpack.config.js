@@ -27,6 +27,7 @@ module.exports = () => {
         filename: 'tests/index.html',
         template: './tests/index.html',
         inject: 'head',
+        scriptLoading: 'blocking',
         chunks: ['tests']
       })
     );

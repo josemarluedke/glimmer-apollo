@@ -38,6 +38,7 @@
     "build:types": "tsc --noEmit false --declaration --declarationDir ./build/types --emitDeclarationOnly --allowJs false && rm -rf ./build/types/tests",
     "start": "ember serve",
     "test": "ember test",
+    "test:types": "tsc --noEmit",
     "prepack": "yarn build"
   },
   "dependencies": {
