@@ -3,25 +3,29 @@ import createApollo from './apollo';
 import { useQuery } from 'glimmer-apollo';
 import { gql } from '@apollo/client/core';
 import './App.css';
+import { startServer } from './mock/server';
 
 export default class App extends Component<{}> {
   constructor(owner: object, args: {}) {
     super(owner, args);
+    const server = startServer('development');
+    server.createList('note', 3);
     createApollo();
   }
 
   static template = hbs`
-    <h1>hello, glimmer!</h1>
-    <Todos />
+    <h1>Notes</h1>
+    <Notes />
   `;
 }
 
-export class Todos extends Component {
-  todos = useQuery(this, () => [
+export class Notes extends Component {
+  notes = useQuery(this, () => [
     gql`
-      query($isDone: Boolean) {
-        todos(isDone: $isDone) {
+      query {
+        notes {
           id
+          title
           description
         }
       }
@@ -29,8 +33,14 @@ export class Todos extends Component {
   ]);
 
   static template = hbs`
-    Loading: {{this.todos.loading}}
+    Loading: {{this.notes.loading}}
     <br />
-    Error: {{this.todos.error}}
+    Error: {{this.notes.error}}
+    Data:
+    {{#each this.notes.data.notes as |note|}}
+      <div>
+        title: {{note.title}}
+      </div>
+    {{/each}}
   `;
 }

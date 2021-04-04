@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "types": ["qunit"]
+    "types": ["qunit"],
+    "paths": {
+      "*": ["types/*"]
+    }
   },
   "exclude": ["node_modules", "tmp", "dist"]
 }
