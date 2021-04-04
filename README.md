@@ -4,10 +4,9 @@ Ember and Glimmer integration for Apollo Client.
 
 > **WIP: This project is currently in development.**
 >
-> Glimmer standalone integration is in a very early stage and not yet proven.
-> This should be possible to achieve though. See tracking issue
+> Glimmer standalone integration is in a very early stage.
+> See tracking issue
 > [#1](https://github.com/josemarluedke/glimmer-apollo/issues/1).
-> However, you can use with Ember today.
 
 ## API
 
@@ -101,12 +100,12 @@ import { setClient } from 'glimmer-apollo';
 setClient(new ApolloClient({ ... });
 ```
 
-### getClient()
+### getClient([clientId])
 
 ```js
 import { getClient } from 'glimmer-apollo';
 
-const client = getClient([clientId]);
+const client = getClient();
 ```
 
 ## License
