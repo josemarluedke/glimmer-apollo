@@ -7,6 +7,7 @@
   "scripts": {
     "build": "yarn workspace glimmer-apollo build",
     "lint:js": "eslint . --ext .js,.ts",
+    "test:types": "yarn workspaces run test:types",
     "start": "yarn workspace glimmer-apollo ember start",
     "test": "yarn workspace glimmer-apollo ember test"
   },
