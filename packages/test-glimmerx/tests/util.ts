@@ -4,11 +4,14 @@ import {
   RenderComponentOptions,
   didRender
 } from '@glimmerx/core';
+import createApollo from '../src/apollo';
+import { clearClients } from 'glimmer-apollo';
 
 // Bootstrap QUnit
 import 'qunit';
 import 'qunit/qunit/qunit.css';
 import 'qunit-dom/dist/qunit-dom';
+import { startServer } from '../src/mock/server';
 
 QUnit.start();
 
@@ -40,6 +43,38 @@ export async function renderComponent(
   }
 
   await glimmerRenderComponent(component, options);
+}
+
+export function setupApollo(hooks: NestedHooks): void {
+  hooks.beforeEach(() => {
+    createApollo();
+  });
+  hooks.afterEach(() => {
+    clearClients();
+  });
+}
+
+export function setupMirage(
+  hooks: NestedHooks
+): { server: ReturnType<typeof startServer> } {
+  let server: ReturnType<typeof startServer> | undefined;
+
+  hooks.beforeEach(function () {
+    server = startServer('test');
+  });
+
+  hooks.afterEach(function () {
+    if (server) {
+      server.shutdown();
+      server = undefined;
+    }
+  });
+
+  return {
+    get server(): ReturnType<typeof startServer> {
+      return server || startServer('test');
+    }
+  };
 }
 
 // re-export QUnit modules for convenience
