@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "start": "webpack serve",
+    "start": "webpack serve --mode development --env development",
     "test": "npm-run-all test:browsers",
     "test:browsers": "testem ci",
     "test:watch": "testem",

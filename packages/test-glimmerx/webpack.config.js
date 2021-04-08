@@ -37,6 +37,7 @@ module.exports = () => {
     mode: IS_PRODUCTION ? 'production' : 'development',
     entry,
     plugins,
+    target: 'web',
     module: {
       rules: [
         {

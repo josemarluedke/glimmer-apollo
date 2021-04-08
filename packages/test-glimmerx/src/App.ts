@@ -25,8 +25,6 @@ export class Notes extends Component {
 
   static template = hbs`
     Loading: {{this.notes.loading}}
-    <div class="btn"></div>
-    div
     <br />
     Error: {{this.notes.error}}
     Data:
