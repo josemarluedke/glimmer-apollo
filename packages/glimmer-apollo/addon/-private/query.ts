@@ -1,4 +1,3 @@
-/* global FastBoot */
 import { getClient } from './client';
 import {
   getOwner,
@@ -37,10 +36,6 @@ export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
 interface Args<TData, TVariables> {
   positional: QueryPositionalArgs<TData, TVariables>;
   named: Record<string, unknown>;
-}
-
-declare global {
-  const FastBoot: unknown;
 }
 
 export class QueryResource<
@@ -187,17 +182,20 @@ export class QueryResource<
   }
 
   private getFastboot(): Fastboot | undefined {
-    if (typeof FastBoot === 'undefined') {
-      return undefined;
-    }
-    const owner = getOwner(this);
+    if (hasFastBoot(self) && typeof self.FastBoot !== 'undefined') {
+      const owner = getOwner(this);
 
-    if (ownerHasLookup(owner) && typeof owner.lookup === 'function') {
-      return owner.lookup('service:fastboot') as Fastboot;
+      if (ownerHasLookup(owner) && typeof owner.lookup === 'function') {
+        return owner.lookup('service:fastboot') as Fastboot;
+      }
     }
 
     return undefined;
   }
+}
+
+function hasFastBoot(obj: unknown): obj is { FastBoot: unknown } {
+  return Object.prototype.hasOwnProperty.call(obj, 'FastBoot');
 }
 
 function ownerHasLookup(
