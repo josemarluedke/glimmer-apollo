@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
-import { setClient, clearClients, useQuery } from 'glimmer-apollo';
+import { setClient, getClient, clearClients, useQuery } from 'glimmer-apollo';
 import {
   ApolloClient,
   ApolloError,
@@ -13,6 +13,7 @@ import {
   UserInfoQuery,
   UserInfoQueryVariables
 } from '../dummy/app/mocks/handlers';
+import sinon from 'sinon';
 
 const USER_INFO = gql`
   query UserInfo($id: ID!) {
@@ -197,5 +198,32 @@ module('useQuery', function (hooks) {
     const expectedError = 'Data With Error';
     assert.equal(query.error?.message, expectedError);
     assert.equal(onErrorCalled!.message, expectedError);
+  });
+
+  test('it does not trigger query update if args references changes but values are the same', async function (assert) {
+    class Obj {
+      @tracked id = '1';
+    }
+    const vars = new Obj();
+    const sandbox = sinon.createSandbox();
+    const client = getClient();
+
+    const watchQuery = sandbox.spy(client, 'watchQuery');
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: vars.id }
+      }
+    ]);
+
+    assert.equal(query.data, undefined);
+    await query.settled();
+
+    vars.id = '1';
+    await query.settled();
+
+    assert.ok(watchQuery.calledOnce);
+
+    sandbox.restore();
   });
 });
