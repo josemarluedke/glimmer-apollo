@@ -15,6 +15,7 @@ import type {
   OperationVariables,
   WatchQueryOptions
 } from '@apollo/client/core';
+import { equal } from '@wry/equality';
 import type { Fastboot } from './types';
 
 interface QueryFunctionOptions<TData> {
@@ -53,8 +54,12 @@ export class QueryResource<
   @tracked promise!: Promise<void>;
 
   private subscription?: ZenObservable.Subscription;
+  private previousPositionalArgs:
+    | Args<TData, TVariables>['positional']
+    | undefined;
 
   async setup(): Promise<void> {
+    this.previousPositionalArgs = this.args.positional;
     const [query, options] = this.args.positional;
     const client = getClient();
 
@@ -108,8 +113,10 @@ export class QueryResource<
   }
 
   update(): void {
-    this.teardown();
-    this.setup();
+    if (!equal(this.previousPositionalArgs, this.args.positional)) {
+      this.teardown();
+      this.setup();
+    }
   }
 
   teardown(): void {
