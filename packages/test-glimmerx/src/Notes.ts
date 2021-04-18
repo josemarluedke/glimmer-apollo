@@ -3,6 +3,7 @@ import { on } from '@glimmerx/modifier';
 import { fn } from '@glimmerx/helper';
 import { useQuery } from 'glimmer-apollo';
 import { gql } from '@apollo/client/core';
+import { WriteIcon } from './Icons';
 
 function equal(a: unknown, b: unknown): boolean {
   return a === b;
@@ -26,6 +27,14 @@ const NoteButton = hbs`
     {{@note.title}}
   </button>
   <Divider />
+`;
+
+const ContentPanelHeader = hbs`
+  <div class="border-b border-black pb-2 mb-2 text-right">
+    <button type="button" class="p-2 rounded hover:bg-gray-800 focus:outline-none focus:ring ring-green-400">
+      <WriteIcon class="w-6 h-6" />
+    </button>
+  </div>
 `;
 
 export default class Notes extends Component {
@@ -71,6 +80,7 @@ export default class Notes extends Component {
       </div>
 
       <div class="sm:w-2/3 border-t-2 sm:border-t-0 sm:border-l-2 border-black p-4">
+        <ContentPanelHeader />
         {{this.selectedNote.description}}
       </div>
     </div>
