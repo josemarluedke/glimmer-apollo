@@ -4,6 +4,7 @@ import { fn } from '@glimmerx/helper';
 import { useQuery } from 'glimmer-apollo';
 import { gql } from '@apollo/client/core';
 import { WriteIcon } from './Icons';
+import { Link } from './Router';
 
 function equal(a: unknown, b: unknown): boolean {
   return a === b;
@@ -19,6 +20,7 @@ const Placeholder = hbs`
 `;
 
 const NoteButton = hbs`
+
   <button
     type="button"
     class="text-left p-2 rounded focus:outline-none focus:ring ring-green-400 {{if (equal @note.id @selectedNote.id) "bg-gray-700" "hover:bg-gray-800"}}"
@@ -31,9 +33,9 @@ const NoteButton = hbs`
 
 const ContentPanelHeader = hbs`
   <div class="border-b border-black pb-2 mb-2 text-right">
-    <button type="button" class="p-2 rounded hover:bg-gray-800 focus:outline-none focus:ring ring-green-400">
+    <Link @to="/notes/add" class="inline-block p-2 rounded hover:bg-gray-800 focus:outline-none focus:ring ring-green-400">
       <WriteIcon class="w-6 h-6" />
-    </button>
+    </Link>
   </div>
 `;
 
