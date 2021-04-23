@@ -1,39 +1,19 @@
 import Component, { hbs } from '@glimmerx/component';
-import { useQuery } from 'glimmer-apollo';
-import { gql } from '@apollo/client/core';
+import Notes from './Notes';
 import './App.css';
+import { Router } from './Router';
 
 export default class App extends Component<{}> {
   static template = hbs`
-    <h1>Notes</h1>
-    <Notes />
-  `;
-}
+    <div class="max-w-screen-lg mx-auto px-6 flex flex-col min-h-screen">
+      <h1 class="text-3xl font-bold py-4 text-center">Notes</h1>
 
-export class Notes extends Component {
-  notes = useQuery(this, () => [
-    gql`
-      query {
-        notes {
-          id
-          title
-          description
-        }
-      }
-    `
-  ]);
-
-  static template = hbs`
-    Loading: {{this.notes.loading}}
-    <div class="btn"></div>
-    div
-    <br />
-    Error: {{this.notes.error}}
-    Data:
-    {{#each this.notes.data.notes as |note|}}
-      <div>
-        title: {{note.title}}
-      </div>
-    {{/each}}
+      <Router class="flex-grow flex flex-col" as |Route|>
+        <Route @path='/'>
+          <Notes class="flex-grow mb-10" />
+        </Route>
+        <Route @path='/notes/add'>ADD</Route>
+      </Router>
+    </div>
   `;
 }

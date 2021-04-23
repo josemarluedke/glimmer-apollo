@@ -1,6 +1,7 @@
 const path = require('path');
 const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = () => {
@@ -15,7 +16,8 @@ module.exports = () => {
       template: './index.html',
       excludeChunks: ['tests']
     }),
-    new CopyPlugin({ patterns: [{ from: 'public', to: 'public' }] })
+    new CopyPlugin({ patterns: [{ from: 'public', to: 'public' }] }),
+    new MiniCssExtractPlugin()
   ];
 
   // Include tests in development builds
@@ -37,6 +39,7 @@ module.exports = () => {
     mode: IS_PRODUCTION ? 'production' : 'development',
     entry,
     plugins,
+    target: 'web',
     module: {
       rules: [
         {
@@ -64,7 +67,18 @@ module.exports = () => {
 
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader']
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  config: path.resolve(__dirname, 'postcss.config.js')
+                }
+              }
+            }
+          ]
         },
         {
           test: /\.(png|svg|jpg|gif)$/,
@@ -89,7 +103,8 @@ module.exports = () => {
       publicPath: '/'
     },
     devServer: {
-      contentBase: path.resolve(__dirname, 'dist')
+      contentBase: path.resolve(__dirname, 'dist'),
+      historyApiFallback: true
     }
   };
 };
