@@ -32,6 +32,7 @@ module.exports = {
         '.babelrc.js',
         'testem.js',
         'webpack.config.js',
+        'postcss.config.js',
         'config/**/*.js',
         'packages/*/.ember-cli.js',
         'packages/*/ember-cli-build.js',

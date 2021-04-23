@@ -1,7 +1,7 @@
 import Component, { hbs } from '@glimmerx/component';
 import Notes from './Notes';
 import './App.css';
-import { Router, Link } from './Router';
+import { Router } from './Router';
 
 export default class App extends Component<{}> {
   static template = hbs`
