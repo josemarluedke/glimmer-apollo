@@ -61,7 +61,7 @@ export default class Notes extends Component {
     }
   ]);
 
-  selectNote = (note): void => {
+  selectNote = (note: any): void => {
     this.selectedNote = note;
   };
 
