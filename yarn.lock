@@ -1508,7 +1508,7 @@
     "@glimmer/util" "0.77.3"
     "@glimmer/validator" "0.77.3"
 
-"@glimmer/manager@0.77.6":
+"@glimmer/manager@0.77.6", "@glimmer/manager@^0.77.6":
   version "0.77.6"
   resolved "https://registry.yarnpkg.com/@glimmer/manager/-/manager-0.77.6.tgz#c6f28ec2084da7e690139936d783405524316a0d"
   integrity sha512-Izb/4pRNTEyuqIUY1kfV4GDG5ki2VKIEw4pBvHcfeKoxqXGWEIR8rmG2Maghbbsn41qX0tjGI7K5bruvUVgDtg==
