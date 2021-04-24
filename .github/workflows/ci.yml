@@ -7,6 +7,9 @@ on:
       - 'v*'
   pull_request: {}
 
+env:
+  CI: 'true'
+
 jobs:
   lint:
     name: Linting
@@ -24,11 +27,8 @@ jobs:
       - run: yarn test:types
 
   package-tests:
-    name: Package Tests
+    name: Glimmer Apollo Tests
     runs-on: ubuntu-latest
-
-    env:
-      CI: 'true'
 
     steps:
       - uses: actions/checkout@v2
@@ -41,12 +41,9 @@ jobs:
       - name: Test
         run: yarn workspace glimmer-apollo run test
 
-  glimmerx-tests:
-    name: Glimmerx Tests
+  examples-glimmerx:
+    name: GlimmerX Tests
     runs-on: ubuntu-latest
-
-    env:
-      CI: 'true'
 
     steps:
       - uses: actions/checkout@v2
@@ -57,4 +54,4 @@ jobs:
       - run: yarn install --frozen-lockfile --non-interactive
       - run: yarn build
       - name: Test
-        run: yarn workspace test-glimmerx run test
+        run: yarn workspace glimmerx run test
