@@ -3,28 +3,16 @@
 /packages/**/vendor/
 
 /site/blueprints/*/files/
-/site/vendor/
 
 # compiled output
-/packages/**/dist/
-/packages/**/tmp/
+dist
+tmp
 /packages/glimmer-apollo/build/
 
-/site/dist/
-/site/tmp/
-
 # dependencies
-/bower_components/
-/node_modules/
-/packages/**/bower_components/
-/packages/**/node_modules/
-
+bower_components
+node_modules
 /packages/*/types/
-
-/site/bower_components/
-/site/node_modules/
-
-
 
 # misc
 /packages/**/coverage/

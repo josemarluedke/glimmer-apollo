@@ -15,7 +15,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['packages/**/tests/**/*.ts'],
+      files: ['{packages,examples}/**/tests/**/*.ts'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off'
