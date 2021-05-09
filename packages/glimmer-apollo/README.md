@@ -2,9 +2,10 @@
 
 ## Compatibility
 
-* Ember.js v3.23 or above
-* Ember CLI v2.13 or above
-* Node.js v12 or above
+- Ember.js v3.25 or above
+- GlimmerX v0.6 or above
+- Ember CLI v2.13 or above
+- Node.js v12 or above
 
 ## Installation
 

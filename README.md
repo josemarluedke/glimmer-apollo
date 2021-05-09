@@ -8,6 +8,25 @@ Ember and Glimmer integration for Apollo Client.
 > See tracking issue
 > [#1](https://github.com/josemarluedke/glimmer-apollo/issues/1).
 
+## Installation
+
+```sh
+yarn add -D glimmer-apollo @apollo/client graphql
+```
+
+```sh
+npm install --save-dev glimmer-apollo @apollo/client graphql
+```
+
+## Compatibility
+
+- Apollo Client v3.0 or above
+- Ember.js v3.25 or above
+- GlimmerX v0.6 or above
+- Ember CLI v2.13 or above
+- Node.js v12 or above
+- FastBoot 1.0+
+
 ## API
 
 ### useQuery(ctx, args)
@@ -38,7 +57,7 @@ export default class Todos extends Component {
 
   @action toggleDone() {
     this.isDone = !this.isDone;
-  };
+  }
 
   static template = hbs`
     <button {{on "click" this.toggleDone}}>Toggle completed todos</button>
@@ -108,6 +127,48 @@ import { getClient } from 'glimmer-apollo';
 const client = getClient();
 ```
 
+## Ember Setup
+
+To correctly setup the Apollo client, you should use a instance initializer.
+This will ensure you can access services, for example, to add access tokens to
+your requests or something else.
+
+Here is an example:
+
+```js
+// app/instance-initializers/apollo.js
+
+import { registerDestructor } from '@ember/destroyable';
+import { setClient, clearClients } from 'glimmer-apollo';
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink
+} from '@apollo/client/core';
+
+export function initialize(appInstance) {
+  setClient(
+    new ApolloClient({
+      cache: new InMemoryCache(),
+      link: createHttpLink({
+        uri: '/graphql'
+      })
+    })
+  );
+
+  registerDestructor(appInstance, () => {
+    clearClients();
+  });
+}
+
+export default {
+  initialize
+};
+```
+
+> Note that you should clear the Apollo client when the application is
+> teared down so that any cache that Apollo hods is cleared from memory.
+
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the MIT License.
