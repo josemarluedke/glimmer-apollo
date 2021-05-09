@@ -13,29 +13,29 @@
   "author": "Josemar Luedke <josemarluedke@gmail.com>",
   "exports": {
     ".": {
-      "require": "./build/commonjs/addon/index.js",
-      "module": "./build/modules/addon/index.js"
+      "require": "./dist/commonjs/addon/index.js",
+      "module": "./dist/modules/addon/index.js"
     },
     "./environment-glimmer": {
-      "require": "./build/commonjs/addon/environment-glimmer.js",
-      "module": "./build/modules/addon/environment-glimmer.js"
+      "require": "./dist/commonjs/addon/environment-glimmer.js",
+      "module": "./dist/modules/addon/environment-glimmer.js"
     },
     "./environment-ember": {
-      "require": "./build/commonjs/addon/environment-ember.js",
-      "default": "./build/modules/addon/environment-ember.js"
+      "require": "./dist/commonjs/addon/environment-ember.js",
+      "default": "./dist/modules/addon/environment-ember.js"
     }
   },
-  "main": "build/commonjs/addon/index.js",
-  "module": "build/modules/addon/index.js",
-  "typings": "build/types/addon/index.d.ts",
+  "main": "dist/commonjs/addon/index.js",
+  "module": "dist/modules/addon/index.js",
+  "typings": "dist/types/addon/index.d.ts",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
   "scripts": {
-    "prebuild": "rm -rf ./build",
+    "prebuild": "rm -rf ./dist",
     "build": "node ../../scripts/build.js && yarn build:types",
-    "build:types": "tsc --noEmit false --declaration --declarationDir ./build/types --emitDeclarationOnly --allowJs false && rm -rf ./build/types/tests",
+    "build:types": "tsc --noEmit false --declaration --declarationDir ./dist/types --emitDeclarationOnly --allowJs false && rm -rf ./dist/types/tests",
     "start": "ember serve",
     "test": "ember test",
     "test:types": "tsc --noEmit",
