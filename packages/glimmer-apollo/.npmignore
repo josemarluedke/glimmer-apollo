@@ -1,6 +1,8 @@
 # compiled output
 /dist/
 /tmp/
+/dummy-dist/
+/types/
 
 # dependencies
 /bower_components/
