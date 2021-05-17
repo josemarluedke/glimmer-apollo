@@ -22,7 +22,11 @@ setEnviromentContext({
   createCache: createCache as never,
   getValue,
   invokeHelper,
-  waitForPromise,
+  waitForPromise: (...args) => {
+    // We create this function to wrap waitForPromise due to error when using
+    // addon v2 format and auto-import v2. Originaly, waitForPromise would be undefined.
+    return waitForPromise(...args);
+  },
   setHelperManager,
   helperCapabilities,
   isDestroyed,

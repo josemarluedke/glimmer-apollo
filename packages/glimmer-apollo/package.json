@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@ember/test-waiters": "^2.4.3",
+    "@embroider/addon-shim": "^0.41.0",
     "@glimmer/destroyable": "^0.77.6",
     "@glimmer/env": "^0.1.7",
     "@glimmer/manager": "^0.77.6",
@@ -51,12 +52,12 @@
     "@glimmer/tracking": "^2.0.0-beta.15",
     "@glimmer/validator": "^0.77.6",
     "@wry/equality": "^0.4.0",
-    "ember-auto-import": "^1.10.1",
-    "ember-cli-babel": "^7.26.2",
+    "ember-auto-import": "^2.0.0",
+    "ember-cli-babel": "^7.26.5",
     "ember-cli-typescript": "^4.1.0"
   },
   "devDependencies": {
-    "@apollo/client": "^3.3.13",
+    "@apollo/client": "3.3.15",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.0",
     "@glimmer/component": "^1.0.3",
@@ -97,7 +98,7 @@
     "ember-page-title": "^6.2.1",
     "ember-qunit": "^5.1.2",
     "ember-resolver": "^8.0.2",
-    "ember-source": "~3.25.1",
+    "ember-source": "~3.27.1",
     "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^2.18.1",
     "ember-try": "^1.4.0",
@@ -109,7 +110,8 @@
     "qunit": "^2.14.0",
     "qunit-dom": "^1.6.0",
     "sinon": "^10.0.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "webpack": "^5.37.0"
   },
   "peerDependencies": {
     "@apollo/client": "^3.0.0",
@@ -122,10 +124,18 @@
     "edition": "octane"
   },
   "ember-addon": {
+    "version": 2,
+    "type": "addon",
     "configPath": "tests/dummy/config",
-    "main": "ember-addon-main.js"
+    "main": "ember-addon-main.js",
+    "app-js": {
+      "./initializers/set-glimmer-apollo-environment-ember.js": "./app/initializers/set-glimmer-apollo-environment-ember.js"
+    }
   },
   "msw": {
     "workerDirectory": "tests/dummy/public"
+  },
+  "volta": {
+    "node": "14.17.0"
   }
 }
