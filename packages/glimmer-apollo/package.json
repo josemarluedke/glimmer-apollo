@@ -23,10 +23,6 @@
     "./environment-glimmer": {
       "require": "./dist/commonjs/addon/environment-glimmer.js",
       "module": "./dist/modules/addon/environment-glimmer.js"
-    },
-    "./environment-ember": {
-      "require": "./dist/commonjs/addon/environment-ember.js",
-      "default": "./dist/modules/addon/environment-ember.js"
     }
   },
   "main": "dist/commonjs/addon/index.js",
