@@ -5,7 +5,7 @@ import {
   isDestroying,
   tracked,
   waitForPromise
-} from './environment';
+} from '../environment';
 import ObservableResource from './observable';
 import { NetworkStatus, ApolloError } from '@apollo/client/core';
 import type {

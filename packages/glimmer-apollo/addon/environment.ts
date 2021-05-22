@@ -1,7 +1,7 @@
 import { DEBUG } from '@glimmer/env';
 export { tracked } from '@glimmer/tracking';
 
-import type { IWaitForPromise } from './types';
+import type { IWaitForPromise } from './-private/types';
 import type {
   getOwner as IGetOwner,
   setOwner as ISetOwner

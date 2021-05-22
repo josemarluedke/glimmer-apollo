@@ -1,4 +1,4 @@
-import { setEnviromentContext } from './-private/environment';
+import { setEnviromentContext } from './environment';
 import { getOwner, setOwner } from '@glimmer/owner';
 import { getValue, createCache } from '@glimmer/validator';
 import { invokeHelper } from '@glimmer/runtime';

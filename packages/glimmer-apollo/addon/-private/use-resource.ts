@@ -1,4 +1,4 @@
-import { invokeHelper, getValue } from './environment';
+import { invokeHelper, getValue } from '../environment';
 import type { Resource } from './resource';
 import type { TemplateArgs, Cache } from './types';
 

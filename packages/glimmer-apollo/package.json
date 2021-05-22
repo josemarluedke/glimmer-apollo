@@ -16,6 +16,10 @@
       "require": "./dist/commonjs/addon/index.js",
       "module": "./dist/modules/addon/index.js"
     },
+    "./environment": {
+      "require": "./dist/commonjs/addon/environment.js",
+      "module": "./dist/modules/addon/environment.js"
+    },
     "./environment-glimmer": {
       "require": "./dist/commonjs/addon/environment-glimmer.js",
       "module": "./dist/modules/addon/environment-glimmer.js"
@@ -51,12 +55,12 @@
     "@glimmer/runtime": "^0.77.6",
     "@glimmer/tracking": "^2.0.0-beta.15",
     "@glimmer/validator": "^0.77.6",
-    "@wry/equality": "^0.4.0",
-    "ember-auto-import": "^2.0.0",
-    "ember-cli-babel": "^7.26.5",
-    "ember-cli-typescript": "^4.1.0"
+    "@wry/equality": "^0.4.0"
   },
   "devDependencies": {
+    "ember-auto-import": "^2.0.0",
+    "ember-cli-babel": "^7.26.5",
+    "ember-cli-typescript": "^4.1.0",
     "@apollo/client": "3.3.15",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.0",
@@ -129,7 +133,7 @@
     "configPath": "tests/dummy/config",
     "main": "ember-addon-main.js",
     "app-js": {
-      "./initializers/set-glimmer-apollo-environment-ember.js": "./app/initializers/set-glimmer-apollo-environment-ember.js"
+      "./initializers/set-glimmer-apollo-environment-ember.js": "./dist/modules/addon/environment-ember.js"
     }
   },
   "msw": {

@@ -7,7 +7,7 @@ import {
   destroy,
   registerDestructor,
   associateDestroyableChild
-} from './environment';
+} from '../environment';
 import type { TemplateArgs, Cache } from './types';
 
 declare const HELPER_DEFINITION: unique symbol;

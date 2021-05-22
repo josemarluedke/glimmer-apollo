@@ -5,7 +5,7 @@ import {
   isDestroying,
   tracked,
   waitForPromise
-} from './environment';
+} from '../environment';
 import { ApolloError } from '@apollo/client/core';
 import type {
   DocumentNode,

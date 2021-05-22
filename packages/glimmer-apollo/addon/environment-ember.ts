@@ -1,4 +1,6 @@
-import { setEnviromentContext } from './-private/environment';
+// NOTE: This file is included in the host Ember App. All imports must be global
+// and not local. eg. from 'glimmer-apollo/environment' instead of './environment'
+import { setEnviromentContext } from 'glimmer-apollo/environment';
 import { getOwner, setOwner } from '@ember/application';
 import { getValue, createCache } from '@glimmer/tracking/primitives/cache';
 import { invokeHelper } from '@ember/helper';
