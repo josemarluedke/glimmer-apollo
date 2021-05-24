@@ -1,0 +1,32 @@
+<h2>
+  User Info
+</h2>
+
+loading: {{this.userInfo.loading}}
+<br />
+firstName: {{this.userInfo.data.user.firstName}}
+
+{{#if this.userInfo.error}}
+  Error: {{this.userInfo.error.message}}
+{{/if}}
+<button type="button" {{on "click" this.userInfo.refetch}}>
+  refetch
+</button>
+
+<hr />
+<h2>
+  Login
+</h2>
+<button type="button" {{on "click" this.bla}}>
+  Login
+</button>
+
+<br />
+loading: {{this.login.loading}}
+
+<br />
+firstName: {{this.login.data.user.firstName}}
+
+{{#if this.login.error}}
+  Error: {{this.login.error.message}}
+{{/if}}

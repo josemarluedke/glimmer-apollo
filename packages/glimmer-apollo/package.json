@@ -57,7 +57,7 @@
     "ember-auto-import": "^2.0.0",
     "ember-cli-babel": "^7.26.5",
     "ember-cli-typescript": "^4.1.0",
-    "@apollo/client": "3.3.15",
+    "@apollo/client": "3.3.19",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.0",
     "@glimmer/component": "^1.0.3",
