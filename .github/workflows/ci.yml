@@ -38,8 +38,10 @@ jobs:
           yarn-version: 1.x
       - run: yarn install --frozen-lockfile --non-interactive
       - run: yarn build
-      - name: Test
+      - name: Test Glimmer Apollo
         run: yarn workspace glimmer-apollo run test
+      - name: Test App
+        run: yarn workspace test-app run test
 
   examples-glimmerx:
     name: GlimmerX Tests
