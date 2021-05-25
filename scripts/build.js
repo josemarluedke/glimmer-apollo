@@ -18,15 +18,16 @@ function babelBuild(srcPath, options = {}) {
 }
 
 function buildFile(srcPath) {
-  const fullPath = path.join(SRC_PATH, srcPath);
+  const fullSrcPath = path.join(SRC_PATH, srcPath);
+  const relativePath = srcPath.replace('src/', '');
 
   writeFile(
-    path.join(OUTPUT_PATH, 'commonjs', srcPath),
-    babelBuild(fullPath, { envName: 'cjs' })
+    path.join(OUTPUT_PATH, 'commonjs', relativePath),
+    babelBuild(fullSrcPath, { envName: 'cjs' })
   );
   writeFile(
-    path.join(OUTPUT_PATH, 'modules', srcPath),
-    babelBuild(fullPath, { envName: 'mjs' })
+    path.join(OUTPUT_PATH, 'modules', relativePath),
+    babelBuild(fullSrcPath, { envName: 'mjs' })
   );
 }
 
@@ -37,6 +38,6 @@ function writeFile(filePath, content) {
 if (require.main === module) {
   fs.mkdirSync(OUTPUT_PATH);
 
-  const srcFiles = glob.sync('./(addon|app)/**/*.{js,ts}', { cwd: SRC_PATH });
+  const srcFiles = glob.sync('./src/**/*.{js,ts}', { cwd: SRC_PATH });
   srcFiles.map(buildFile);
 }

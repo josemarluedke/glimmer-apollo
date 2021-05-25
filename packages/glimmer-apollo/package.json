@@ -13,21 +13,21 @@
   "author": "Josemar Luedke <josemarluedke@gmail.com>",
   "exports": {
     ".": {
-      "require": "./dist/commonjs/addon/index.js",
-      "module": "./dist/modules/addon/index.js"
+      "require": "./dist/commonjs/index.js",
+      "module": "./dist/modules/index.js"
     },
     "./environment": {
-      "require": "./dist/commonjs/addon/environment.js",
-      "module": "./dist/modules/addon/environment.js"
+      "require": "./dist/commonjs/environment.js",
+      "module": "./dist/modules/environment.js"
     },
     "./environment-glimmer": {
-      "require": "./dist/commonjs/addon/environment-glimmer.js",
-      "module": "./dist/modules/addon/environment-glimmer.js"
+      "require": "./dist/commonjs/environment-glimmer.js",
+      "module": "./dist/modules/environment-glimmer.js"
     }
   },
-  "main": "dist/commonjs/addon/index.js",
-  "module": "dist/modules/addon/index.js",
-  "typings": "dist/types/addon/index.d.ts",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/modules/index.js",
+  "typings": "dist/types/index.d.ts",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -71,7 +71,7 @@
     "type": "addon",
     "main": "ember-addon-main.js",
     "app-js": {
-      "./initializers/set-glimmer-apollo-environment-ember.js": "./dist/modules/addon/environment-ember.js"
+      "./initializers/set-glimmer-apollo-environment-ember.js": "./dist/modules/environment-ember.js"
     }
   },
   "volta": {

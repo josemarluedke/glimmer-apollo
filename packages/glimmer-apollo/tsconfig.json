@@ -3,10 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "glimmer-apollo": ["addon"],
-      "glimmer-apollo/*": ["addon/*"],
+      "glimmer-apollo": ["src"],
+      "glimmer-apollo/*": ["src/*"],
       "*": ["types/*"]
     }
   },
-  "include": ["addon/**/*", "types/**/*"]
+  "include": ["src/**/*", "types/**/*"]
 }
