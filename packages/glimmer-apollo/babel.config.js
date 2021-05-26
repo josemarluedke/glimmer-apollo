@@ -13,17 +13,5 @@ module.exports = {
         }
       }
     ]
-  ],
-  overrides: [
-    {
-      env: {
-        cjs: {
-          presets: [['@babel/preset-env', { modules: 'commonjs' }]]
-        },
-        mjs: {
-          presets: [['@babel/preset-env', { modules: false }]]
-        }
-      }
-    }
   ]
 };

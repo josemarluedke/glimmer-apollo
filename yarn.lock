@@ -7853,24 +7853,6 @@ git-repo-info@^2.1.1:
   resolved "https://registry.yarnpkg.com/git-repo-info/-/git-repo-info-2.1.1.tgz#220ffed8cbae74ef8a80e3052f2ccb5179aed058"
   integrity sha512-8aCohiDo4jwjOwma4FmYFd3i97urZulL8XL24nIPxuE+GZnfsAyy/g2Shqx6OjUiFKUXZM+Yy+KHnOmmA3FVcg==
 
-glimmer-apollo@^0.0.2-beta.1:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/glimmer-apollo/-/glimmer-apollo-0.0.2.tgz#3783f3a64d66b7cb5eec5cd453d086cd29bcb427"
-  integrity sha512-tx0uvaKYwSdXZAGSFmZ7FOCM9qgY/2dlTamgPSjhTjv8iUJ2z5E1nAAwl7Rgzu17lUcGlLlO1nC7noyM4uTzkw==
-  dependencies:
-    "@apollo/client" "^3.3.13"
-    "@ember/test-waiters" "^2.4.3"
-    "@glimmer/destroyable" "^0.77.6"
-    "@glimmer/env" "^0.1.7"
-    "@glimmer/owner" "^0.77.6"
-    "@glimmer/runtime" "^0.77.6"
-    "@glimmer/tracking" "^2.0.0-beta.15"
-    "@glimmer/validator" "^0.77.6"
-    "@wry/equality" "^0.4.0"
-    ember-auto-import "^1.10.1"
-    ember-cli-babel "^7.26.2"
-    ember-cli-typescript "^4.1.0"
-
 glob-base@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-base/-/glob-base-0.3.0.tgz#dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
