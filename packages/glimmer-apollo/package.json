@@ -13,20 +13,20 @@
   "author": "Josemar Luedke <josemarluedke@gmail.com>",
   "exports": {
     ".": {
-      "require": "./dist/commonjs/index.js",
-      "module": "./dist/modules/index.js"
+      "require": "./dist/cjs/index.js",
+      "module": "./dist/esm/index.js"
     },
     "./environment": {
-      "require": "./dist/commonjs/environment.js",
-      "module": "./dist/modules/environment.js"
+      "require": "./dist/cjs/environment.js",
+      "module": "./dist/esm/environment.js"
     },
     "./environment-glimmer": {
-      "require": "./dist/commonjs/environment-glimmer.js",
-      "module": "./dist/modules/environment-glimmer.js"
+      "require": "./dist/cjs/environment-glimmer.js",
+      "module": "./dist/esm/environment-glimmer.js"
     }
   },
-  "main": "dist/commonjs/index.js",
-  "module": "dist/modules/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
   "directories": {
     "doc": "doc",
@@ -34,9 +34,9 @@
   },
   "scripts": {
     "prebuild": "rm -rf ./dist",
-    "build": "node ../../scripts/build.js && yarn build:types",
+    "build": "rollup -c rollup.config.js && yarn build:types",
     "build:types": "tsc --noEmit false --declaration --declarationDir ./dist/types --emitDeclarationOnly --allowJs false && rm -rf ./dist/types/tests",
-    "start": "echo 'you must use the test-app'",
+    "start": "rollup -c rollup.config.js -w",
     "test": "echo 'TODO'",
     "test:types": "tsc --noEmit",
     "prepack": "yarn build"
@@ -55,8 +55,19 @@
   },
   "devDependencies": {
     "@apollo/client": "3.3.19",
+    "@babel/core": "^7.13.14",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-decorators": "^7.13.5",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/plugin-transform-typescript": "^7.13.0",
+    "@babel/preset-env": "^7.13.12",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-multi-entry": "^4.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
+    "rollup": "^2.50.0",
+    "rollup-plugin-multi-input": "^1.3.0",
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
@@ -71,7 +82,7 @@
     "type": "addon",
     "main": "ember-addon-main.js",
     "app-js": {
-      "./initializers/set-glimmer-apollo-environment-ember.js": "./dist/modules/environment-ember.js"
+      "./initializers/set-glimmer-apollo-environment-ember.js": "./dist/esm/environment-ember.js"
     }
   },
   "volta": {
