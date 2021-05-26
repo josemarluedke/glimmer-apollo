@@ -4,6 +4,7 @@
 
 # dependencies
 /bower_components/
+/node_modules/
 
 # misc
 /.bowerrc
@@ -19,3 +20,5 @@
 /tests/
 /yarn.lock
 .gitkeep
+/babel.config.js
+/rollup.config.js

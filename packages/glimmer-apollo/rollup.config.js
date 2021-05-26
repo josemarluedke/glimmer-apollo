@@ -1,55 +1,49 @@
-import multi from 'rollup-plugin-multi-input';
-import { babel } from '@rollup/plugin-babel';
-import resolve from '@rollup/plugin-node-resolve';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-const extensions = ['.js', '.ts'];
+import multiInput from 'rollup-plugin-multi-input';
+import resolve from '@rollup/plugin-node-resolve';
+import ts from '@wessberg/rollup-plugin-ts';
 
 function isExternal(id) {
   return !(id.startsWith('./') || id.startsWith('../') || id.startsWith('/'));
 }
 
-const baseOptions = {
+const config = {
+  input: [
+    'src/index.ts',
+    'src/environment.ts',
+    'src/environment-ember.ts',
+    'src/environment-glimmer.ts'
+  ],
+  preserveModules: true,
+  output: [
+    {
+      dir: './dist/esm',
+      sourcemap: true,
+      format: 'esm'
+    },
+    {
+      exports: 'auto',
+      dir: './dist/cjs',
+      format: 'cjs',
+      sourcemap: true
+    }
+  ],
   external(id) {
     return isExternal(id);
   },
   plugins: [
-    multi({ relative: 'src/' }),
-    babel({
-      extensions,
-      babelHelpers: 'bundled'
-      // exclude: 'node_modules/**',
-      // include: ['*/addon/**/*'],
-      // ...require('./babel.config')
+    multiInput({ relative: 'src/' }),
+    ts({
+      transpiler: 'babel',
+      browserslist: false,
+      tsconfig: {
+        fileName: 'tsconfig.json',
+        hook: (resolvedConfig) => ({ ...resolvedConfig, declaration: true })
+      }
     }),
-    resolve({ extensions })
+    resolve({ extensions: ['.js', '.ts'] })
   ]
 };
-
-const config = [
-  {
-    input: [
-      'src/index.ts',
-      'src/environment.ts',
-      'src/environment-ember.ts',
-      'src/environment-glimmer.ts'
-    ],
-    preserveModules: true,
-    output: [
-      {
-        dir: './dist/esm',
-        sourcemap: true,
-        format: 'esm'
-      },
-      {
-        exports: 'auto',
-        dir: './dist/cjs',
-        format: 'cjs',
-        sourcemap: true
-      }
-    ],
-
-    ...baseOptions
-  }
-];
 
 export default config;

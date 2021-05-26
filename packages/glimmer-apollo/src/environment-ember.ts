@@ -38,7 +38,7 @@ setEnviromentContext({
   associateDestroyableChild
 });
 
-export function initialize(/* application */): void {
+function initialize(/* application */): void {
   // empty
 }
 

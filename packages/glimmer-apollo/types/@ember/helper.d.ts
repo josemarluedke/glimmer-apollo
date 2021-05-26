@@ -1,8 +1,8 @@
 declare module '@ember/helper' {
-  export type {
+  export {
     setHelperManager,
     helperCapabilities as capabilities
   } from '@glimmer/manager';
 
-  export type { invokeHelper } from '@glimmer/runtime';
+  export { invokeHelper } from '@glimmer/runtime';
 }

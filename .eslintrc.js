@@ -26,6 +26,7 @@ module.exports = {
     {
       files: [
         '.babelrc.js',
+        'babel.config.js',
         '.docfy-config.js',
         '.ember-cli.js',
         '.eslintrc.js',
