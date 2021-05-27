@@ -16,7 +16,8 @@
     "start": "ember serve",
     "test": "ember test",
     "test:types": "echo 'no type tests'",
-    "test:ember": "ember test"
+    "test:ember": "ember test",
+    "test:ember-compatibility": "ember try:each"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.19",
@@ -46,6 +47,7 @@
     "@types/htmlbars-inline-precompile": "^1.0.1",
     "@types/qunit": "^2.11.1",
     "@types/rsvp": "^4.0.3",
+    "@types/sinon": "^10.0.1",
     "broccoli-asset-rev": "^3.0.0",
     "ember-auto-import": "^2.0.0",
     "ember-cli": "~3.26.1",
@@ -64,7 +66,9 @@
     "ember-qunit": "^5.1.2",
     "ember-resolver": "^8.0.2",
     "ember-source": "~3.27.1",
+    "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^3.4.2",
+    "ember-try": "^1.4.0",
     "glimmer-apollo": "^0.1.0",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.12.4",
