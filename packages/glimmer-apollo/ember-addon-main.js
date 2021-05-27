@@ -1,5 +1,4 @@
 'use strict';
 
-module.exports = {
-  name: require('./package').name
-};
+const { addonV1Shim } = require('@embroider/addon-shim');
+module.exports = addonV1Shim(__dirname);

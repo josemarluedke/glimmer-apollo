@@ -38,8 +38,37 @@ jobs:
           yarn-version: 1.x
       - run: yarn install --frozen-lockfile --non-interactive
       - run: yarn build
-      - name: Test
+      - name: Test Glimmer Apollo
         run: yarn workspace glimmer-apollo run test
+      - name: Test App
+        run: yarn workspace test-app run test
+
+  try-scenarios:
+    name: ${{ matrix.ember-try-scenario }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        ember-try-scenario:
+          - ember-3.27
+          - ember-release
+          - ember-beta
+          - ember-canary
+          - ember-embroider
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: volta-cli/action@v1
+        with:
+          node-version: 12.x
+          yarn-version: 1.x
+      - run: yarn install --frozen-lockfile --non-interactive
+      - run: yarn build
+      - name: Test
+        env:
+          EMBER_TRY_SCENARIO: ${{ matrix.ember-try-scenario }}
+        run: yarn workspace test-app run ember try:one $EMBER_TRY_SCENARIO
 
   examples-glimmerx:
     name: GlimmerX Tests

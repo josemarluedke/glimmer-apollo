@@ -54,9 +54,9 @@ export function setupApollo(hooks: NestedHooks): void {
   });
 }
 
-export function setupMirage(
-  hooks: NestedHooks
-): { server: ReturnType<typeof startServer> } {
+export function setupMirage(hooks: NestedHooks): {
+  server: ReturnType<typeof startServer>;
+} {
   let server: ReturnType<typeof startServer> | undefined;
 
   hooks.beforeEach(function () {
