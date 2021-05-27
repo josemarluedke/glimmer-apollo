@@ -41,7 +41,7 @@ module.exports = async function () {
         }
       },
       {
-        name: 'embroider',
+        name: 'ember-embroider',
         env: {
           EMBROIDER: true
         }
