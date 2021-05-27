@@ -3,7 +3,6 @@
 import multiInput from 'rollup-plugin-multi-input';
 import resolve from '@rollup/plugin-node-resolve';
 import ts from '@wessberg/rollup-plugin-ts';
-import rename from 'rollup-plugin-rename';
 
 function isExternal(id) {
   return !(
