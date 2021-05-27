@@ -3,9 +3,16 @@
 import multiInput from 'rollup-plugin-multi-input';
 import resolve from '@rollup/plugin-node-resolve';
 import ts from '@wessberg/rollup-plugin-ts';
+import rename from 'rollup-plugin-rename';
 
 function isExternal(id) {
-  return !(id.startsWith('./') || id.startsWith('../') || id.startsWith('/'));
+  return !(
+    id.startsWith('./') ||
+    id.startsWith('../') ||
+    id.startsWith('/') ||
+    id.startsWith('@babel/runtime') ||
+    id.startsWith('tslib')
+  );
 }
 
 const config = {
@@ -13,9 +20,10 @@ const config = {
     'src/index.ts',
     'src/environment.ts',
     'src/environment-ember.ts',
-    'src/environment-glimmer.ts'
+    'src/environment-glimmer.ts',
+    'src/ember-initializer.ts'
   ],
-  preserveModules: true,
+  // preserveModules: true,
   output: [
     {
       dir: './dist/esm',
