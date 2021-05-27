@@ -9,18 +9,10 @@ module.exports = async function () {
 
     scenarios: [
       {
-        name: 'ember-lts-3.20',
+        name: 'ember-3.27',
         npm: {
           devDependencies: {
-            'ember-source': '~3.20.5'
-          }
-        }
-      },
-      {
-        name: 'ember-lts-3.24',
-        npm: {
-          devDependencies: {
-            'ember-source': '~3.24.3'
+            'ember-source': '~3.27.1'
           }
         }
       },
@@ -47,24 +39,13 @@ module.exports = async function () {
             'ember-source': await getChannelURL('canary')
           }
         }
+      },
+      {
+        name: 'embroider',
+        env: {
+          EMBROIDER: true
+        }
       }
-      // {
-      // name: 'ember-classic',
-      // env: {
-      // EMBER_OPTIONAL_FEATURES: JSON.stringify({
-      // 'application-template-wrapper': true,
-      // 'default-async-observers': false,
-      // 'template-only-glimmer-components': false
-      // })
-      // },
-      // npm: {
-      // ember: {
-      // edition: 'classic'
-      // }
-      // }
-      // }
-      // embroiderSafe(),
-      // embroiderOptimized()
     ]
   };
 };
