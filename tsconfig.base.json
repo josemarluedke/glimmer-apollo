@@ -14,6 +14,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noEmitOnError": false,
+    "skipLibCheck": true,
     "noEmit": true,
     "inlineSourceMap": true,
     "inlineSources": true,
