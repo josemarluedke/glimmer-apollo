@@ -127,7 +127,7 @@ const client = getClient();
 
 ## Ember Setup
 
-To correctly setup the Apollo client, you should use a instance initializer.
+To correctly setup the Apollo client, you should use an instance initializer.
 This will ensure you can access services, for example, to add access tokens to
 your requests or something else.
 
@@ -165,7 +165,7 @@ export default {
 ```
 
 > Note that you should clear the Apollo client when the application is
-> teared down so that any cache that Apollo hods is cleared from memory.
+> torn down so that any cache that Apollo holds is cleared from memory.
 
 ## License
 
