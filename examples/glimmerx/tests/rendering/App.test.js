@@ -1,20 +1,14 @@
-import {
-  module,
-  test,
-  renderComponent,
-  setupApollo,
-  setupMirage
-} from '../util';
+import { module, test, renderComponent, setupMirage } from '../util';
+import { hbs } from '@glimmerx/component';
 
 import App from '../../src/App';
 
 module('App test', (hooks) => {
   const mirage = setupMirage(hooks);
-  setupApollo(hooks);
 
   test('it works', async (assert) => {
     mirage.server.createList('note', 3);
-    await renderComponent(App);
+    await renderComponent(hbs`<App />`);
 
     assert.dom('h1').containsText('Notes');
   });
