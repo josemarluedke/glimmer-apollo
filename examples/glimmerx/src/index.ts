@@ -1,6 +1,8 @@
 import { renderComponent } from '@glimmerx/core';
+import { hbs } from '@glimmerx/component';
+import 'glimmer-apollo/environment-glimmer';
+import { GlimmerApolloProvider } from './apollo';
 import { startServer } from './mock/server';
-import createApollo from './apollo';
 import App from './App';
 
 document.addEventListener(
@@ -8,12 +10,17 @@ document.addEventListener(
   () => {
     const server = startServer('development');
     server.createList('note', 3);
-    createApollo();
 
     const element = document.getElementById('app');
-    renderComponent(App, {
-      element: element! // eslint-disable-line
-    });
+    renderComponent(
+      hbs`<GlimmerApolloProvider>
+            <App />
+          </GlimmerApolloProvider>
+        `,
+      {
+        element: element! // eslint-disable-line
+      }
+    );
   },
   { once: true }
 );

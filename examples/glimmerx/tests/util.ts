@@ -1,11 +1,11 @@
+import 'glimmer-apollo/environment-glimmer';
 import {
   renderComponent as glimmerRenderComponent,
   ComponentDefinition,
   RenderComponentOptions,
   didRender
 } from '@glimmerx/core';
-import createApollo from '../src/apollo';
-import { clearClients } from 'glimmer-apollo';
+import { GlimmerApolloProvider } from '../src/apollo';
 
 // Bootstrap QUnit
 import 'qunit';
@@ -42,16 +42,9 @@ export async function renderComponent(
     options = { ...elementOrOptions, element };
   }
 
-  await glimmerRenderComponent(component, options);
-}
+  options.args = { Component: component };
 
-export function setupApollo(hooks: NestedHooks): void {
-  hooks.beforeEach(() => {
-    createApollo();
-  });
-  hooks.afterEach(() => {
-    clearClients();
-  });
+  await glimmerRenderComponent(GlimmerApolloProvider, options);
 }
 
 export function setupMirage(hooks: NestedHooks): {
