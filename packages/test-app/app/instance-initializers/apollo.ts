@@ -1,14 +1,14 @@
-import { registerDestructor } from '@ember/destroyable';
-import { setClient, clearClients } from 'glimmer-apollo';
+import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
   InMemoryCache,
   createHttpLink
 } from '@apollo/client/core';
-import type Application from '@ember/application';
+import ApplicationInstance from '@ember/application/instance';
 
-export function initialize(appInstance: Application): void {
+export function initialize(appInstance: ApplicationInstance): void {
   setClient(
+    appInstance,
     new ApolloClient({
       cache: new InMemoryCache(),
       link: createHttpLink({
@@ -16,10 +16,6 @@ export function initialize(appInstance: Application): void {
       })
     })
   );
-
-  registerDestructor(appInstance, () => {
-    clearClients();
-  });
 }
 
 export default {

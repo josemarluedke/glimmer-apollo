@@ -109,20 +109,40 @@ export default class Todo extends Component {
 }
 ```
 
-### setClient(client[, clientId])
+### setClient(ctx, client[, clientId])
+
+Where `ctx` is an object with owner.
 
 ```js
 import { setClient } from 'glimmer-apollo';
 
-setClient(new ApolloClient({ ... });
+class App extends Component {
+  constructor() {
+    super(...arguments);
+
+    setClient(this, new ApolloClient({ ... });
+  }
+
+  // ...
+}
 ```
 
-### getClient([clientId])
+### getClient(ctx[,clientId])
+
+Where `ctx` is an object with owner.
 
 ```js
 import { getClient } from 'glimmer-apollo';
 
-const client = getClient();
+class MyComponent extends Component {
+  constructor() {
+    super(...arguments);
+
+    const client = getClient(this);
+  }
+
+  // ...
+}
 ```
 
 ## Ember Setup
@@ -136,8 +156,7 @@ Here is an example:
 ```js
 // app/instance-initializers/apollo.js
 
-import { registerDestructor } from '@ember/destroyable';
-import { setClient, clearClients } from 'glimmer-apollo';
+import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
   InMemoryCache,
@@ -146,6 +165,7 @@ import {
 
 export function initialize(appInstance) {
   setClient(
+    appInstance,
     new ApolloClient({
       cache: new InMemoryCache(),
       link: createHttpLink({
@@ -153,10 +173,6 @@ export function initialize(appInstance) {
       })
     })
   );
-
-  registerDestructor(appInstance, () => {
-    clearClients();
-  });
 }
 
 export default {
@@ -164,8 +180,8 @@ export default {
 };
 ```
 
-> Note that you should clear the Apollo client when the application is
-> torn down so that any cache that Apollo holds is cleared from memory.
+> Note that when the context (application instance) is torn down, the
+> Apollo Client will be cleared and unregistered from Glimmer Apollo.
 
 ## License
 

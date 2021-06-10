@@ -1,7 +1,8 @@
 import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
-import { setClient, getClient, clearClients, useQuery } from 'glimmer-apollo';
+import { setClient, getClient, useQuery } from 'glimmer-apollo';
+import { setOwner } from '@ember/application';
 import {
   ApolloClient,
   ApolloError,
@@ -27,6 +28,8 @@ const USER_INFO = gql`
 
 module('useQuery', function (hooks) {
   let ctx = {};
+  const owner = {};
+
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     link: createHttpLink({
@@ -35,9 +38,9 @@ module('useQuery', function (hooks) {
   });
 
   hooks.beforeEach(() => {
-    clearClients();
-    setClient(client);
     ctx = {};
+    setOwner(ctx, owner);
+    setClient(ctx, client);
   });
 
   hooks.afterEach(() => {
@@ -206,7 +209,7 @@ module('useQuery', function (hooks) {
     }
     const vars = new Obj();
     const sandbox = sinon.createSandbox();
-    const client = getClient();
+    const client = getClient(ctx);
 
     const watchQuery = sandbox.spy(client, 'watchQuery');
     const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
