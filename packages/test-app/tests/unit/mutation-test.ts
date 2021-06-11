@@ -4,7 +4,8 @@ import {
   setClient,
   clearClients,
   useMutation,
-  getClient
+  getClient,
+  gql
 } from 'glimmer-apollo';
 import { setOwner } from '@ember/application';
 import { tracked } from '@glimmer/tracking';
@@ -12,8 +13,7 @@ import {
   ApolloClient,
   ApolloError,
   InMemoryCache,
-  createHttpLink,
-  gql
+  createHttpLink
 } from '@apollo/client/core';
 import {
   LoginMutationVariables,
