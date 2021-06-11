@@ -1,11 +1,11 @@
-import { setClient, clearClients } from 'glimmer-apollo';
-import { registerDestructor } from '@glimmer/destroyable';
+import Component, { hbs } from '@glimmerx/component';
+
+import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
   InMemoryCache,
   createHttpLink
 } from '@apollo/client/core';
-import Component, { hbs } from '@glimmerx/component';
 
 export class GlimmerApolloProvider extends Component<{}> {
   constructor(owner: object, args: {}) {
@@ -37,12 +37,5 @@ export default function setupApolloClient(ctx: object): void {
   });
 
   // Set default apollo client for Glimmer Apollo
-  setClient(apolloClient);
-
-  // Clear registered clients on tear down
-  if (ctx) {
-    registerDestructor(ctx, () => {
-      clearClients();
-    });
-  }
+  setClient(ctx, apolloClient);
 }

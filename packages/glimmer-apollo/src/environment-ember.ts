@@ -1,5 +1,6 @@
 import { setEnviromentContext } from './environment';
 import { getOwner, setOwner } from '@ember/application';
+import ApplicationInstance from '@ember/application/instance';
 import { getValue, createCache } from '@glimmer/tracking/primitives/cache';
 import { invokeHelper } from '@ember/helper';
 import {
@@ -17,6 +18,7 @@ import {
 } from '@ember/helper';
 
 setEnviromentContext({
+  owner: ApplicationInstance,
   getOwner,
   setOwner,
   createCache: createCache as never,

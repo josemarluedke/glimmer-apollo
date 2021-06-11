@@ -28,6 +28,7 @@ import type {
 } from '@glimmer/validator';
 
 interface EnviromentContext {
+  owner?: object;
   setOwner: typeof ISetOwner;
   getOwner: typeof IGetOwner;
   getValue: typeof IGetValue;
@@ -43,7 +44,8 @@ interface EnviromentContext {
   helperCapabilities: typeof IHelperCapabilities;
 }
 
-export let getOwner: EnviromentContext['getOwner'];
+export let owner: EnviromentContext['owner'];
+let _getOwner: EnviromentContext['getOwner'];
 export let setOwner: EnviromentContext['setOwner'];
 export let createCache: EnviromentContext['createCache'];
 export let getValue: EnviromentContext['getValue'];
@@ -59,6 +61,15 @@ export let helperCapabilities: EnviromentContext['helperCapabilities'];
 
 let environmentContextWasSet = false;
 
+export function getOwner<O extends object>(obj: object): O | undefined {
+  // eslint-disable-next-line
+  if (typeof owner !== 'undefined' && obj instanceof (owner as any)) {
+    return obj as O;
+  }
+
+  return _getOwner(obj);
+}
+
 export function setEnviromentContext(env: EnviromentContext): void {
   if (DEBUG) {
     if (environmentContextWasSet) {
@@ -70,8 +81,9 @@ export function setEnviromentContext(env: EnviromentContext): void {
     environmentContextWasSet = true;
   }
 
+  owner = env.owner;
   setOwner = env.setOwner;
-  getOwner = env.getOwner;
+  _getOwner = env.getOwner;
   createCache = env.createCache;
   getValue = env.getValue;
   invokeHelper = env.invokeHelper;
