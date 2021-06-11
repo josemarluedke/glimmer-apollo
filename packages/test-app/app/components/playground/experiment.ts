@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'glimmer-apollo';
+import { useQuery, useMutation, gql } from 'glimmer-apollo';
 
 const USER_INFO = gql`
   query GetUserInfo {

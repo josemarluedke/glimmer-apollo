@@ -1,14 +1,13 @@
 import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
-import { setClient, getClient, useQuery } from 'glimmer-apollo';
+import { setClient, getClient, useQuery, gql } from 'glimmer-apollo';
 import { setOwner } from '@ember/application';
 import {
   ApolloClient,
   ApolloError,
   InMemoryCache,
-  createHttpLink,
-  gql
+  createHttpLink
 } from '@apollo/client/core';
 import {
   UserInfoQuery,

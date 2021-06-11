@@ -32,8 +32,7 @@ npm install --save-dev glimmer-apollo @apollo/client graphql
 ```js
 import Component, { hbs, tracked } from '@glimmerx/component';
 import { on, action } from '@glimmerx/modifier';
-import { useQuery } from 'glimmer-apollo';
-import gql from 'graphql-tag';
+import { useQuery, gql } from 'glimmer-apollo';
 import Todo from './todo';
 
 export default class Todos extends Component {
@@ -76,8 +75,7 @@ export default class Todos extends Component {
 ```js
 import Component, { hbs } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
-import { useMutation } from 'glimmer-apollo';
-import gql from 'graphql-tag';
+import { useMutation, gql } from 'glimmer-apollo';
 
 export default class Todo extends Component {
   deleteTodo = useMutation(this, () => [
