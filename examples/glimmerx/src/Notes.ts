@@ -6,6 +6,7 @@ import { fn } from '@glimmerx/helper';
 import { useQuery, gql } from 'glimmer-apollo';
 import { WriteIcon } from './Icons';
 import { Link } from './Router';
+import { GET_NOTES } from './queries';
 
 function equal(a: unknown, b: unknown): boolean {
   return a === b;
@@ -44,15 +45,7 @@ export default class Notes extends Component {
   @tracked selectedNote: any;
 
   notes = useQuery(this, () => [
-    gql`
-      query {
-        notes {
-          id
-          title
-          description
-        }
-      }
-    `,
+    GET_NOTES,
     {
       onComplete: (): void => {
         this.selectedNote = undefined;

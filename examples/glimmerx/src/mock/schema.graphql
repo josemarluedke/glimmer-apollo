@@ -2,8 +2,9 @@ type Note {
   id: ID!
   title: String!
   description: String!
+  isArchived: Boolean
 }
 
 type Query {
-  notes: [Note!]
+  notes(isArchived: Boolean): [Note!]
 }

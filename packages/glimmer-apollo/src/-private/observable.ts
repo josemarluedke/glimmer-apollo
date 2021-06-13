@@ -16,7 +16,7 @@ export default class ObservableResource<
 > extends Resource<Args> {
   private observable?: ObservableQuery<TData>;
 
-  _setObservable(observable: ObservableQuery<TData>) {
+  protected _setObservable(observable: ObservableQuery<TData>) {
     this.observable = observable;
   }
 
