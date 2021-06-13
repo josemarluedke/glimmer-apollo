@@ -3,7 +3,7 @@
 import Component, { hbs, tracked } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
 import { fn } from '@glimmerx/helper';
-import { useQuery, gql } from 'glimmer-apollo';
+import { useQuery } from 'glimmer-apollo';
 import { WriteIcon } from './Icons';
 import { Link } from './Router';
 import { GET_NOTES } from './queries';
