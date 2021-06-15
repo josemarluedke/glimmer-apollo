@@ -16,7 +16,10 @@ export default class Notes extends Component {
       },
       onError: (error): void => {
         console.error('Received an error', error.message);
-      }
+      },
+      errorPolicy: 'all',
+      fetchPolicy: 'network-only',
+      ssr: true
     }
   ]);
 

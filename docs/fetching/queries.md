@@ -5,7 +5,7 @@ order: 1
 # Queries
 
 In this guide, we look into how to fetch GraphQL data using Glimmer Apollo.
-It assumes you're familiar with how GraphQL queries work. If aren't,
+It assumes you're familiar with how GraphQL queries work. If you aren't,
 we recommend this [guide](https://graphql.org/learn/queries/) to learn more
 about GraphQL Queries.
 
@@ -19,7 +19,7 @@ import paths for `Component` and `hbs`.
 
 Let's first define our GraphQL Query document.
 
-```ts:title=queries.ts
+```ts:queries.ts
 import { gql } from 'glimmer-apollo';
 
 export const GET_NOTES = gql`
@@ -33,10 +33,9 @@ export const GET_NOTES = gql`
 `;
 ```
 
-Next, let's define a component called Notes where we will execute the
-query using `useQuery`.
+Next, let's define a component called Notes, where we will execute the query using `useQuery`.
 
-```ts:title=notes.ts
+```ts:notes.ts
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES } from './queries';
 
@@ -65,8 +64,8 @@ for fetching from the network and watching the local cache for changes.
 A few things to note about `useQuery`, which is a Resource:
 
 - The `this` is to keep track of destruction -- so when `Notes` component is destroyed, all the queries attached to it can be unsubscribed.
-- The query will not be executed until it a property is accessed. For example, accessing `loading` or `data` will trigger the query to be executed.
-- The second argument to `useQuery` should always be a function that returns an array. This argument can be referred to `Args Thunk.`
+- The query will not be executed until a property is accessed. For example, accessing `loading` or `data` will trigger the query to be executed.
+- The second argument to `useQuery` should always be a function that returns an array. This argument can be referred to as `Args Thunk.`
 
 ### Variables
 
@@ -84,7 +83,7 @@ If your variables are `tracked`, Glimmer Apollo will re-execute your query.
 Let's look at the following example where we modify our original `GetNotes`
 query and the `Notes` component to add the ability to filter by `isArchived`.
 
-```ts:title=queries.ts
+```ts:queries.ts
 import { gql } from 'glimmer-apollo';
 
 export const GET_NOTES = gql`
@@ -98,7 +97,7 @@ export const GET_NOTES = gql`
 `;
 ```
 
-```ts:title=notes.ts
+```ts:notes.ts
 import { tracked } from '@glimmer/tracking';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES } from './queries';
