@@ -142,6 +142,45 @@ export default class Notes extends Component {
 When the button is clicked, we will re-execute our `GetNotes` query with the
 updated `isArchived` value.
 
+## Options
+
+Alongside variables, you can pass additional options to `useQuery`. These options vary from fetch policies, error policies, and more.
+
+```ts
+notes = useQuery(this, () => [
+  GET_NOTES,
+  {
+    variables: { isArchived: this.isArchived },
+    errorPolicy: 'all',
+    fetchPolicy: 'network-only',
+    ssr: false
+  }
+]);
+```
+
+### `ssr`
+
+Glimmer Apollo supports SSR with [FastBoot](http://ember-fastboot.com/) by default. Any queries that are triggered while rendering in FastBoot are automatically awaited for the server to respond.
+
+The `ssr` option allows disabling fetching of the query when running in SSR with FastBoot. It will skip the execution entirely in FastBoot but will execute when running in the Browser. This feature is useful if you are fetching secondary data to the page and can wait to be fetched.
+
+### `clientId`
+
+This option specifies which Apollo Client should be used for the given query. Glimmer Apollo supports defining multiple Apollo Clients that are distinguished by a custom identifier while setting the client to Glimmer Apollo.
+
+```ts
+// ....
+setClient(
+  this,
+  new ApolloClient({
+    /* ... */
+  }),
+  'my-custom-client'
+);
+// ....
+notes = useQuery(this, () => [GET_NOTES, { clientId: 'my-custom-client' }]);
+```
+
 ## Event Callbacks
 
 As part of the options argument to `useQuery`, you can pass callback functions
@@ -182,3 +221,61 @@ notes = useQuery(this, () => [
   }
 ]);
 ```
+
+## Derived Data
+
+Deriving data is very simple due to how auto-tracking works. As result, you can just have getters in the component that derive the data you need.
+
+Let's say we want to have a count of notes that are displayed.
+
+```ts:notes.ts
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from './queries';
+
+export default class Notes extends Component {
+  notes = useQuery(this, () => [
+    GET_NOTES,
+  ]);
+
+  get totalNotes(): number {
+    return this.notes.data?.notes.length || 0;
+  }
+
+  static template = hbs`
+    /// ...
+    Displaying {{this.totalNotes}} notes
+
+    {{#each this.notes.data.notes as |note|}}
+      <div>
+        Title: {{note.title}}
+        Description: {{note.description}}
+      </div>
+    {{/each}}
+  `;
+}
+```
+
+## Ember Routes
+
+Fetching data in routes has its use cases.
+One aspect of this is that Ember automatically awaits the model hook to be resolved before rendering your template. By design, `useQuery` is built on reactivity in mind, so it might not feel like we could use it in routes, but sure we can.
+
+Below we have an example where we use the property `promise` that holds a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves when the query finishes fetching the data from the network.
+
+```js:app/routes/notes.js
+import Route from '@ember/routing/route';
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from '../queries'
+
+export default class NotesRoute extends Route {
+  notes = useQuery(this, () => [GET_NOTES]);
+
+  async model() {
+    await this.notes.promise;
+
+    return this.notes;
+  }
+}
+```
+
+> Important: You should make sure to return the entire instance of the Resource from the model hook, not partial data. This way, the UI will update when Apollo Client's cache changes.
