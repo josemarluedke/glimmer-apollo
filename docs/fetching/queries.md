@@ -181,6 +181,90 @@ setClient(
 notes = useQuery(this, () => [GET_NOTES, { clientId: 'my-custom-client' }]);
 ```
 
+## Query Status
+
+### `loading`
+
+This is a handy property that allows us to inform our interface that we are loading data.
+
+```ts
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from './queries';
+
+export default class Notes extends Component {
+  notes = useQuery(this, () => [GET_NOTES]);
+
+  static template = hbs`
+    {{#if this.notes.loading}}
+      Loading...
+    {{/if}}
+
+    // ...
+  `;
+}
+```
+
+### `error`
+
+This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your query. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
+
+```ts
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from './queries';
+
+export default class Notes extends Component {
+  notes = useQuery(this, () => [GET_NOTES
+    { errorPolicy: 'all' }
+  ]);
+
+  static template = hbs`
+    {{#if this.notes.error}}
+      {{this.notes.error}}
+    {{/if}}
+
+    // ...
+  `;
+}
+```
+
+For most cases, it's usually sufficient to check for the `loading` state, then the `error` state, then finally, assume that the data is available and render it.
+
+### `networkStatus`
+
+This property is a number indicating the current network state of the query's associated request.
+Similar to the error property, `networkStatus` should be used in conjunction with the `notifyOnNetworkStatusChange` option for detailed info about the network status.
+
+```ts
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from './queries';
+import { NetworkStatus } from '@apollo/client/core';
+
+export default class Notes extends Component {
+  notes = useQuery(this, () => [
+    GET_NOTES,
+    { notifyOnNetworkStatusChange: true }
+  ]);
+
+  isRefetching(): boolean {
+    return this.notes.networkStatus === NetworkStatus.refetch;
+  }
+
+  static template = hbs`
+    {{#if this.isRefetching}}
+      Refetching...
+    {{/if}}
+
+    // ...
+  `;
+}
+```
+
+### `promise`
+
+This property holds a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves when the query finishes fetching the data from the network.
+The Promise will only be updated for the first execution of the Resource, meaning that it won't become an unresolved promise when Apollo Cache is updating or when refecting.
+This property is useful for executing queries in [Ember Routes](#ember-routes).
+
 ## Event Callbacks
 
 As part of the options argument to `useQuery`, you can pass callback functions
