@@ -15,7 +15,7 @@ be used in Ember.js ([with template-imports](https://github.com/ember-template-i
 as well as Glimmer.js. We have omitted its imports because of the different
 import paths for `Component` and `hbs`.
 
-## Executing a query
+## Executing a Query
 
 Let's first define our GraphQL Query document.
 
@@ -373,7 +373,7 @@ export default class NotesRoute extends Route {
 
 > Important: You should make sure to return the entire instance of the Resource from the model hook, not partial data. This way, the UI will update when Apollo Client's cache changes.
 
-## Helper functions
+## Helper Functions
 
 Below you can find a few helper functions available from Apollo Client's Query Object.
 You can access these directly from the Query Resource as shown below:
