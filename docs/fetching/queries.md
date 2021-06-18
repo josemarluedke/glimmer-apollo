@@ -363,3 +363,56 @@ export default class NotesRoute extends Route {
 ```
 
 > Important: You should make sure to return the entire instance of the Resource from the model hook, not partial data. This way, the UI will update when Apollo Client's cache changes.
+
+## Helper functions
+
+Below you can find a few helper functions available from Apollo Client's Query Object.
+You can access these directly from the Query Resource as shown below:
+
+```ts:notes.ts
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from './queries';
+
+export default class Notes extends Component {
+  notes = useQuery(this, () => [
+    GET_NOTES,
+  ]);
+
+  static template = hbs`
+    <button {{on "click" this.notes.refetch}}>Refech</button>
+
+    {{#each this.notes.data.notes as |note|}}
+      <div>
+        Title: {{note.title}}
+        Description: {{note.description}}
+      </div>
+    {{/each}}
+  `;
+}
+```
+
+### `refetch`
+
+A function that enables you to re-execute the query, optionally passing in new variables.
+
+### `fetchMore`
+
+A function that helps you fetch the next set of results for a [paginated list field](https://www.apollographql.com/docs/react/pagination/core-api/).
+
+### `updateQuery`
+
+A function that enables you to update the query's cached result without executing a followup GraphQL operation.
+
+### `startPolling`
+
+A function that instructs the query to begin re-executing at a specified interval (in milliseconds).
+
+### `stopPolling`
+
+A function that instructs the query to stop polling after a previous call to `startPolling`.
+
+### `subscribeToMore`
+
+A function that enables you to execute a subscription, usually to subscribe to specific fields that were included in the query.
+
+This function returns another function that you can call to terminate the subscription.
