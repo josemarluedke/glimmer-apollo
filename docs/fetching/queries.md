@@ -33,7 +33,24 @@ export const GET_NOTES = gql`
 `;
 ```
 
-Next, let's define a component called Notes, where we will execute the query using `useQuery`.
+### useQuery
+
+This function is the primary way to query GraphQL APIs using Glimmer Apollo. `useQuery` is a utility function that creates a Query Resource instance.
+
+The Query Resource uses Apollo's [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery) for fetching from the network and watching the local cache for changes. It allows the UI to keep up to date with any cache changes and any refetches that might be triggered.
+
+```ts:notes.ts
+import { useQuery } from 'glimmer-apollo';
+import { GET_NOTES } from './queries';
+
+export default class Notes extends Component {
+  notes = useQuery(this, () => [GET_NOTES, { /* options */ }]);
+}
+```
+
+- The `this` is to keep track of destruction. When the context object (`this`) is destroyed, all the queries attached to it can be unsubscribed.
+- The query will not be executed until a property is accessed. For example, accessing `loading` or `data` will trigger the query to be executed.
+- The second argument to `useQuery` should always be a function that returns an array. We can refer to this argument as `Args Thunk.`
 
 ```ts:notes.ts
 import { useQuery } from 'glimmer-apollo';
@@ -58,14 +75,6 @@ export default class Notes extends Component {
   `;
 }
 ```
-
-The `useQuery` method uses Apollo's [watchQuery](https://www.apollographql.com/docs/react/api/core/ApolloClient/#ApolloClient.watchQuery)
-for fetching from the network and watching the local cache for changes.
-A few things to note about `useQuery`, which is a Resource:
-
-- The `this` is to keep track of destruction -- so when `Notes` component is destroyed, all the queries attached to it can be unsubscribed.
-- The query will not be executed until a property is accessed. For example, accessing `loading` or `data` will trigger the query to be executed.
-- The second argument to `useQuery` should always be a function that returns an array. This argument can be referred to as `Args Thunk.`
 
 ### Variables
 
