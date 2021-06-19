@@ -14,7 +14,13 @@ Let's define our GraphQL Mutation document.
 import { gql } from 'glimmer-apollo';
 
 export const CREATE_NOTE = gql`
-  TODO
+  mutation CreateNote($input: NoteInput!) {
+    createNote(input: $input) {
+      id
+      title
+      description
+    }
+  }
 `;
 ```
 
@@ -142,7 +148,105 @@ export default class CreateNote extends Component {
 }
 ```
 
+### `clientId`
+
+This option specifies which Apollo Client should be used for the given mutation. Glimmer Apollo supports defining multiple Apollo Clients that are distinguished by a custom identifier while setting the client to Glimmer Apollo.
+
+```ts
+// ....
+setClient(
+  this,
+  new ApolloClient({
+    /* ... */
+  }),
+  'my-custom-client'
+);
+// ....
+notes = useQuery(this, () => [GET_NOTES, { clientId: 'my-custom-client' }]);
+```
+
 ## Mutation Status
+
+### `called`
+
+This boolean property informs if the `mutate` function gets called.
+
+```ts:create-note.ts
+import { useMutation } from 'glimmer-apollo';
+import { CREATE_NOTE } from './mutations';
+
+export default class CreateNote extends Component {
+  createNote = useMutation(this, () => [CREATE_NOTE]);
+
+  submit = async (): Promise<void> => {
+    await this.createNote.mutate(/* variables */);
+  };
+
+  static template = hbs`
+    <button {{on "click" this.submit}}>
+      Create Note
+    </button>
+
+    {{#if this.createNote.called}}
+      Mutate function called.
+    {{/if}}
+  `;
+}
+```
+
+### `loading`
+
+This is a handy property that allows us to inform our interface that we are saving data.
+
+```ts:create-note.ts
+import { useMutation } from 'glimmer-apollo';
+import { CREATE_NOTE } from './mutations';
+
+export default class CreateNote extends Component {
+  createNote = useMutation(this, () => [CREATE_NOTE]);
+
+  submit = async (): Promise<void> => {
+    await this.createNote.mutate(/* variables */);
+  };
+
+  static template = hbs`
+    <button {{on "click" this.submit}}>
+      Create Note
+    </button>
+
+    {{#if this.createNote.loading}}
+      Creating...
+    {{/if}}
+  `;
+}
+```
+
+### `error`
+
+This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your mutation. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
+
+```ts:create-note.ts
+import { useMutation } from 'glimmer-apollo';
+import { CREATE_NOTE } from './mutations';
+
+export default class CreateNote extends Component {
+  createNote = useMutation(this, () => [CREATE_NOTE]);
+
+  submit = async (): Promise<void> => {
+    await this.createNote.mutate(/* variables */);
+  };
+
+  static template = hbs`
+    <button {{on "click" this.submit}}>
+      Create Note
+    </button>
+
+    {{#if this.createNote.error}}
+      {{this.createNote.error.message}}
+    {{/if}}
+  `;
+}
+```
 
 ## Event Callbacks
 
