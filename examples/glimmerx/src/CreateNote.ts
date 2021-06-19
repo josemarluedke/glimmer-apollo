@@ -1,26 +1,52 @@
 import Component, { hbs } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CreateNoteMutation,
+  CreateNoteMutationVariables,
+  CREATE_NOTE
+} from './mutations';
+import { GetNotesQuery, GetNotesQueryVariables, GET_NOTES } from './queries';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [
-    CREATE_NOTE,
-    {
-      variables: {
-        // default variables here
-      },
-      errorPolicy: 'all'
-    }
-  ]);
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [
+      CREATE_NOTE,
+      {
+        update(cache, result): void {
+          const variables = { isArchived: false };
+
+          const data = cache.readQuery<GetNotesQuery, GetNotesQueryVariables>({
+            query: GET_NOTES,
+            variables
+          });
+
+          if (data) {
+            const existingNotes = data.notes;
+            const newNote = result.data?.createNote;
+
+            if (newNote) {
+              cache.writeQuery({
+                query: GET_NOTES,
+                variables,
+                data: { notes: [newNote, ...existingNotes] }
+              });
+            }
+          }
+        }
+      }
+    ]
+  );
 
   submit = async (): Promise<void> => {
-    await this.createNote.mutate(
-      {
-        // overwrite default variables here
-      },
-      { refetchQueries: ['GetNotes'] }
-    );
+    await this.createNote.mutate({
+      input: {
+        title: 'Title',
+        description: 'Description',
+        isArchived: false
+      }
+    });
   };
 
   static template = hbs`

@@ -2,13 +2,13 @@ import Component, { hbs } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
 import { tracked } from '@glimmer/tracking';
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GetNotesQuery, GetNotesQueryVariables, GET_NOTES } from './queries';
 import CreateNote from './CreateNote';
 
 export default class Notes extends Component {
   @tracked isArchived = false;
 
-  notes = useQuery(this, () => [
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
     GET_NOTES,
     {
       variables: { isArchived: this.isArchived },
@@ -17,10 +17,7 @@ export default class Notes extends Component {
       },
       onError: (error): void => {
         console.error('Received an error', error.message);
-      },
-      errorPolicy: 'all',
-      fetchPolicy: 'network-only',
-      ssr: true
+      }
     }
   ]);
 

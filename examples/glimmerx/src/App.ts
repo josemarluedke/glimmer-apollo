@@ -1,6 +1,6 @@
 import Component, { hbs } from '@glimmerx/component';
 import Notes from './Notes';
-import TuturialNotes from './TuturialNotes';
+import TutorialNotes from './TutorialNotes';
 import './App.css';
 import { Router } from './Router';
 
@@ -15,7 +15,7 @@ export default class App extends Component<{}> {
         </Route>
         <Route @path='/notes/add'>ADD</Route>
         <Route @path='/tutorial'>
-          <TuturialNotes />
+          <TutorialNotes />
         </Route>
       </Router>
     </div>
