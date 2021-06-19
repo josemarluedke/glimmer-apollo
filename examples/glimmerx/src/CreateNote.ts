@@ -2,11 +2,11 @@ import Component, { hbs } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
 import { useMutation } from 'glimmer-apollo';
 import {
+  CREATE_NOTE,
   CreateNoteMutation,
-  CreateNoteMutationVariables,
-  CREATE_NOTE
+  CreateNoteMutationVariables
 } from './mutations';
-import { GetNotesQuery, GetNotesQueryVariables, GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class CreateNote extends Component {
   createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(

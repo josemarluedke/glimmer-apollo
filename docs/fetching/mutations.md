@@ -22,6 +22,25 @@ export const CREATE_NOTE = gql`
     }
   }
 `;
+
+export type CreateNoteMutation = {
+  __typename?: 'Mutation';
+
+  createNote?: {
+    __typename?: 'Note';
+    id: string;
+    title: string;
+    description: string;
+  } | null;
+};
+
+export type CreateNoteMutationVariables = {
+  input: {
+    title: string;
+    description: string;
+    isArchived?: boolean | null;
+  };
+};
 ```
 
 ### useMutation
@@ -30,10 +49,22 @@ Similar to `useQuery`, `useMutation` is a utility function to create a Mutation 
 
 ```ts:notes.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [CREATE_NOTE, { /* options */ }]);
+  createNote = seMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [
+      CREATE_NOTE,
+      {
+        /* options */
+      }
+    ]
+  );
 }
 ```
 
@@ -43,10 +74,14 @@ export default class CreateNote extends Component {
 
 ```ts:create-note.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [
+  createNote = seMutation<CreateNoteMutation, CreateNoteMutationVariables>(
     CREATE_NOTE,
     {
       /* options */
@@ -100,21 +135,28 @@ However, some data might be present early on, so you might also want to pass the
 
 ```ts:create-note.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [
-    CREATE_NOTE,
-    {
-      variables: {
-        // default variables here
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [
+      CREATE_NOTE,
+      {
+        variables: {
+          /* default variables here */
+        }
       }
-    }
-  ]);
+    ]
+  );
 
   submit = async (): Promise<void> => {
-    await this.createNote.mutate(
-      // overwrite default variables here
+    await this.createNote.mutate({
+      /* overwrite default variables here */
     });
   };
 }
@@ -126,22 +168,29 @@ Similar to variables, you can pass options to mutations on `useMutation` and `mu
 
 ```ts:create-note.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [
-    CREATE_NOTE,
-    {
-      errorPolicy: 'all'
-    }
-  ]);
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [
+      CREATE_NOTE,
+      {
+        errorPolicy: 'all'
+      }
+    ]
+  );
 
   submit = async (): Promise<void> => {
     await this.createNote.mutate(
       {
-        // variables
+        /* variables */
       },
-      // additional options
+      /* additional options */
       { refetchQueries: ['GetNotes'] }
     );
   };
@@ -162,7 +211,10 @@ setClient(
   'my-custom-client'
 );
 // ....
-notes = useQuery(this, () => [GET_NOTES, { clientId: 'my-custom-client' }]);
+notes = useMutation(this, () => [
+  CREATE_NOTE,
+  { clientId: 'my-custom-client' }
+]);
 ```
 
 ## Mutation Status
@@ -173,10 +225,17 @@ This boolean property informs if the `mutate` function gets called.
 
 ```ts:create-note.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [CREATE_NOTE]);
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [CREATE_NOTE]
+  );
 
   submit = async (): Promise<void> => {
     await this.createNote.mutate(/* variables */);
@@ -200,10 +259,17 @@ This is a handy property that allows us to inform our interface that we are savi
 
 ```ts:create-note.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [CREATE_NOTE]);
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [CREATE_NOTE]
+  );
 
   submit = async (): Promise<void> => {
     await this.createNote.mutate(/* variables */);
@@ -227,10 +293,17 @@ This property that can be `undefined` or an `ApolloError` object, holds the info
 
 ```ts:create-note.ts
 import { useMutation } from 'glimmer-apollo';
-import { CREATE_NOTE } from './mutations';
+import {
+  CREATE_NOTE,
+  CreateNoteMutation,
+  CreateNoteMutationVariables
+} from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = useMutation(this, () => [CREATE_NOTE]);
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [CREATE_NOTE]
+  );
 
   submit = async (): Promise<void> => {
     await this.createNote.mutate(/* variables */);
@@ -304,11 +377,11 @@ In the example below, we use `GetNotes` query from the previous section to demon
 ```ts:create-notes.ts
 import { useMutation } from 'glimmer-apollo';
 import {
+  CREATE_NOTE,
   CreateNoteMutation,
-  CreateNoteMutationVariables,
-  CREATE_NOTE
+  CreateNoteMutationVariables
 } from './mutations';
-import { GetNotesQuery, GetNotesQueryVariables, GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class CreateNote extends Component {
   createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(

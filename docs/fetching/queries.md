@@ -31,6 +31,18 @@ export const GET_NOTES = gql`
     }
   }
 `;
+
+export type GetNotesQuery = {
+  __typename?: 'Query';
+  notes: {
+    __typename?: 'Note';
+    id: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export type GetNotesQueryVariables = {};
 ```
 
 ### useQuery
@@ -41,10 +53,15 @@ The Query Resource uses Apollo's [watchQuery](https://www.apollographql.com/docs
 
 ```ts:notes.ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [GET_NOTES, { /* options */ }]);
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
+    GET_NOTES,
+    {
+      /* options */
+    }
+  ]);
 }
 ```
 
@@ -54,10 +71,12 @@ export default class Notes extends Component {
 
 ```ts:notes.ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [GET_NOTES]);
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
+    GET_NOTES
+  ]);
 
   static template = hbs`
     {{#if this.notes.loading}}
@@ -98,23 +117,37 @@ import { gql } from 'glimmer-apollo';
 export const GET_NOTES = gql`
   query GetNotes($isArchived: Boolean) {
     notes(isArchived: $isArchived) {
-       id
-       title
-       description
+      id
+      title
+      description
     }
   }
 `;
+
+export type GetNotesQuery = {
+  __typename?: 'Query';
+  notes: {
+    __typename?: 'Note';
+    id: string;
+    title: string;
+    description: string;
+  }[];
+};
+
+export type GetNotesQueryVariables = {
+  isArchived?: boolean | null;
+};
 ```
 
 ```ts:notes.ts
 import { tracked } from '@glimmer/tracking';
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
   @tracked isArchived = false;
 
-  notes = useQuery(this, () => [
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
     GET_NOTES,
     { variables: { isArchived: this.isArchived } }
   ]);
@@ -198,10 +231,12 @@ This is a handy property that allows us to inform our interface that we are load
 
 ```ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [GET_NOTES]);
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
+    GET_NOTES
+  ]);
 
   static template = hbs`
     {{#if this.notes.loading}}
@@ -219,10 +254,11 @@ This property that can be `undefined` or an `ApolloError` object, holds the info
 
 ```ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [GET_NOTES
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
+    GET_NOTES,
     { errorPolicy: 'all' }
   ]);
 
@@ -245,11 +281,11 @@ Similar to the error property, `networkStatus` should be used in conjunction wit
 
 ```ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 import { NetworkStatus } from '@apollo/client/core';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
     GET_NOTES,
     { notifyOnNetworkStatusChange: true }
   ]);
@@ -323,10 +359,10 @@ Let's say we want to have a count of notes that are displayed.
 
 ```ts:notes.ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
     GET_NOTES,
   ]);
 
@@ -361,7 +397,9 @@ import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES } from '../queries'
 
 export default class NotesRoute extends Route {
-  notes = useQuery(this, () => [GET_NOTES]);
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
+    GET_NOTES
+  ]);
 
   async model() {
     await this.notes.promise;
@@ -380,11 +418,11 @@ You can access these directly from the Query Resource as shown below:
 
 ```ts:notes.ts
 import { useQuery } from 'glimmer-apollo';
-import { GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
 export default class Notes extends Component {
-  notes = useQuery(this, () => [
-    GET_NOTES,
+  notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [
+    GET_NOTES
   ]);
 
   static template = hbs`

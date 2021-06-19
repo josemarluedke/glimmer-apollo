@@ -10,16 +10,16 @@ export const GET_NOTES = gql`
   }
 `;
 
-export type Maybe<T> = T | null;
-
-export type GetNotesQueryVariables = {
-  isArchived?: Maybe<boolean>;
-};
-
-export type GetNotesQuery = { __typename?: 'Query' } & {
-  notes: { __typename?: 'Note' } & {
+export type GetNotesQuery = {
+  __typename?: 'Query';
+  notes: {
+    __typename?: 'Note';
     id: string;
     title: string;
     description: string;
   }[];
+};
+
+export type GetNotesQueryVariables = {
+  isArchived?: boolean | null;
 };

@@ -2,7 +2,7 @@ import Component, { hbs } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
 import { tracked } from '@glimmer/tracking';
 import { useQuery } from 'glimmer-apollo';
-import { GetNotesQuery, GetNotesQueryVariables, GET_NOTES } from './queries';
+import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 import CreateNote from './CreateNote';
 
 export default class Notes extends Component {

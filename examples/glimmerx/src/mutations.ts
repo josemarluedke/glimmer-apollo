@@ -10,20 +10,21 @@ export const CREATE_NOTE = gql`
   }
 `;
 
-export type Maybe<T> = T | null;
+export type CreateNoteMutation = {
+  __typename?: 'Mutation';
 
-export type CreateNoteMutation = { __typename?: 'Mutation' } & {
-  createNote?: Maybe<
-    { __typename?: 'Note' } & { id: string; title: string; description: string }
-  >;
-};
-
-export type NoteInput = {
-  title: string;
-  description: string;
-  isArchived: Maybe<boolean>;
+  createNote?: {
+    __typename?: 'Note';
+    id: string;
+    title: string;
+    description: string;
+  } | null;
 };
 
 export type CreateNoteMutationVariables = {
-  input: NoteInput;
+  input: {
+    title: string;
+    description: string;
+    isArchived?: boolean | null;
+  };
 };
