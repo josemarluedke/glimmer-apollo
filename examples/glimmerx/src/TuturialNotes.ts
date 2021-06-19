@@ -3,6 +3,7 @@ import { on } from '@glimmerx/modifier';
 import { tracked } from '@glimmer/tracking';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES } from './queries';
+import CreateNote from './CreateNote';
 
 export default class Notes extends Component {
   @tracked isArchived = false;
@@ -50,5 +51,7 @@ export default class Notes extends Component {
         </div>
       {{/each}}
     {{/if}}
+
+    <CreateNote />
   `;
 }
