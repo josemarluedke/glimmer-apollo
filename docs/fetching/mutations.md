@@ -284,3 +284,89 @@ createNote = useMutation(this, () => [
   }
 ]);
 ```
+
+## Updating the Cache
+
+When you execute a mutation, you modify backend data. If that data is also present in your [Apollo Client cache](https://www.apollographql.com/docs/react/caching/cache-configuration/), you might need to update your cache to reflect the result of the mutation. It depends on whether the mutation updates a single existing record.
+
+### Updating a single existing record
+
+Apollo will automatically update the record if a mutation updates a single record present in the Apollo Client cache. For this behavior to work, the mutation result must include an `id` field.
+
+### Making all other cache updates
+
+If a mutation modifies multiple entities or creates, deletes records, the Apollo Client cache is **not** automatically updated to reflect the result of the mutation. To manually update the cache, you can pass an `update` function to `useMutation` options.
+
+The purpose of an update function is to modify the cached data to match the modifications that a mutation makes to your backend data without having to refetch the data from your server.
+
+In the example below, we use `GetNotes` query from the previous section to demonstrate how to update the cache when creating a new note.
+
+```ts:create-notes.ts
+import { useMutation } from 'glimmer-apollo';
+import {
+  CreateNoteMutation,
+  CreateNoteMutationVariables,
+  CREATE_NOTE
+} from './mutations';
+import { GetNotesQuery, GetNotesQueryVariables, GET_NOTES } from './queries';
+
+export default class CreateNote extends Component {
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+    this,
+    () => [
+      CREATE_NOTE,
+      {
+        update(cache, result): void {
+          const variables = { isArchived: false };
+
+          const data = cache.readQuery<GetNotesQuery, GetNotesQueryVariables>({
+            query: GET_NOTES,
+            variables
+          });
+
+          if (data) {
+            const existingNotes = data.notes;
+            const newNote = result.data?.createNote;
+
+            if (newNote) {
+              cache.writeQuery({
+                query: GET_NOTES,
+                variables,
+                data: { notes: [newNote, ...existingNotes] }
+              });
+            }
+          }
+        }
+      }
+    ]
+  );
+
+  submit = async (): Promise<void> => {
+    await this.createNote.mutate({
+      input: {
+        title: 'Title',
+        description: 'Description',
+        isArchived: false
+      }
+    });
+  };
+
+  static template = hbs`
+    <button {{on "click" this.submit}}>
+      Create Note
+    </button>
+
+    {{#if this.createNote.loading}}
+      Creating...
+    {{else if this.createNote.error}}
+      Error!: {{this.createNote.error.message}}
+    {{else if this.createNote.called}}
+      <div>
+        id: {{this.createNote.data.createNote.id}}
+        Title: {{this.createNote.data.createNote.title}}
+        Description: {{this.createNote.data.createNote.description}}
+      </div>
+    {{/if}}
+  `;
+}
+```
