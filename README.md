@@ -40,7 +40,7 @@ export default class Todos extends Component {
 
   todos = useQuery(this, () => [
     gql`
-      query ($isDone: Boolean) {
+      query($isDone: Boolean) {
         todos(isDone: $isDone) {
           id
           description
@@ -80,7 +80,7 @@ import { useMutation, gql } from 'glimmer-apollo';
 export default class Todo extends Component {
   deleteTodo = useMutation(this, () => [
     gql`
-      mutation ($id: ID!) {
+      mutation($id: ID!) {
         deleteTodo(id: $id) {
           id
         }

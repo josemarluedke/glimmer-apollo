@@ -9,7 +9,7 @@ document.addEventListener(
   'DOMContentLoaded',
   () => {
     const server = startServer('development');
-    server.createList('note', 3);
+    server.createList('note', 10);
 
     const element = document.getElementById('app');
     renderComponent(

@@ -69,7 +69,7 @@ module('useQuery', function (hooks) {
     });
   });
 
-  test('it refetches tue query when args change', async function (assert) {
+  test('it refetches the query when args change', async function (assert) {
     class Obj {
       @tracked id = '1';
     }

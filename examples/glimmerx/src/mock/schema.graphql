@@ -2,8 +2,19 @@ type Note {
   id: ID!
   title: String!
   description: String!
+  isArchived: Boolean
 }
 
 type Query {
-  notes: [Note!]
+  notes(isArchived: Boolean): [Note!]
+}
+
+input NoteInput {
+  title: String!
+  description: String!
+  isArchived: Boolean
+}
+
+type Mutation {
+  createNote(input: NoteInput!): Note
 }
