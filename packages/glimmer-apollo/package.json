@@ -84,6 +84,9 @@
   "engines": {
     "node": ">= 12"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "ember-addon": {
     "version": 2,
     "type": "addon",
