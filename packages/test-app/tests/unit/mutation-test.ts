@@ -319,4 +319,41 @@ module('useMutation', function (hooks) {
 
     sandbox.restore();
   });
+
+  test('it uses correct client based on clientId option', async function (assert) {
+    class Obj {
+      @tracked username = 'non-existing';
+    }
+    const vars = new Obj();
+    const sandbox = sinon.createSandbox();
+    const defaultClient = getClient(ctx);
+    const customClient = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: createHttpLink({
+        uri: '/graphql'
+      })
+    });
+    setClient(ctx, customClient, 'custom-client');
+
+    const defaultMutate = sandbox.spy(defaultClient, 'mutate');
+    const customMutate = sandbox.spy(customClient, 'mutate');
+
+    const mutation = useMutation<LoginMutation, LoginMutationVariables>(
+      ctx,
+      () => [
+        LOGIN,
+        {
+          variables: { username: vars.username },
+          clientId: 'custom-client'
+        }
+      ]
+    );
+
+    mutation.mutate();
+
+    assert.ok(customMutate.calledOnce, 'custom client should be used');
+    assert.ok(defaultMutate.notCalled, 'default client should not be used');
+
+    sandbox.restore();
+  });
 });
