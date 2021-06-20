@@ -26,6 +26,7 @@ interface BaseQueryOptions<TData, TVariables>
   extends Omit<WatchQueryOptions<TVariables>, 'query'>,
     QueryFunctionOptions<TData> {
   ssr?: boolean;
+  clientId?: string;
 }
 
 export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
@@ -56,7 +57,7 @@ export class QueryResource<
   async setup(): Promise<void> {
     this.previousPositionalArgs = this.args.positional;
     const [query, options] = this.args.positional;
-    const client = getClient(this);
+    const client = getClient(this, options?.clientId);
 
     this.loading = true;
     const fastboot = this.getFastboot();

@@ -23,7 +23,9 @@ interface MutationFunctionOptions<TData> {
 
 interface BaseMutationOptions<TData, TVariables>
   extends MutationFunctionOptions<TData>,
-    Omit<MutationOptions<TData, TVariables>, 'mutation'> {}
+    Omit<MutationOptions<TData, TVariables>, 'mutation'> {
+  clientId?: string;
+}
 
 export type MutationPositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
@@ -53,8 +55,9 @@ export class MutationResource<
     > = {}
   ): Promise<Maybe<TData>> {
     this.loading = true;
-    const client = getClient(this);
     const [mutation, originalOptions] = this.args.positional;
+    const options = { ...originalOptions, ...overrideOptions };
+    const client = getClient(this, options.clientId);
 
     if (!variables) {
       variables = originalOptions?.variables;
@@ -68,8 +71,7 @@ export class MutationResource<
     this.promise = waitForPromise(
       client.mutate<TData, TVariables>({
         mutation,
-        ...originalOptions,
-        ...overrideOptions,
+        ...options,
         variables
       })
     )

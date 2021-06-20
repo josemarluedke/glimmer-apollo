@@ -228,4 +228,43 @@ module('useQuery', function (hooks) {
 
     sandbox.restore();
   });
+
+  test('it uses correct client based on clientId option', async function (assert) {
+    class Obj {
+      @tracked id = '1';
+    }
+    const vars = new Obj();
+    const sandbox = sinon.createSandbox();
+    const defaultClient = getClient(ctx);
+    const customClient = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: createHttpLink({
+        uri: '/graphql'
+      })
+    });
+    setClient(ctx, customClient, 'custom-client');
+
+    const defaultClientWatchQuery = sandbox.spy(defaultClient, 'watchQuery');
+    const customClientWatchQuery = sandbox.spy(customClient, 'watchQuery');
+
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: vars.id },
+        clientId: 'custom-client'
+      }
+    ]);
+
+    await query.settled();
+    assert.ok(
+      customClientWatchQuery.calledOnce,
+      'custom client should be used'
+    );
+    assert.ok(
+      defaultClientWatchQuery.notCalled,
+      'default client should not be used'
+    );
+
+    sandbox.restore();
+  });
 });
