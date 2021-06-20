@@ -1,6 +1,6 @@
 {
   "name": "glimmerx",
-  "version": "0.0.0",
+  "version": "0.3.0",
   "private": true,
   "description": "A brand new Glimmer app.",
   "directories": {
@@ -52,7 +52,7 @@
     "copy-webpack-plugin": "^8.1.0",
     "css-loader": "^5.2.0",
     "file-loader": "^6.0.0",
-    "glimmer-apollo": "^0.2.0",
+    "glimmer-apollo": "^0.3.0",
     "glob": "7.1.6",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
