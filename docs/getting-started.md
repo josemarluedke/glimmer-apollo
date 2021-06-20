@@ -38,7 +38,7 @@ The first step to get going is to create and set an `ApolloClient` instance.
 For this we will create a file and export a function to set it up. The location
 of this file can be something like `app/apollo.js`. It's totally up to you.
 
-```ts
+```ts:app/apollo.js
 import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
@@ -80,8 +80,7 @@ is the Owner.
 Now that we have defined the Apollo Client let's call the function we created
 above in an Instance Initializer.
 
-```ts
-// app/instance-initializers/apollo.js
+```ts:app/instance-initializers/apollo.js
 import setupApolloClient from '../apollo';
 
 export default {
@@ -98,7 +97,7 @@ For setting up Glimmer Apollo in a Glimmer.js app, we must include a file that
 defines the environment. This environment file should be imported very early in
 the stack. We recommend importing it in your `src/index.js`.
 
-```js
+```js:src/index.js
 import 'glimmer-apollo/environment-glimmer'; // <---- Add this import
 
 import { renderComponent } from '@glimmerx/core';
@@ -121,9 +120,7 @@ previous step, we can now call `setupApolloClient` function to set Apollo Client
 
 The example below uses the App component.
 
-```ts
-// src/App.js
-
+```ts:src/App.js
 import Component, { hbs } from '@glimmerx/component';
 import setupApolloClient from './apollo';
 
@@ -133,7 +130,7 @@ export class App extends Component {
     setupApolloClient(this);
   }
 
-  ///....
+  // ....
 }
 ```
 
