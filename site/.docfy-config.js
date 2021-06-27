@@ -10,7 +10,7 @@ const highlight = require('rehype-highlight');
  */
 module.exports = {
   repository: {
-    url: 'https://github.com/josemarluedke/frontile',
+    url: 'https://github.com/josemarluedke/glimmer-apollo',
     editBranch: 'main'
   },
   tocMaxDepth: 3,
@@ -29,6 +29,7 @@ module.exports = {
     }
   ],
   labels: {
+    docs: 'Docs',
     fetching: 'Fetching'
   }
 };

@@ -1,0 +1,16 @@
+/* purgecss start ignore */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+
+/* purgecss end ignore */
+
+@import 'tailwindcss/utilities';
+@import './highlight.css';
+
+.remark-code-title {
+  @apply py-2 px-4 bg-gray-900 text-white rounded-t-lg mt-5 text-sm;
+}
+
+.remark-code-title + .prose pre:first-child {
+  @apply rounded-t-none;
+}
