@@ -1,5 +1,8 @@
 'use strict';
 
+// Enable FastBoot Rehydration
+process.env.EXPERIMENTAL_RENDER_MODE_SERIALIZE = true;
+
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const env = EmberApp.env();
 
@@ -21,6 +24,12 @@ if (env === 'production') {
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
+    prember: {
+      urls: ['/']
+    },
+    fastboot: {
+      hostWhitelist: [/^localhost:\d+$/]
+    },
     postcssOptions: {
       compile: {
         enabled: true,
