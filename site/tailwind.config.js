@@ -10,7 +10,12 @@ module.exports = {
     enabled: process.env.PURGE_CSS === 'true',
     layers: ['base', 'utilities'],
 
-    content: ['./app/index.html', './app/**/*.hbs', './node_modules/**/*.hbs'],
+    content: [
+      './app/index.html',
+      './app/**/*.hbs',
+      './node_modules/**/*.hbs',
+      '../node_modules/**/*.hbs'
+    ],
     options: {
       safelist: [/^_/, /js-/]
     }
@@ -132,7 +137,7 @@ module.exports = {
         }
       })
     },
-    frontile: (theme) => {
+    frontile: () => {
       return {
         overlays: {
           config: {
