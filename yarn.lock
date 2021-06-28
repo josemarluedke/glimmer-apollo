@@ -8273,7 +8273,7 @@ dns-txt@^2.0.2:
 
 docfy-theme-ember@josemarluedke/docfy-theme-ember:
   version "0.0.0"
-  resolved "https://codeload.github.com/josemarluedke/docfy-theme-ember/tar.gz/bf3f72864d386457cfc3fded45828b7924bd3496"
+  resolved "https://codeload.github.com/josemarluedke/docfy-theme-ember/tar.gz/7c9ff85dae1fd4cbf50669dad47c61867bcebdf3"
   dependencies:
     "@frontile/core" "^0.12.0"
     "@frontile/overlays" "^0.12.0"
