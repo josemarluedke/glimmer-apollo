@@ -1,19 +1,16 @@
 <img width="978" alt="github-readme" src="https://user-images.githubusercontent.com/230476/123680246-548a9c80-d7fd-11eb-9d38-d1f838619b98.jpg">
+<p align="center">
+  <a href="https://github.com/josemarluedke/glimmer-apollo/actions?query=workflow%3ACI"><img src="https://github.com/josemarluedke/docfy/workflows/CI/badge.svg" alt="Build Status"></a>
+  <a href="https://github.com/josemarluedke/glimmer-apollo/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license"></a>
+</p>
 
 
-# glimmer-apollo
+Glimmer Apollo: Ember and Glimmer integration for Apollo Client.
 
-Ember and Glimmer integration for Apollo Client.
+## Documentation
 
-## Installation
+Visit [glimmer-apollo.com](https://glimmer-apollo.com/) to read the docs.
 
-```sh
-yarn add -D glimmer-apollo @apollo/client graphql
-```
-
-```sh
-npm install --save-dev glimmer-apollo @apollo/client graphql
-```
 
 ## Compatibility
 
@@ -29,6 +26,7 @@ npm install --save-dev glimmer-apollo @apollo/client graphql
 - Ember CLI v2.13 or above
 
 ## API
+
 
 ### useQuery(ctx, args)
 
@@ -145,44 +143,6 @@ class MyComponent extends Component {
   // ...
 }
 ```
-
-## Ember Setup
-
-To correctly setup the Apollo client, you should use an instance initializer.
-This will ensure you can access services, for example, to add access tokens to
-your requests or something else.
-
-Here is an example:
-
-```js
-// app/instance-initializers/apollo.js
-
-import { setClient } from 'glimmer-apollo';
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink
-} from '@apollo/client/core';
-
-export function initialize(appInstance) {
-  setClient(
-    appInstance,
-    new ApolloClient({
-      cache: new InMemoryCache(),
-      link: createHttpLink({
-        uri: '/graphql'
-      })
-    })
-  );
-}
-
-export default {
-  initialize
-};
-```
-
-> Note that when the context (application instance) is torn down, the
-> Apollo Client will be cleared and unregistered from Glimmer Apollo.
 
 ## License
 
