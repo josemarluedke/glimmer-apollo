@@ -1,3 +1,5 @@
+<img width="978" alt="github-readme" src="https://user-images.githubusercontent.com/230476/123578438-b65dee80-d78a-11eb-9b2b-9600d09bdda7.jpg">
+
 # glimmer-apollo
 
 Ember and Glimmer integration for Apollo Client.
