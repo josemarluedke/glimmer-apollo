@@ -1,5 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const { red } = require('tailwindcss/colors');
+const { pink } = require('tailwindcss/colors');
 
 // backdrop-filter backdrop-blur bg-opacity-30
 
@@ -30,8 +30,7 @@ module.exports = {
         gray: {
           1000: '#12161f'
         },
-        red,
-        primary: red,
+        primary: pink,
         brand: '#1c1e24'
       },
       zIndex: {
