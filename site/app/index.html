@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicons/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/x-icon" href="/assets/favicons/favicon.ico" />
+    <link rel="manifest" href="/assets/favicons/site.webmanifest" />
+
+    <meta
+      name="description"
+      content="Ember and Glimmer integration for Apollo Client."
+    />
+    <meta
+      property="og:description"
+      content="Ember and Glimmer integration for Apollo Client."
+    />
+
+    <meta name="theme-color" content="#334154" />
+    <meta property="og:title" content="Glimmer Apollo" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://user-images.githubusercontent.com/230476/123680246-548a9c80-d7fd-11eb-9d38-d1f838619b98.jpg"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      name="twitter:image:src"
+      content="https://user-images.githubusercontent.com/230476/123680246-548a9c80-d7fd-11eb-9d38-d1f838619b98.jpg"
+    />
+    <meta name="twitter:title" content="Glimmer Apollo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@josemarluedke" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {{content-for "head"}}
+
+    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css" />
+    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/site.css" />
+
+    {{content-for "head-footer"}}
+    <script>
+      (function setTheme() {
+        const mql = window.matchMedia('(prefers-color-scheme: dark)');
+        const prefersDarkFromMQ = mql.matches;
+        const persistedPreference = localStorage.getItem('prefersMode');
+
+        let colorMode = 'light';
+
+        const hasUsedToggle = typeof persistedPreference === 'string';
+
+        if (hasUsedToggle) {
+          colorMode = persistedPreference;
+        } else {
+          colorMode = prefersDarkFromMQ ? 'dark' : 'light';
+        }
+
+        const root = document.documentElement;
+
+        if (colorMode === 'dark') {
+          root.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+
+  <body class="text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+    {{content-for "body"}}
+
+    <script src="{{rootURL}}assets/vendor.js"></script>
+    <script src="{{rootURL}}assets/site.js"></script>
+
+    {{content-for "body-footer"}}
+  </body>
+</html>

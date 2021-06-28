@@ -1,0 +1,26 @@
+{{page-title "Glimmer Apollo"}}
+
+<DocfyHeader
+  @name="Glimmer Apollo"
+  @darkOnly={{true}}
+  @githubUrl="https://github.com/josemarluedke/glimmer-apollo"
+>
+  <:title>
+    <GlimmerApolloLogo class="h-8" />
+  </:title>
+  <:left>
+    <DocfyJumpTo />
+  </:left>
+
+  <:right as |linkClass linkClassActive|>
+    <LinkTo
+      @route="docs"
+      class="{{linkClass}} hidden sm:block"
+      @activeClass={{linkClassActive}}
+    >
+      Docs
+    </LinkTo>
+  </:right>
+</DocfyHeader>
+
+{{outlet}}

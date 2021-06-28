@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "site"
   ],
   "scripts": {
     "build": "yarn workspace glimmer-apollo build",
