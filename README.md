@@ -1,4 +1,5 @@
-<img width="978" alt="github-readme" src="https://user-images.githubusercontent.com/230476/123578438-b65dee80-d78a-11eb-9b2b-9600d09bdda7.jpg">
+<img width="978" alt="github-readme" src="https://user-images.githubusercontent.com/230476/123680246-548a9c80-d7fd-11eb-9d38-d1f838619b98.jpg">
+
 
 # glimmer-apollo
 
