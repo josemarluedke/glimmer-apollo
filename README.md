@@ -1,4 +1,5 @@
-<img width="978" alt="github-readme" src="https://user-images.githubusercontent.com/230476/123680246-548a9c80-d7fd-11eb-9d38-d1f838619b98.jpg">
+<img width="978" alt="github-readme" src="https://user-images.githubusercontent.com/230476/123694510-442eed80-d80e-11eb-8e8b-7ff3d8a0597a.jpg">
+
 <p align="center">
   <a href="https://github.com/josemarluedke/glimmer-apollo/actions?query=workflow%3ACI"><img src="https://github.com/josemarluedke/glimmer-apollo/workflows/CI/badge.svg" alt="Build Status"></a>
   <a href="https://github.com/josemarluedke/glimmer-apollo/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license"></a>
