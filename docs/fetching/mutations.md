@@ -81,7 +81,7 @@ import {
 } from './mutations';
 
 export default class CreateNote extends Component {
-  createNote = seMutation<CreateNoteMutation, CreateNoteMutationVariables>(
+  createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
     CREATE_NOTE,
     {
       /* options */
