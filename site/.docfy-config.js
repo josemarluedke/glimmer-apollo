@@ -1,6 +1,5 @@
 const path = require('path');
 const autolinkHeadings = require('remark-autolink-headings');
-// const highlight = require('remark-highlight.js');
 const withProse = require('@docfy/plugin-with-prose');
 const codeTitle = require('remark-code-titles');
 const highlight = require('rehype-highlight');
@@ -15,11 +14,7 @@ module.exports = {
   },
   tocMaxDepth: 3,
   plugins: [withProse({ className: 'prose dark:prose-light' })],
-  remarkPlugins: [
-    codeTitle,
-    autolinkHeadings
-    // highlight
-  ],
+  remarkPlugins: [codeTitle, autolinkHeadings],
   rehypePlugins: [highlight],
   sources: [
     {

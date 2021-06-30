@@ -9,6 +9,7 @@ const env = EmberApp.env();
 const postcssPlugins = [
   require('postcss-import')({ path: ['../node_modules'] }),
   require('tailwindcss')('./tailwind.config.js'),
+  require('postcss-nested'),
   require('autoprefixer')({
     overrideBrowserslist: require('./config/targets').browsers
   })
