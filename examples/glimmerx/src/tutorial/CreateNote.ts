@@ -57,12 +57,16 @@ export default class CreateNote extends Component {
     {{#if this.createNote.loading}}
       Creating...
     {{else if this.createNote.error}}
-      Error!: {{this.createNote.error.message}}
+      Error!:
+      {{this.createNote.error.message}}
     {{else if this.createNote.called}}
       <div>
-        id: {{this.createNote.data.createNote.id}}
-        Title: {{this.createNote.data.createNote.title}}
-        Description: {{this.createNote.data.createNote.description}}
+        id:
+        {{this.createNote.data.createNote.id}}
+        Title:
+        {{this.createNote.data.createNote.title}}
+        Description:
+        {{this.createNote.data.createNote.description}}
       </div>
     {{/if}}
   `;

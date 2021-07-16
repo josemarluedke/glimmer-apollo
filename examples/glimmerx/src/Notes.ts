@@ -23,7 +23,12 @@ const Placeholder = hbs`
 const NoteButton = hbs`
   <button
     type="button"
-    class="text-left p-2 rounded focus:outline-none focus:ring ring-green-400 {{if (equal @note.id @selectedNote.id) "bg-gray-700" "hover:bg-gray-800"}}"
+    class="text-left p-2 rounded focus:outline-none focus:ring ring-green-400
+      {{if
+        (equal @note.id @selectedNote.id)
+        "bg-gray-700"
+        "hover:bg-gray-800"
+      }}"
     {{on "click" (fn @onSelectNote @note)}}
   >
     {{@note.title}}
@@ -33,7 +38,10 @@ const NoteButton = hbs`
 
 const ContentPanelHeader = hbs`
   <div class="border-b border-black pb-2 mb-2 text-right">
-    <Link @to="/notes/add" class="inline-block p-2 rounded hover:bg-gray-800 focus:outline-none focus:ring ring-green-400">
+    <Link
+      @to="/notes/add"
+      class="inline-block p-2 rounded hover:bg-gray-800 focus:outline-none focus:ring ring-green-400"
+    >
       <WriteIcon class="w-6 h-6" />
     </Link>
   </div>
@@ -81,7 +89,9 @@ export default class Notes extends Component {
         {{/if}}
       </div>
 
-      <div class="sm:w-2/3 border-t-2 sm:border-t-0 sm:border-l-2 border-black p-4">
+      <div
+        class="sm:w-2/3 border-t-2 sm:border-t-0 sm:border-l-2 border-black p-4"
+      >
         <ContentPanelHeader />
         {{this.selectedNote.description}}
       </div>

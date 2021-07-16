@@ -13,10 +13,11 @@ document.addEventListener(
 
     const element = document.getElementById('app');
     renderComponent(
-      hbs`<GlimmerApolloProvider>
-            <App />
-          </GlimmerApolloProvider>
-        `,
+      hbs`
+        <GlimmerApolloProvider>
+          <App />
+        </GlimmerApolloProvider>
+      `,
       {
         element: element! // eslint-disable-line
       }

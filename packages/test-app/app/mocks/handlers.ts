@@ -47,45 +47,46 @@ const USERS: User[] = [
 ];
 
 export const handlers = [
-  graphql.query<UserInfoQuery, UserInfoQueryVariables>(
-    'UserInfo',
-    (req, res, ctx) => {
-      const user = USERS[Number(req.variables.id.charAt(0)) - 1];
+  graphql.query<UserInfoQuery, UserInfoQueryVariables>('UserInfo', (
+    req,
+    res,
+    ctx
+  ) => {
+    const user = USERS[Number(req.variables.id.charAt(0)) - 1];
 
-      if (user && req.variables.id.includes('with-error')) {
-        return res(
-          ctx.errors([
-            {
-              message: 'Data With Error'
-            }
-          ]),
-          ctx.data({
-            user: {
-              __typename: 'User',
-              ...user
-            }
-          })
-        );
-      } else if (user) {
-        return res(
-          ctx.data({
-            user: {
-              __typename: 'User',
-              ...user
-            }
-          })
-        );
-      } else {
-        return res(
-          ctx.errors([
-            {
-              message: 'User not found'
-            }
-          ])
-        );
-      }
+    if (user && req.variables.id.includes('with-error')) {
+      return res(
+        ctx.errors([
+          {
+            message: 'Data With Error'
+          }
+        ]),
+        ctx.data({
+          user: {
+            __typename: 'User',
+            ...user
+          }
+        })
+      );
+    } else if (user) {
+      return res(
+        ctx.data({
+          user: {
+            __typename: 'User',
+            ...user
+          }
+        })
+      );
+    } else {
+      return res(
+        ctx.errors([
+          {
+            message: 'User not found'
+          }
+        ])
+      );
     }
-  ),
+  }),
 
   // Capture a "Login" mutation
   graphql.mutation('Login', (req, res, ctx) => {
