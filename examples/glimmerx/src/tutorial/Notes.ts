@@ -39,12 +39,15 @@ export default class Notes extends Component {
     {{#if this.notes.loading}}
       Loading...
     {{else if this.notes.error}}
-      Error!: {{this.notes.error.message}}
+      Error!:
+      {{this.notes.error.message}}
     {{else}}
       {{#each this.notes.data.notes as |note|}}
         <div>
-          Title: {{note.title}}
-          Description: {{note.description}}
+          Title:
+          {{note.title}}
+          Description:
+          {{note.description}}
         </div>
       {{/each}}
     {{/if}}

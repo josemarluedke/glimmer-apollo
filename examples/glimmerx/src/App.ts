@@ -10,11 +10,11 @@ export default class App extends Component<{}> {
       <h1 class="text-3xl font-bold py-4 text-center">Notes</h1>
 
       <Router class="flex-grow flex flex-col" as |Route|>
-        <Route @path='/'>
+        <Route @path="/">
           <Notes class="flex-grow mb-10" />
         </Route>
-        <Route @path='/notes/add'>ADD</Route>
-        <Route @path='/tutorial'>
+        <Route @path="/notes/add">ADD</Route>
+        <Route @path="/tutorial">
           <TutorialNotes />
         </Route>
       </Router>

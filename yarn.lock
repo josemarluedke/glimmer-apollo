@@ -2375,6 +2375,11 @@
     "@glimmer/modifier" "2.0.0-beta.16"
     ember-cli-babel "7.26.2"
 
+"@glimmerx/prettier-plugin-component-templates@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@glimmerx/prettier-plugin-component-templates/-/prettier-plugin-component-templates-0.6.5.tgz#fb3cb55d331f8d91fcd7d4a47c1c208df3e1bae4"
+  integrity sha512-St2PfnRBbS/B1xQMBw1qExVMC4Kg2aW80qk6VQc+r2RDdBc7pfWcC7mO8Tv6p0o9cIQXdVzBOds49PFEifICow==
+
 "@glimmerx/webpack-loader@^0.6.0":
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/@glimmerx/webpack-loader/-/webpack-loader-0.6.3.tgz#32eaa9e5aa2601fa3e39cb6becbdd5239f81689d"

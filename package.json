@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@glimmerx/eslint-plugin": "^0.6.0",
+    "@glimmerx/prettier-plugin-component-templates": "^0.6.5",
     "@underline/eslint-config-ember-typescript": "^0.10.3",
     "@underline/eslint-config-node": "^0.10.2",
     "@underline/eslint-config-typescript": "^0.10.2",

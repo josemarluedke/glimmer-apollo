@@ -65,7 +65,7 @@ class Router extends Component {
   }
 
   static template = hbs`
-    <div {{this.startNavigo}} ...attributes>
+    <div ...attributes {{this.startNavigo}}>
       {{yield Route}}
     </div>
   `;
