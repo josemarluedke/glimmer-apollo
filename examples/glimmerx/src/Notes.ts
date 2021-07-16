@@ -3,10 +3,9 @@
 import Component, { hbs, tracked } from '@glimmerx/component';
 import { on } from '@glimmerx/modifier';
 import { fn } from '@glimmerx/helper';
-import { useQuery } from 'glimmer-apollo';
+import { useQuery, gql } from 'glimmer-apollo';
 import { WriteIcon } from './Icons';
 import { Link } from './Router';
-import { GET_NOTES } from './queries';
 
 function equal(a: unknown, b: unknown): boolean {
   return a === b;
@@ -22,7 +21,6 @@ const Placeholder = hbs`
 `;
 
 const NoteButton = hbs`
-
   <button
     type="button"
     class="text-left p-2 rounded focus:outline-none focus:ring ring-green-400 {{if (equal @note.id @selectedNote.id) "bg-gray-700" "hover:bg-gray-800"}}"
@@ -45,7 +43,15 @@ export default class Notes extends Component {
   @tracked selectedNote: any;
 
   notes = useQuery(this, () => [
-    GET_NOTES,
+    gql`
+      query GetNotes($isArchived: Boolean) {
+        notes(isArchived: $isArchived) {
+          id
+          title
+          description
+        }
+      }
+    `,
     {
       onComplete: (): void => {
         this.selectedNote = undefined;

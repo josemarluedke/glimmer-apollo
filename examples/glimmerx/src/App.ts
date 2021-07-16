@@ -1,6 +1,6 @@
 import Component, { hbs } from '@glimmerx/component';
 import Notes from './Notes';
-import TutorialNotes from './TutorialNotes';
+import TutorialNotes from './tutorial/Notes';
 import './App.css';
 import { Router } from './Router';
 
