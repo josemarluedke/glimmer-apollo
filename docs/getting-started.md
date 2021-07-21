@@ -38,7 +38,7 @@ The first step to get going is to create and set an `ApolloClient` instance.
 For this we will create a file and export a function to set it up. The location
 of this file can be something like `app/apollo.js`. It's totally up to you.
 
-```ts:app/apollo.js
+```ts:app/apollo.ts
 import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
