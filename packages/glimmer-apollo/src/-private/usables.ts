@@ -22,3 +22,17 @@ export function useMutation<TData = unknown, TVariables = OperationVariables>(
     MutationResource<TData, TVariables>
   >(parentDestroyable, MutationResource, args);
 }
+
+export type UseQuery<TData = unknown, TVariables = OperationVariables> = {
+  args: () => QueryPositionalArgs<TData, TVariables>[1];
+  return: QueryResource<TData, TVariables>;
+  data: TData;
+  variables: TVariables;
+};
+
+export type UseMutation<TData = unknown, TVariables = OperationVariables> = {
+  args: () => MutationPositionalArgs<TData, TVariables>[1];
+  return: MutationResource<TData, TVariables>;
+  data: TData;
+  variables: TVariables;
+};
