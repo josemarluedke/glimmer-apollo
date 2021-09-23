@@ -1,8 +1,10 @@
 import { getOwner, registerDestructor } from '../environment';
 import type { ApolloClient } from '@apollo/client/core';
 
-const CLIENTS: WeakMap<object, Map<string, ApolloClient<unknown>>> =
-  new WeakMap();
+const CLIENTS: WeakMap<
+  object,
+  Map<string, ApolloClient<unknown>>
+> = new WeakMap();
 const DEFAULT_CLIENT_ID = 'default';
 
 export function setClient<TCache = unknown>(
