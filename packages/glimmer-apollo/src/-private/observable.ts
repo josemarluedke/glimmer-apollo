@@ -23,8 +23,8 @@ export default class ObservableResource<
   refetch = (variables?: Partial<TVariables>) =>
     this.observable?.refetch(variables);
 
-  fetchMore = <K extends keyof TVariables>(
-    fetchMoreOptions: FetchMoreQueryOptions<TVariables, K, TData> &
+  fetchMore = (
+    fetchMoreOptions: FetchMoreQueryOptions<TVariables, TData> &
       FetchMoreOptions<TData, TVariables>
   ) => this.observable?.fetchMore(fetchMoreOptions);
 

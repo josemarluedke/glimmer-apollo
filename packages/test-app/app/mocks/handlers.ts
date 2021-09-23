@@ -28,7 +28,7 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = {
   __typename?: 'Mutation';
-  user: Maybe<
+  login: Maybe<
     { __typename?: 'User' } & Pick<User, 'id' | 'firstName' | 'lastName'>
   >;
 };
@@ -110,7 +110,7 @@ export const handlers = [
           }
         ]),
         ctx.data({
-          user: {
+          login: {
             __typename: 'User',
             ...USERS[1]
           }
@@ -120,7 +120,7 @@ export const handlers = [
 
     return res(
       ctx.data({
-        user: {
+        login: {
           __typename: 'User',
           ...USERS[1]
         }
@@ -138,7 +138,8 @@ export const handlers = [
 
           id: '1',
           firstName: 'John',
-          lastName: 'Maverick'
+          lastName: 'Maverick',
+          username: 'joth'
         }
       })
     );
