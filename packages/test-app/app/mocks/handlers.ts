@@ -138,7 +138,8 @@ export const handlers = [
 
           id: '1',
           firstName: 'John',
-          lastName: 'Maverick'
+          lastName: 'Maverick',
+          username: 'joth'
         }
       })
     );
