@@ -18,15 +18,15 @@
     "@glimmer/tracking": "^2.0.0-beta.17"
   },
   "devDependencies": {
-    "@glimmerx/eslint-plugin": "^0.6.0",
+    "@glimmerx/eslint-plugin": "^0.6.5",
     "@glimmerx/prettier-plugin-component-templates": "^0.6.5",
-    "@underline/eslint-config-ember-typescript": "^0.10.3",
-    "@underline/eslint-config-node": "^0.10.2",
-    "@underline/eslint-config-typescript": "^0.10.2",
-    "eslint": "^7.18.0",
-    "fast-glob": "^3.2.5",
-    "lerna": "^3.22.1",
-    "typescript": "^4.1.3"
+    "@underline/eslint-config-ember-typescript": "^0.11.0",
+    "@underline/eslint-config-node": "^0.11.0",
+    "@underline/eslint-config-typescript": "^0.11.0",
+    "eslint": "^7.32.0",
+    "fast-glob": "^3.2.7",
+    "lerna": "^4.0.0",
+    "typescript": "^4.4.3"
   },
   "engines": {
     "node": ">= 12"
