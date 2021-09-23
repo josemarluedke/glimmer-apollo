@@ -77,7 +77,7 @@ module('useMutation', function (hooks) {
     assert.equal(mutation.called, true);
     assert.equal(mutation.error, undefined);
     assert.deepEqual(mutation.data, {
-      user: {
+      login: {
         __typename: 'User',
         firstName: 'Joth',
         id: '2',
@@ -205,7 +205,7 @@ module('useMutation', function (hooks) {
     await mutation.settled();
 
     const expectedData = {
-      user: {
+      login: {
         __typename: 'User',
         firstName: 'Joth',
         id: '2',
@@ -265,7 +265,7 @@ module('useMutation', function (hooks) {
     await mutation.settled();
 
     const expectedData = {
-      user: {
+      login: {
         __typename: 'User',
         firstName: 'Joth',
         id: '2',

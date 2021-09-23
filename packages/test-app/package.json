@@ -20,7 +20,7 @@
     "test:ember-compatibility": "ember try:each"
   },
   "devDependencies": {
-    "@apollo/client": "^3.3.19",
+    "@apollo/client": "^3.4.13",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.2.5",
     "@embroider/compat": "^0.41.0",
@@ -52,7 +52,7 @@
     "@types/rsvp": "^4.0.3",
     "@types/sinon": "^10.0.1",
     "broccoli-asset-rev": "^3.0.0",
-    "ember-auto-import": "^2.0.0",
+    "ember-auto-import": "^2.2.0",
     "ember-cli": "~3.26.1",
     "ember-cli-app-version": "^5.0.0",
     "ember-cli-babel": "^7.26.6",
@@ -73,7 +73,7 @@
     "ember-template-lint": "^3.4.2",
     "ember-try": "^1.4.0",
     "glimmer-apollo": "^0.3.0",
-    "graphql": "^15.5.0",
+    "graphql": "^15.6.0",
     "loader.js": "^4.7.0",
     "msw": "^0.29.0",
     "npm-run-all": "^4.1.5",
