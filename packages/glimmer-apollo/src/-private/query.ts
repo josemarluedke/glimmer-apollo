@@ -48,13 +48,12 @@ export class QueryResource<
   @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
 
-  private subscription?: ZenObservable.Subscription;
-  private previousPositionalArgs:
-    | Args<TData, TVariables>['positional']
-    | undefined;
+  #subscription?: ZenObservable.Subscription;
+  #previousPositionalArgs: Args<TData, TVariables>['positional'] | undefined;
 
+  /** @internal */
   async setup(): Promise<void> {
-    this.previousPositionalArgs = this.args.positional;
+    this.#previousPositionalArgs = this.args.positional;
     const [query, options] = this.args.positional;
     const client = getClient(this, options?.clientId);
 
@@ -74,16 +73,16 @@ export class QueryResource<
 
     this._setObservable(observable);
 
-    this.subscription = observable.subscribe(
+    this.#subscription = observable.subscribe(
       (result) => {
-        this.onComplete(result);
+        this.#onComplete(result);
         if (firstResolve) {
           firstResolve();
           firstResolve = undefined;
         }
       },
       (error) => {
-        this.onError(error);
+        this.#onError(error);
         if (firstReject) {
           firstReject();
           firstReject = undefined;
@@ -101,26 +100,28 @@ export class QueryResource<
     }
   }
 
+  /** @internal */
+  update(): void {
+    if (!equal(this.#previousPositionalArgs, this.args.positional)) {
+      this.teardown();
+      this.setup();
+    }
+  }
+
+  /** @internal */
+  teardown(): void {
+    if (this.#subscription) {
+      this.#subscription.unsubscribe();
+    }
+  }
+
   settled(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.promise.then(resolve).catch(resolve);
     });
   }
 
-  update(): void {
-    if (!equal(this.previousPositionalArgs, this.args.positional)) {
-      this.teardown();
-      this.setup();
-    }
-  }
-
-  teardown(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  private onComplete(result: ApolloQueryResult<TData>): void {
+  #onComplete(result: ApolloQueryResult<TData>): void {
     const { loading, errors, data, networkStatus } = result;
     let { error } = result;
 
@@ -133,10 +134,10 @@ export class QueryResource<
     this.data = data;
     this.networkStatus = networkStatus;
     this.error = error;
-    this.handleOnCompleteOrOnError();
+    this.#handleOnCompleteOrOnError();
   }
 
-  private onError(error: ApolloError): void {
+  #onError(error: ApolloError): void {
     if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors')) {
       error = new ApolloError({ networkError: error });
     }
@@ -145,10 +146,10 @@ export class QueryResource<
     this.data = undefined;
     this.networkStatus = NetworkStatus.error;
     this.error = error;
-    this.handleOnCompleteOrOnError();
+    this.#handleOnCompleteOrOnError();
   }
 
-  private handleOnCompleteOrOnError(): void {
+  #handleOnCompleteOrOnError(): void {
     // We want to avoid calling the callbacks when this is destroyed.
     // If the resource is destroyed, the callback context might not be defined anymore.
     if (isDestroyed(this) || isDestroying(this)) {
