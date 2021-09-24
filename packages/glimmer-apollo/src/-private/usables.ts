@@ -54,10 +54,12 @@ export type UseMutation<TData = unknown, TVariables = OperationVariables> = {
   variables: TVariables;
 };
 
-export type UseSubscription<TData = unknown, TVariables = OperationVariables> =
-  {
-    args: () => SubscriptionPositionalArgs<TData, TVariables>[1];
-    return: SubscriptionResource<TData, TVariables>;
-    data: TData;
-    variables: TVariables;
-  };
+export type UseSubscription<
+  TData = unknown,
+  TVariables = OperationVariables
+> = {
+  args: () => SubscriptionPositionalArgs<TData, TVariables>[1];
+  return: SubscriptionResource<TData, TVariables>;
+  data: TData;
+  variables: TVariables;
+};

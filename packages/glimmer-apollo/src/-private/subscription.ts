@@ -29,8 +29,10 @@ interface BaseSubscriptionOptions<TData, TVariables>
   clientId?: string;
 }
 
-export type SubscriptionPositionalArgs<TData, TVariables = OperationVariables> =
-  [DocumentNode, BaseSubscriptionOptions<TData, TVariables>?];
+export type SubscriptionPositionalArgs<
+  TData,
+  TVariables = OperationVariables
+> = [DocumentNode, BaseSubscriptionOptions<TData, TVariables>?];
 
 interface Args<TData, TVariables> {
   positional: SubscriptionPositionalArgs<TData, TVariables>;
