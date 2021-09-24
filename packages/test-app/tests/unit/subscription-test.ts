@@ -6,14 +6,14 @@ import { setClient, getClient, useSubscription, gql } from 'glimmer-apollo';
 import { setOwner } from '@ember/application';
 import { ApolloClient, ApolloError, InMemoryCache } from '@apollo/client/core';
 import {
-  MessageAddedSubscription,
-  MessageAddedSubscriptionVariables
+  OnMessageAddedSubscription,
+  OnMessageAddedSubscriptionVariables
 } from '../../app/mocks/handlers';
 import sinon from 'sinon';
 import { MockSubscriptionLink } from 'test-app/tests/helpers/mock-subscription-link';
 
 const SUBSCRIPTION = gql`
-  subscription ($channel: String!) {
+  subscription OnMessageAdded($channel: String!) {
     messageAdded(channel: $channel) {
       id
       message
@@ -56,8 +56,8 @@ module('useSubscription', function (hooks) {
     link.simulateResult(results[0]);
 
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -107,8 +107,8 @@ module('useSubscription', function (hooks) {
     const vars = new Obj();
 
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -141,8 +141,8 @@ module('useSubscription', function (hooks) {
     link.simulateResult(subscriptionError);
 
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -164,8 +164,8 @@ module('useSubscription', function (hooks) {
 
     let onDataCalled: unknown;
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -240,8 +240,8 @@ module('useSubscription', function (hooks) {
 
     let onErrorCalled: ApolloError;
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -265,8 +265,8 @@ module('useSubscription', function (hooks) {
 
     let onCompleteCalled = false;
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -300,8 +300,8 @@ module('useSubscription', function (hooks) {
 
     const subscribe = sandbox.spy(client, 'subscribe');
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
@@ -339,8 +339,8 @@ module('useSubscription', function (hooks) {
     const customClientWatchsub = sandbox.spy(customClient, 'subscribe');
 
     const sub = useSubscription<
-      MessageAddedSubscription,
-      MessageAddedSubscriptionVariables
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
     >(ctx, () => [
       SUBSCRIPTION,
       {
