@@ -151,7 +151,7 @@ export default class Messages extends Component {
     </div>
   `;
 }
-`
+```
 
 ### setClient(ctx, client[, clientId])
 
