@@ -13,5 +13,9 @@ module.exports = {
         }
       }
     ]
-  ]
+  ],
+  assumptions: {
+    // For legacy decorator support with class fields to work
+    setPublicClassFields: true
+  }
 };
