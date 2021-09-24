@@ -52,7 +52,7 @@
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^6.3.0",
     "file-loader": "^6.0.0",
-    "glimmer-apollo": "^0.3.0",
+    "glimmer-apollo": "^0.4.0",
     "glob": "7.2.0",
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.5",

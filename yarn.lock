@@ -1937,21 +1937,13 @@
     "@handlebars/parser" "^1.1.0"
     simple-html-tokenizer "^0.5.10"
 
-"@glimmer/tracking@2.0.0-beta.17", "@glimmer/tracking@^1.0.3 | ^2.0.0-beta.17", "@glimmer/tracking@^2.0.0-beta.15":
+"@glimmer/tracking@2.0.0-beta.17", "@glimmer/tracking@^1.0.2", "@glimmer/tracking@^1.0.3 | ^2.0.0-beta.17", "@glimmer/tracking@^1.0.4", "@glimmer/tracking@^2.0.0-beta.15", "@glimmer/tracking@^2.0.0-beta.17":
   version "2.0.0-beta.17"
   resolved "https://registry.yarnpkg.com/@glimmer/tracking/-/tracking-2.0.0-beta.17.tgz#a617a29aaa599cc3a1dbef7e561166354ba18644"
   integrity sha512-dzPqdgPC5IE0COrgvi/J+Vzqcfq6TAOiZHAKSEJXGhnthk4iOFOEJWiYZe1B0azBcNd2t7FUHGoFf7j1gFIwlw==
   dependencies:
     "@glimmer/env" "^0.1.7"
     "@glimmer/validator" "0.77.6"
-
-"@glimmer/tracking@^1.0.2", "@glimmer/tracking@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@glimmer/tracking/-/tracking-1.0.4.tgz#f1bc1412fe5e2236d0f8d502994a8f88af1bbb21"
-  integrity sha512-F+oT8I55ba2puSGIzInmVrv/8QA2PcK1VD+GWgFMhF6WC97D+uZX7BFg+a3s/2N4FVBq5KHE+QxZzgazM151Yw==
-  dependencies:
-    "@glimmer/env" "^0.1.7"
-    "@glimmer/validator" "^0.44.0"
 
 "@glimmer/util@0.65.3":
   version "0.65.3"
@@ -2022,11 +2014,6 @@
   dependencies:
     "@glimmer/env" "^0.1.7"
     "@glimmer/global-context" "0.77.6"
-
-"@glimmer/validator@^0.44.0":
-  version "0.44.0"
-  resolved "https://registry.yarnpkg.com/@glimmer/validator/-/validator-0.44.0.tgz#03d127097dc9cb23052cdb7fcae59d0a9dca53e1"
-  integrity sha512-i01plR0EgFVz69GDrEuFgq1NheIjZcyTy3c7q+w7d096ddPVeVcRzU3LKaqCfovvLJ+6lJx40j45ecycASUUyw==
 
 "@glimmer/vm-babel-plugins@0.77.6":
   version "0.77.6"
@@ -4990,12 +4977,7 @@ babel-plugin-filter-imports@^4.0.0:
     "@babel/types" "^7.7.2"
     lodash "^4.17.15"
 
-babel-plugin-htmlbars-inline-precompile@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-3.2.0.tgz#c4882ea875d0f5683f0d91c1f72e29a4f14b5606"
-  integrity sha512-IUeZmgs9tMUGXYu1vfke5I18yYJFldFGdNFQOWslXTnDWXzpwPih7QFduUqvT+awDpDuNtXpdt5JAf43Q1Hhzg==
-
-babel-plugin-htmlbars-inline-precompile@^5.0.0, babel-plugin-htmlbars-inline-precompile@^5.2.0, babel-plugin-htmlbars-inline-precompile@^5.2.1:
+babel-plugin-htmlbars-inline-precompile@^3.2.0, babel-plugin-htmlbars-inline-precompile@^5.0.0, babel-plugin-htmlbars-inline-precompile@^5.2.0, babel-plugin-htmlbars-inline-precompile@^5.2.1:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-htmlbars-inline-precompile/-/babel-plugin-htmlbars-inline-precompile-5.3.0.tgz#eeaff07c35415264aea4d6bafb5e71167f6ffb2f"
   integrity sha512-WeLBQM5Y9rx2GbwfxKy47lWh+u23afdlb48sM+5RTMTLwO90oILA7znzzOls7e+bcj06Nw0H+xpRWuyhlS37hg==

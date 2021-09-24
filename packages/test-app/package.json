@@ -72,7 +72,7 @@
     "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^3.7.0",
     "ember-try": "^1.4.0",
-    "glimmer-apollo": "^0.3.0",
+    "glimmer-apollo": "^0.4.0",
     "graphql": "^15.6.0",
     "loader.js": "^4.7.0",
     "msw": "^0.35.0",
