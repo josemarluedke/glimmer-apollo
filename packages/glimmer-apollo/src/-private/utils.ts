@@ -38,3 +38,13 @@ export function createPromise(): [
 
     return [promise, resolvePromise!, rejectPromise!]; //eslint-disable-line
 }
+
+export function settled(promise?: Promise<unknown>): Promise<void> {
+  return new Promise<void>((resolve) => {
+    if (promise) {
+      promise.then(() => resolve()).catch(() => resolve());
+    } else {
+      resolve();
+    }
+  });
+}

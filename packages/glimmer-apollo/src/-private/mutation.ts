@@ -13,6 +13,7 @@ import type {
   MutationOptions,
   OperationVariables
 } from '@apollo/client/core';
+import { settled } from './utils';
 
 type Maybe<T> = T | undefined | null;
 
@@ -88,13 +89,7 @@ export class MutationResource<
   }
 
   settled(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      if (this.promise) {
-        this.promise.then(() => resolve()).catch(() => resolve());
-      } else {
-        resolve();
-      }
-    });
+    return settled(this.promise);
   }
 
   #onComplete(result: FetchResult<TData>): void {

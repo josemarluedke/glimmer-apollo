@@ -14,7 +14,7 @@ import type {
   SubscriptionOptions
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
-import { getFastboot, createPromise } from './utils';
+import { getFastboot, createPromise, settled } from './utils';
 
 interface SubscriptionFunctionOptions<TData> {
   onData?: (data: TData | undefined) => void;
@@ -126,9 +126,7 @@ export class SubscriptionResource<
   }
 
   settled(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      this.promise.then(resolve).catch(resolve);
-    });
+    return settled(this.promise);
   }
 
   #onNextResult(result: FetchResult<TData>): void {

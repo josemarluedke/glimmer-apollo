@@ -14,7 +14,7 @@ import type {
   WatchQueryOptions
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
-import { getFastboot, createPromise } from './utils';
+import { getFastboot, createPromise, settled } from './utils';
 
 interface QueryFunctionOptions<TData> {
   onComplete?: (data: TData | undefined) => void;
@@ -116,9 +116,7 @@ export class QueryResource<
   }
 
   settled(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      this.promise.then(resolve).catch(resolve);
-    });
+    return settled(this.promise);
   }
 
   #onComplete(result: ApolloQueryResult<TData>): void {
