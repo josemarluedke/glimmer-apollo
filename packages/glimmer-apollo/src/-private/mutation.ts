@@ -7,41 +7,33 @@ import {
   waitForPromise
 } from '../environment';
 import { ApolloError } from '@apollo/client/core';
+import { settled } from './utils';
 import type {
   DocumentNode,
   FetchResult,
-  MutationOptions,
+  MutationOptions as ApolloMutationOptions,
   OperationVariables
 } from '@apollo/client/core';
-import { settled } from './utils';
+import type { TemplateArgs } from './types';
 
 type Maybe<T> = T | undefined | null;
 
-interface MutationFunctionOptions<TData> {
+interface MutationOptions<TData, TVariables>
+  extends Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> {
+  clientId?: string;
   onComplete?: (data: Maybe<TData>) => void;
   onError?: (error: ApolloError) => void;
 }
 
-interface BaseMutationOptions<TData, TVariables>
-  extends MutationFunctionOptions<TData>,
-    Omit<MutationOptions<TData, TVariables>, 'mutation'> {
-  clientId?: string;
-}
-
 export type MutationPositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
-  BaseMutationOptions<TData, TVariables>?
+  MutationOptions<TData, TVariables>?
 ];
-
-interface Args<TData, TVariables> {
-  positional: MutationPositionalArgs<TData, TVariables>;
-  named: Record<string, unknown>;
-}
 
 export class MutationResource<
   TData,
   TVariables = OperationVariables
-> extends Resource<Args<TData, TVariables>> {
+> extends Resource<TemplateArgs<MutationPositionalArgs<TData, TVariables>>> {
   @tracked loading = false;
   @tracked called = false;
   @tracked error?: ApolloError;

@@ -11,45 +11,39 @@ import type {
   DocumentNode,
   OperationVariables,
   FetchResult,
-  SubscriptionOptions
+  SubscriptionOptions as ApolloSubscriptionOptions
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
 import { getFastboot, createPromise, settled } from './utils';
+import type { TemplateArgs } from './types';
 
-interface SubscriptionFunctionOptions<TData> {
+interface SubscriptionOptions<TData, TVariables>
+  extends Omit<ApolloSubscriptionOptions<TVariables>, 'query'> {
+  ssr?: boolean;
+  clientId?: string;
   onData?: (data: TData | undefined) => void;
   onError?: (error: ApolloError) => void;
   onComplete?: () => void;
 }
 
-interface BaseSubscriptionOptions<TData, TVariables>
-  extends Omit<SubscriptionOptions<TVariables>, 'query'>,
-    SubscriptionFunctionOptions<TData> {
-  ssr?: boolean;
-  clientId?: string;
-}
-
 export type SubscriptionPositionalArgs<
   TData,
   TVariables = OperationVariables
-> = [DocumentNode, BaseSubscriptionOptions<TData, TVariables>?];
-
-interface Args<TData, TVariables> {
-  positional: SubscriptionPositionalArgs<TData, TVariables>;
-  named: Record<string, unknown>;
-}
+> = [DocumentNode, SubscriptionOptions<TData, TVariables>?];
 
 export class SubscriptionResource<
   TData,
   TVariables = OperationVariables
-> extends Resource<Args<TData, TVariables>> {
+> extends Resource<
+  TemplateArgs<SubscriptionPositionalArgs<TData, TVariables>>
+> {
   @tracked loading = true;
   @tracked error?: ApolloError;
   @tracked data: TData | undefined;
   @tracked promise!: Promise<void>;
 
   #subscription?: ZenObservable.Subscription;
-  #previousPositionalArgs: Args<TData, TVariables>['positional'] | undefined;
+  #previousPositionalArgs: typeof this.args.positional | undefined;
 
   /** @internal */
   async setup(): Promise<void> {

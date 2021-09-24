@@ -7,41 +7,37 @@ import {
 } from '../environment';
 import ObservableResource from './observable';
 import { NetworkStatus, ApolloError } from '@apollo/client/core';
+import { equal } from '@wry/equality';
+import { getFastboot, createPromise, settled } from './utils';
 import type {
   ApolloQueryResult,
   DocumentNode,
   OperationVariables,
   WatchQueryOptions
 } from '@apollo/client/core';
-import { equal } from '@wry/equality';
-import { getFastboot, createPromise, settled } from './utils';
+import type { TemplateArgs } from './types';
 
-interface QueryFunctionOptions<TData> {
+interface QueryOptions<TData, TVariables>
+  extends Omit<WatchQueryOptions<TVariables>, 'query'> {
+  ssr?: boolean;
+  clientId?: string;
   onComplete?: (data: TData | undefined) => void;
   onError?: (error: ApolloError) => void;
 }
 
-interface BaseQueryOptions<TData, TVariables>
-  extends Omit<WatchQueryOptions<TVariables>, 'query'>,
-    QueryFunctionOptions<TData> {
-  ssr?: boolean;
-  clientId?: string;
-}
-
 export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
-  BaseQueryOptions<TData, TVariables>?
+  QueryOptions<TData, TVariables>?
 ];
-
-interface Args<TData, TVariables> {
-  positional: QueryPositionalArgs<TData, TVariables>;
-  named: Record<string, unknown>;
-}
 
 export class QueryResource<
   TData,
   TVariables = OperationVariables
-> extends ObservableResource<TData, TVariables, Args<TData, TVariables>> {
+> extends ObservableResource<
+  TData,
+  TVariables,
+  TemplateArgs<QueryPositionalArgs<TData, TVariables>>
+> {
   @tracked loading = true;
   @tracked error?: ApolloError;
   @tracked data: TData | undefined;
@@ -49,7 +45,7 @@ export class QueryResource<
   @tracked promise!: Promise<void>;
 
   #subscription?: ZenObservable.Subscription;
-  #previousPositionalArgs: Args<TData, TVariables>['positional'] | undefined;
+  #previousPositionalArgs: typeof this.args.positional | undefined;
 
   /** @internal */
   async setup(): Promise<void> {
