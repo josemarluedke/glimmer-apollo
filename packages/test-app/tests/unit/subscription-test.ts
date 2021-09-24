@@ -4,12 +4,7 @@ import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 import { setClient, getClient, useSubscription, gql } from 'glimmer-apollo';
 import { setOwner } from '@ember/application';
-import {
-  ApolloClient,
-  ApolloError,
-  InMemoryCache,
-  createHttpLink
-} from '@apollo/client/core';
+import { ApolloClient, ApolloError, InMemoryCache } from '@apollo/client/core';
 import {
   MessageAddedSubscription,
   MessageAddedSubscriptionVariables
