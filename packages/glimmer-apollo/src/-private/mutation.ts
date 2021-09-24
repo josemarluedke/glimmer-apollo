@@ -7,40 +7,33 @@ import {
   waitForPromise
 } from '../environment';
 import { ApolloError } from '@apollo/client/core';
+import { settled } from './utils';
 import type {
   DocumentNode,
   FetchResult,
-  MutationOptions,
+  MutationOptions as ApolloMutationOptions,
   OperationVariables
 } from '@apollo/client/core';
+import type { TemplateArgs } from './types';
 
 type Maybe<T> = T | undefined | null;
 
-interface MutationFunctionOptions<TData> {
+interface MutationOptions<TData, TVariables>
+  extends Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> {
+  clientId?: string;
   onComplete?: (data: Maybe<TData>) => void;
   onError?: (error: ApolloError) => void;
 }
 
-interface BaseMutationOptions<TData, TVariables>
-  extends MutationFunctionOptions<TData>,
-    Omit<MutationOptions<TData, TVariables>, 'mutation'> {
-  clientId?: string;
-}
-
 export type MutationPositionalArgs<TData, TVariables = OperationVariables> = [
   DocumentNode,
-  BaseMutationOptions<TData, TVariables>?
+  MutationOptions<TData, TVariables>?
 ];
-
-interface Args<TData, TVariables> {
-  positional: MutationPositionalArgs<TData, TVariables>;
-  named: Record<string, unknown>;
-}
 
 export class MutationResource<
   TData,
   TVariables = OperationVariables
-> extends Resource<Args<TData, TVariables>> {
+> extends Resource<TemplateArgs<MutationPositionalArgs<TData, TVariables>>> {
   @tracked loading = false;
   @tracked called = false;
   @tracked error?: ApolloError;
@@ -76,11 +69,11 @@ export class MutationResource<
       })
     )
       .then((result) => {
-        this.onComplete(result);
+        this.#onComplete(result);
         return this.data;
       })
       .catch((error) => {
-        this.onError(error);
+        this.#onError(error);
         return error;
       });
 
@@ -88,16 +81,10 @@ export class MutationResource<
   }
 
   settled(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      if (this.promise) {
-        this.promise.then(() => resolve()).catch(() => resolve());
-      } else {
-        resolve();
-      }
-    });
+    return settled(this.promise);
   }
 
-  private onComplete(result: FetchResult<TData>): void {
+  #onComplete(result: FetchResult<TData>): void {
     const { data, errors } = result;
     const error =
       errors && errors.length > 0
@@ -107,17 +94,17 @@ export class MutationResource<
     this.data = data;
     this.error = error;
 
-    this.handleOnCompleteOrOnError();
+    this.#handleOnCompleteOrOnError();
   }
 
-  private onError(error: ApolloError): void {
+  #onError(error: ApolloError): void {
     this.error = error;
     this.data = undefined;
 
-    this.handleOnCompleteOrOnError();
+    this.#handleOnCompleteOrOnError();
   }
 
-  private handleOnCompleteOrOnError(): void {
+  #handleOnCompleteOrOnError(): void {
     this.loading = false;
     this.called = true;
 

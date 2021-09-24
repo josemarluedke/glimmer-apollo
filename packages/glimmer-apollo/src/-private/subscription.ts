@@ -5,43 +5,41 @@ import {
   tracked,
   waitForPromise
 } from '../environment';
-import ObservableResource from './observable';
-import { NetworkStatus, ApolloError } from '@apollo/client/core';
-import { equal } from '@wry/equality';
-import { getFastboot, createPromise, settled } from './utils';
+import { Resource } from './resource';
+import { ApolloError } from '@apollo/client/core';
 import type {
-  ApolloQueryResult,
   DocumentNode,
   OperationVariables,
-  WatchQueryOptions
+  FetchResult,
+  SubscriptionOptions as ApolloSubscriptionOptions
 } from '@apollo/client/core';
+import { equal } from '@wry/equality';
+import { getFastboot, createPromise, settled } from './utils';
 import type { TemplateArgs } from './types';
 
-interface QueryOptions<TData, TVariables>
-  extends Omit<WatchQueryOptions<TVariables>, 'query'> {
+interface SubscriptionOptions<TData, TVariables>
+  extends Omit<ApolloSubscriptionOptions<TVariables>, 'query'> {
   ssr?: boolean;
   clientId?: string;
-  onComplete?: (data: TData | undefined) => void;
+  onData?: (data: TData | undefined) => void;
   onError?: (error: ApolloError) => void;
+  onComplete?: () => void;
 }
 
-export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
-  DocumentNode,
-  QueryOptions<TData, TVariables>?
-];
-
-export class QueryResource<
+export type SubscriptionPositionalArgs<
   TData,
   TVariables = OperationVariables
-> extends ObservableResource<
+> = [DocumentNode, SubscriptionOptions<TData, TVariables>?];
+
+export class SubscriptionResource<
   TData,
-  TVariables,
-  TemplateArgs<QueryPositionalArgs<TData, TVariables>>
+  TVariables = OperationVariables
+> extends Resource<
+  TemplateArgs<SubscriptionPositionalArgs<TData, TVariables>>
 > {
   @tracked loading = true;
   @tracked error?: ApolloError;
   @tracked data: TData | undefined;
-  @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
 
   #subscription?: ZenObservable.Subscription;
@@ -62,29 +60,39 @@ export class QueryResource<
 
     let [promise, firstResolve, firstReject] = createPromise(); // eslint-disable-line prefer-const
     this.promise = promise;
-    const observable = client.watchQuery({
+    const observable = client.subscribe({
       query,
       ...(options || {})
     });
 
-    this._setObservable(observable);
-
-    this.#subscription = observable.subscribe(
-      (result) => {
-        this.#onComplete(result);
+    this.#subscription = observable.subscribe({
+      next: (result) => {
+        if (isDestroyed(this) || isDestroying(this)) {
+          return;
+        }
+        this.#onNextResult(result);
         if (firstResolve) {
           firstResolve();
           firstResolve = undefined;
         }
       },
-      (error) => {
+      error: (error) => {
+        if (isDestroyed(this) || isDestroying(this)) {
+          return;
+        }
         this.#onError(error);
         if (firstReject) {
           firstReject();
           firstReject = undefined;
         }
+      },
+      complete: () => {
+        if (isDestroyed(this) || isDestroying(this)) {
+          return;
+        }
+        this.#onComplete();
       }
-    );
+    });
 
     waitForPromise(promise).catch(() => {
       // We catch by default as the promise is only meant to be used
@@ -98,7 +106,10 @@ export class QueryResource<
 
   /** @internal */
   update(): void {
-    if (!equal(this.#previousPositionalArgs, this.args.positional)) {
+    if (
+      !equal(this.#previousPositionalArgs, this.args.positional) ||
+      !this.#subscription
+    ) {
       this.teardown();
       this.setup();
     }
@@ -115,20 +126,22 @@ export class QueryResource<
     return settled(this.promise);
   }
 
-  #onComplete(result: ApolloQueryResult<TData>): void {
-    const { loading, errors, data, networkStatus } = result;
-    let { error } = result;
+  #onNextResult(result: FetchResult<TData>): void {
+    this.loading = false;
+    this.error = undefined;
 
-    error =
-      errors && errors.length > 0
-        ? new ApolloError({ graphQLErrors: errors })
-        : undefined;
+    const { data } = result;
+    if (data == null) {
+      this.data = undefined;
+    } else {
+      this.data = data;
+    }
 
-    this.loading = loading;
-    this.data = data;
-    this.networkStatus = networkStatus;
-    this.error = error;
-    this.#handleOnCompleteOrOnError();
+    const [, options] = this.args.positional;
+    const { onData } = options || {};
+    if (onData) {
+      onData(this.data);
+    }
   }
 
   #onError(error: ApolloError): void {
@@ -138,26 +151,27 @@ export class QueryResource<
 
     this.loading = false;
     this.data = undefined;
-    this.networkStatus = NetworkStatus.error;
     this.error = error;
-    this.#handleOnCompleteOrOnError();
-  }
-
-  #handleOnCompleteOrOnError(): void {
-    // We want to avoid calling the callbacks when this is destroyed.
-    // If the resource is destroyed, the callback context might not be defined anymore.
-    if (isDestroyed(this) || isDestroying(this)) {
-      return;
-    }
 
     const [, options] = this.args.positional;
-    const { onComplete, onError } = options || {};
-    const { data, error } = this;
+    const { onError } = options || {};
+    if (onError) {
+      onError(this.error);
+    }
+  }
 
-    if (onComplete && !error) {
-      onComplete(data);
-    } else if (onError && error) {
-      onError(error);
+  #onComplete(): void {
+    this.loading = false;
+
+    const [, options] = this.args.positional;
+    const { onComplete } = options || {};
+    if (onComplete) {
+      onComplete();
+    }
+
+    if (this.#subscription) {
+      this.#subscription.unsubscribe();
+      this.#subscription = undefined;
     }
   }
 }

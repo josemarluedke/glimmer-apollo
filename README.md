@@ -109,6 +109,50 @@ export default class Todo extends Component {
 }
 ```
 
+### useSubscription(ctx, args)
+
+```js
+import Component, { hbs, tracked } from '@glimmerx/component';
+import { on } from '@glimmerx/modifier';
+import { useSubscription, gql } from 'glimmer-apollo';
+
+export default class Messages extends Component {
+  @tracked receivedMessages = [];
+
+  messageAdded = useSubscription(this, () => [
+    gql`
+      subscription ($channel: String!) {
+        messageAdded(channel: $channel) {
+          id
+          message
+        }
+      }
+    `,
+    {
+      variables: { channel: this.args.channel },
+      onData: (data) => {
+        this.receivedMessages = [
+          ...this.receivedMessages,
+          data.messageAdded
+        ]
+      }
+    }
+  ]);
+
+  static template = hbs`
+    <div>
+      {{#if this.messageAdded.loading}}
+        Connecting...
+      {{/if}}
+
+      {{#each this.receivedMessages as |item|}}
+        {{item.message}}
+      {{/each}}
+    </div>
+  `;
+}
+`
+
 ### setClient(ctx, client[, clientId])
 
 Where `ctx` is an object with owner.

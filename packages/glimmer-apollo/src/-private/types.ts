@@ -1,7 +1,9 @@
 export type { Cache } from '@glimmer/validator';
 
-export interface TemplateArgs {
-  positional: readonly unknown[];
+export interface TemplateArgs<
+  T extends readonly unknown[] = readonly unknown[]
+> {
+  positional: T;
   named: Record<string, unknown>;
 }
 
