@@ -5,5 +5,9 @@ export {
   clearClients
 } from './-private/client';
 export { gql } from '@apollo/client/core';
-export { useQuery, useMutation } from './-private/usables';
-export type { UseQuery, UseMutation } from './-private/usables';
+export { useQuery, useMutation, useSubscription } from './-private/usables';
+export type {
+  UseQuery,
+  UseMutation,
+  UseSubscription
+} from './-private/usables';

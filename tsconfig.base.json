@@ -19,6 +19,7 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "es6",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "stripInternal": true
   }
 }

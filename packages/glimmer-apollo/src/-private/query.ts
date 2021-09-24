@@ -1,6 +1,5 @@
 import { getClient } from './client';
 import {
-  getOwner,
   isDestroyed,
   isDestroying,
   tracked,
@@ -15,7 +14,7 @@ import type {
   WatchQueryOptions
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
-import type { Fastboot } from './types';
+import { getFastboot, createPromise } from './utils';
 
 interface QueryFunctionOptions<TData> {
   onComplete?: (data: TData | undefined) => void;
@@ -60,13 +59,13 @@ export class QueryResource<
     const client = getClient(this, options?.clientId);
 
     this.loading = true;
-    const fastboot = this.getFastboot();
+    const fastboot = getFastboot(this);
 
     if (fastboot && fastboot.isFastBoot && options && options.ssr === false) {
       return;
     }
 
-    let [promise, firstResolve, firstReject] = this.createPromise(); // eslint-disable-line prefer-const
+    let [promise, firstResolve, firstReject] = createPromise(); // eslint-disable-line prefer-const
     this.promise = promise;
     const observable = client.watchQuery({
       query,
@@ -166,42 +165,4 @@ export class QueryResource<
       onError(error);
     }
   }
-
-  private createPromise(): [
-    Promise<void>,
-    (() => void) | undefined,
-    (() => void) | undefined
-  ] {
-    let resolvePromise: (val?: unknown) => void | undefined;
-    let rejectPromise: (val?: undefined) => void | undefined;
-    const promise = new Promise<void>((resolve, reject) => {
-      resolvePromise = resolve;
-      rejectPromise = reject;
-    });
-
-    return [promise, resolvePromise!, rejectPromise!]; //eslint-disable-line
-  }
-
-  private getFastboot(): Fastboot | undefined {
-    if (hasFastBoot(self) && typeof self.FastBoot !== 'undefined') {
-      const owner = getOwner(this);
-
-      if (ownerHasLookup(owner) && typeof owner.lookup === 'function') {
-        return owner.lookup('service:fastboot') as Fastboot;
-      }
-    }
-
-    return undefined;
-  }
-}
-
-function hasFastBoot(obj: unknown): obj is { FastBoot: unknown } {
-  return Object.prototype.hasOwnProperty.call(obj, 'FastBoot');
-}
-
-function ownerHasLookup(
-  owner: object | undefined
-  //eslint-disable-next-line
-): owner is { lookup: unknown } {
-  return !!(owner && 'lookup' in owner);
 }
