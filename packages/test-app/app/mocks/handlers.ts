@@ -38,11 +38,11 @@ export type LoginMutation = {
   >;
 };
 
-export type MessageAddedSubscriptionVariables = Exact<{
+export type OnMessageAddedSubscriptionVariables = Exact<{
   channel: string;
 }>;
 
-export type MessageAddedSubscription = {
+export type OnMessageAddedSubscription = {
   __typename?: 'Subscription';
   messageAdded: Maybe<
     { __typename?: 'Message' } & Pick<Message, 'id' | 'message'>
