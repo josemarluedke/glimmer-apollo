@@ -76,11 +76,11 @@ export class MutationResource<
       })
     )
       .then((result) => {
-        this.onComplete(result);
+        this.#onComplete(result);
         return this.data;
       })
       .catch((error) => {
-        this.onError(error);
+        this.#onError(error);
         return error;
       });
 
@@ -97,7 +97,7 @@ export class MutationResource<
     });
   }
 
-  private onComplete(result: FetchResult<TData>): void {
+  #onComplete(result: FetchResult<TData>): void {
     const { data, errors } = result;
     const error =
       errors && errors.length > 0
@@ -107,17 +107,17 @@ export class MutationResource<
     this.data = data;
     this.error = error;
 
-    this.handleOnCompleteOrOnError();
+    this.#handleOnCompleteOrOnError();
   }
 
-  private onError(error: ApolloError): void {
+  #onError(error: ApolloError): void {
     this.error = error;
     this.data = undefined;
 
-    this.handleOnCompleteOrOnError();
+    this.#handleOnCompleteOrOnError();
   }
 
-  private handleOnCompleteOrOnError(): void {
+  #handleOnCompleteOrOnError(): void {
     this.loading = false;
     this.called = true;
 
