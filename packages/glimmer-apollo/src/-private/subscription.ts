@@ -106,7 +106,10 @@ export class SubscriptionResource<
 
   /** @internal */
   update(): void {
-    if (!equal(this.#previousPositionalArgs, this.args.positional)) {
+    if (
+      !equal(this.#previousPositionalArgs, this.args.positional) ||
+      !this.#subscription
+    ) {
       this.teardown();
       this.setup();
     }
@@ -164,6 +167,11 @@ export class SubscriptionResource<
     const { onComplete } = options || {};
     if (onComplete) {
       onComplete();
+    }
+
+    if (this.#subscription) {
+      this.#subscription.unsubscribe();
+      this.#subscription = undefined;
     }
   }
 }

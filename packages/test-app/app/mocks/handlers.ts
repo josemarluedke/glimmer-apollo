@@ -11,6 +11,11 @@ type User = {
   lastName: string;
 };
 
+type Message = {
+  id: string;
+  message: string;
+};
+
 export type UserInfoQueryVariables = Exact<{
   id: string;
 }>;
@@ -30,6 +35,17 @@ export type LoginMutation = {
   __typename?: 'Mutation';
   login: Maybe<
     { __typename?: 'User' } & Pick<User, 'id' | 'firstName' | 'lastName'>
+  >;
+};
+
+export type MessageAddedSubscriptionVariables = Exact<{
+  channel: string;
+}>;
+
+export type MessageAddedSubscription = {
+  __typename?: 'Subscription';
+  messageAdded: Maybe<
+    { __typename?: 'Message' } & Pick<Message, 'id' | 'message'>
   >;
 };
 
