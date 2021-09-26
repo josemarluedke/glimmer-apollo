@@ -36,6 +36,7 @@ import {
   split
 } from '@apollo/client/core';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
 
 export default function setupApolloClient(context: object): void {
   // WebSocket connection to the API
