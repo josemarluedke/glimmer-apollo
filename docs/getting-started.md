@@ -68,8 +68,32 @@ export default function setupApolloClient(context: object): void {
 
 The `context` argument for `setClient` can be any object with an Owner. Both
 Ember.js apps and Glimmer.js have the concept of Owners, so we should be all set.
-For Ember apps specifically, you can also pass an ApplicationInstance, which itself
-is the Owner.
+For Ember apps specifically, you can also pass an `ApplicationInstance`, which itself
+is the Owner. 
+
+
+For Engine we should pass `context.ownerInjection()` instead of `context`
+because `EngineInstance` has no `owner` concept. It will register a new client per engine.
+
+## Setup the client for Ember Engines
+
+Since the `
+
+```ts:app/apollo.ts
+import { setClient } from 'glimmer-apollo';
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink
+} from '@apollo/client/core';
+
+export default function setupApolloClient(context: object): void {
+  ...
+
+  // Set default apollo client for Glimmer Apollo
+  setClient(context.ownerInjection(), apolloClient);
+}
+```
 
 > Important: When the context object is torn down, the `ApolloClient` instance
 > will be cleared out, removing all its cache, and it will unregister the client
