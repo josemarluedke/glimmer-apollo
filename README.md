@@ -159,6 +159,7 @@ Where `ctx` is an object with owner.
 
 ```js
 import { setClient } from 'glimmer-apollo';
+import { ApolloClient } from '@apollo/client/core';
 
 class App extends Component {
   constructor() {
