@@ -72,12 +72,10 @@ For Ember apps specifically, you can also pass an `ApplicationInstance`, which i
 is the Owner. 
 
 
-For Engine we should pass `context.ownerInjection()` instead of `context`
-because `EngineInstance` has no `owner` concept. It will register a new client per engine.
-
 ## Setup the client for Ember Engines
 
-Since the `
+For Engine we should pass `context.ownerInjection()` instead of `context`
+because `EngineInstance` has no `owner` concept. It will register a new client per engine.
 
 ```ts:app/apollo.ts
 import { setClient } from 'glimmer-apollo';
