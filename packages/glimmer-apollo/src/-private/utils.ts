@@ -13,7 +13,11 @@ function ownerHasLookup(
 }
 
 export function getFastboot(ctx: Object): Fastboot | undefined {
-  if (hasFastBoot(self) && typeof self.FastBoot !== 'undefined') {
+  if (
+    typeof self != 'undefined' &&
+    hasFastBoot(self) &&
+    typeof self.FastBoot !== 'undefined'
+  ) {
     const owner = getOwner(ctx);
 
     if (ownerHasLookup(owner) && typeof owner.lookup === 'function') {
