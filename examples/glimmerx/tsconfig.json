@@ -5,7 +5,13 @@
     "types": ["qunit"],
     "paths": {
       "*": ["types/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-hbs-plugin",
+        "tags": ["hbs"]
+      }
+    ]
   },
   "exclude": ["node_modules", "tmp", "dist"]
 }
