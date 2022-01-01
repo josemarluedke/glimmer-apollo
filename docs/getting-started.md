@@ -72,27 +72,6 @@ For Ember apps specifically, you can also pass an `ApplicationInstance`, which i
 is the Owner. 
 
 
-## Setup the client for Ember Engines
-
-For Engine we should pass `context.ownerInjection()` instead of `context`
-because `EngineInstance` has no `owner` concept. It will register a new client per engine.
-
-```ts:app/apollo.ts
-import { setClient } from 'glimmer-apollo';
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink
-} from '@apollo/client/core';
-
-export default function setupApolloClient(context: object): void {
-  ...
-
-  // Set default apollo client for Glimmer Apollo
-  setClient(context.ownerInjection(), apolloClient);
-}
-```
-
 > Important: When the context object is torn down, the `ApolloClient` instance
 > will be cleared out, removing all its cache, and it will unregister the client
 > from Glimmer Apollo.
@@ -112,6 +91,22 @@ export default {
 
 We recommend using an instance initializer as they get executed in component
 integration tests, allowing you to run GraphQL queries in your component tests.
+
+### Setup the client for Ember Engines
+
+For Engine we should pass `context.ownerInjection()` instead of `context`
+because `EngineInstance` has no `owner` concept and if you try to use `context` it will crash you app. Using `context.ownerInjection()` it will register a new client per engine.
+
+```ts:app/apollo.ts
+import { setClient } from 'glimmer-apollo';
+
+export default function setupApolloClient(context: object): void {
+  ...
+
+  // Set default apollo client for Glimmer Apollo
+  setClient(context.ownerInjection(), apolloClient);
+}
+```
 
 ## Glimmer Setup
 
