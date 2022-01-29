@@ -2,12 +2,15 @@
   User Info
 </h2>
 
-loading: {{this.userInfo.loading}}
+loading:
+{{this.userInfo.loading}}
 <br />
-firstName: {{this.userInfo.data.user.firstName}}
+firstName:
+{{this.userInfo.data.user.firstName}}
 
 {{#if this.userInfo.error}}
-  Error: {{this.userInfo.error.message}}
+  Error:
+  {{this.userInfo.error.message}}
 {{/if}}
 <button type="button" {{on "click" this.userInfo.refetch}}>
   refetch
@@ -22,11 +25,14 @@ firstName: {{this.userInfo.data.user.firstName}}
 </button>
 
 <br />
-loading: {{this.login.loading}}
+loading:
+{{this.login.loading}}
 
 <br />
-firstName: {{this.login.data.user.firstName}}
+firstName:
+{{this.login.data.login.firstName}}
 
 {{#if this.login.error}}
-  Error: {{this.login.error.message}}
+  Error:
+  {{this.login.error.message}}
 {{/if}}

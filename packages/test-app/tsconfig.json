@@ -24,7 +24,8 @@
     "paths": {
       "test-app/tests/*": ["tests/*"],
       "test-app/*": ["app/*"],
-      "*": ["types/*"]
+      "*": ["types/*"],
+      "fetch": ["../../node_modules/ember-fetch"]
     }
   },
   "include": ["app/**/*", "tests/**/*", "types/**/*"]
