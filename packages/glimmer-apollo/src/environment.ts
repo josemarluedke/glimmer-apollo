@@ -2,10 +2,7 @@ import { DEBUG } from '@glimmer/env';
 export { tracked } from '@glimmer/tracking';
 
 import type { IWaitForPromise } from './-private/types';
-import type {
-  getOwner as IGetOwner,
-  setOwner as ISetOwner
-} from '@glimmer/owner';
+import type { setOwner as ISetOwner } from '@glimmer/owner';
 
 import type {
   setHelperManager as ISetHelperManager,
@@ -30,7 +27,7 @@ import type {
 interface EnviromentContext {
   owner?: object;
   setOwner: typeof ISetOwner;
-  getOwner: typeof IGetOwner;
+  getOwner: (object: unknown) => unknown;
   getValue: typeof IGetValue;
   createCache: typeof ICreateCache;
   invokeHelper: typeof IInvokeHelper;
@@ -67,7 +64,7 @@ export function getOwner<O extends object>(obj: object): O | undefined {
     return obj as O;
   }
 
-  return _getOwner(obj);
+  return _getOwner(obj) as O;
 }
 
 export function setEnviromentContext(env: EnviromentContext): void {

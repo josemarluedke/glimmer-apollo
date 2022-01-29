@@ -11,7 +11,8 @@ import type {
   DocumentNode,
   OperationVariables,
   FetchResult,
-  SubscriptionOptions as ApolloSubscriptionOptions
+  SubscriptionOptions as ApolloSubscriptionOptions,
+  ObservableSubscription
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
 import { getFastboot, createPromise, settled } from './utils';
@@ -42,7 +43,7 @@ export class SubscriptionResource<
   @tracked data: TData | undefined;
   @tracked promise!: Promise<void>;
 
-  #subscription?: ZenObservable.Subscription;
+  #subscription?: ObservableSubscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
   /** @internal */

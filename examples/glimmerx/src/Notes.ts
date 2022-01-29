@@ -26,8 +26,8 @@ const NoteButton = hbs`
     class="text-left p-2 rounded focus:outline-none focus:ring ring-green-400
       {{if
         (equal @note.id @selectedNote.id)
-        "bg-gray-700"
-        "hover:bg-gray-800"
+        'bg-gray-700'
+        'hover:bg-gray-800'
       }}"
     {{on "click" (fn @onSelectNote @note)}}
   >
