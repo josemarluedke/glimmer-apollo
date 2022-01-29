@@ -30,8 +30,8 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@ember/test-waiters": "^3.0.0",
-    "@embroider/addon-shim": "^0.44.1",
+    "@ember/test-waiters": "^3.0.1",
+    "@embroider/addon-shim": "^1.0.0",
     "@glimmer/env": "^0.1.7",
     "@wry/equality": "^0.5.2"
   },
