@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Addon } from '@embroider/addon-dev/rollup';
-import ts from '@wessberg/rollup-plugin-ts';
+import ts from 'rollup-plugin-ts';
 import walkSync from 'walk-sync';
 import { join } from 'path';
 

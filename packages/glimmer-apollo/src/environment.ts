@@ -30,7 +30,7 @@ import type {
 interface EnviromentContext {
   owner?: object;
   setOwner: typeof ISetOwner;
-  getOwner: typeof IGetOwner;
+  getOwner: (object: unknown) => unknown;
   getValue: typeof IGetValue;
   createCache: typeof ICreateCache;
   invokeHelper: typeof IInvokeHelper;
@@ -67,7 +67,7 @@ export function getOwner<O extends object>(obj: object): O | undefined {
     return obj as O;
   }
 
-  return _getOwner(obj);
+  return _getOwner(obj) as O;
 }
 
 export function setEnviromentContext(env: EnviromentContext): void {

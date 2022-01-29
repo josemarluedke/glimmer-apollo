@@ -13,7 +13,8 @@ import type {
   ApolloQueryResult,
   DocumentNode,
   OperationVariables,
-  WatchQueryOptions
+  WatchQueryOptions,
+  ObservableSubscription
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
@@ -44,7 +45,7 @@ export class QueryResource<
   @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
 
-  #subscription?: ZenObservable.Subscription;
+  #subscription?: ObservableSubscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
   /** @internal */
