@@ -1,46 +1,45 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-import multiInput from 'rollup-plugin-multi-input';
-import resolve from '@rollup/plugin-node-resolve';
+import { Addon } from '@embroider/addon-dev/rollup';
 import ts from '@wessberg/rollup-plugin-ts';
+import walkSync from 'walk-sync';
+import { join } from 'path';
 
-function isExternal(id) {
-  return !(
-    id.startsWith('./') ||
-    id.startsWith('../') ||
-    id.startsWith('/') ||
-    id.startsWith('@babel/runtime') ||
-    id.startsWith('tslib')
-  );
+// https://github.com/embroider-build/embroider/blob/main/packages/addon-dev/src/rollup-public-entrypoints.ts
+function publicEntrypoints(args) {
+  return {
+    name: 'addon-modules',
+    buildStart() {
+      for (let name of walkSync(args.srcDir, {
+        globs: args.include
+      })) {
+        this.emitFile({
+          type: 'chunk',
+          id: join(args.srcDir, name),
+          fileName: name.replace('.ts', '.js')
+        });
+      }
+    }
+  };
 }
 
-const config = {
-  input: [
-    'src/index.ts',
-    'src/environment.ts',
-    'src/environment-ember.ts',
-    'src/environment-glimmer.ts',
-    'src/ember-initializer.ts'
-  ],
-  // preserveModules: true,
-  output: [
-    {
-      dir: './dist/esm',
-      sourcemap: true,
-      format: 'esm'
-    },
-    {
-      exports: 'auto',
-      dir: './dist/cjs',
-      format: 'cjs',
-      sourcemap: true
-    }
-  ],
-  external(id) {
-    return isExternal(id);
-  },
+const addon = new Addon({
+  srcDir: 'src',
+  destDir: 'dist'
+});
+
+export default {
+  // This provides defaults that work well alongside `publicEntrypoints` below.
+  // You can augment this if you need to.
+  output: addon.output(),
+
   plugins: [
-    multiInput({ relative: 'src/' }),
+    // These are the modules that users should be able to import from your
+    // addon. Anything not listed here may get optimized away.
+    publicEntrypoints({
+      srcDir: 'src',
+      include: ['*.ts']
+    }),
+
     ts({
       transpiler: 'babel',
       browserslist: false,
@@ -49,8 +48,15 @@ const config = {
         hook: (resolvedConfig) => ({ ...resolvedConfig, declaration: true })
       }
     }),
-    resolve({ extensions: ['.js', '.ts'] })
+
+    // Follow the V2 Addon rules about dependencies. Your code can import from
+    // `dependencies` and `peerDependencies` as well as standard Ember-provided
+    // package names.
+    addon.dependencies(),
+
+    addon.keepAssets(['ember-initializer.js']),
+
+    // Remove leftover build artifacts when starting a new build.
+    addon.clean()
   ]
 };
-
-export default config;

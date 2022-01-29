@@ -1,11 +1,17 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import config from 'test-app/config/environment';
-import { worker } from 'test-app/mocks/browser';
+import { importSync } from '@embroider/macros';
 
 export default class ApplicationRoute extends Route {
+  @service fastboot!: { isFastBoot: boolean };
+
   async beforeModel(): Promise<void> {
     if (config.environment === 'development') {
-      await worker.start();
+      if (!this.fastboot.isFastBoot) {
+        // @ts-ignore
+        await importSync('test-app/mocks/browser').worker.start();
+      }
     }
   }
 }
