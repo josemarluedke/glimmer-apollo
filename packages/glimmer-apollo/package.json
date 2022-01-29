@@ -32,13 +32,7 @@
   "dependencies": {
     "@ember/test-waiters": "^3.0.0",
     "@embroider/addon-shim": "^0.44.1",
-    "@glimmer/destroyable": "^0.77.6",
     "@glimmer/env": "^0.1.7",
-    "@glimmer/manager": "^0.77.6",
-    "@glimmer/owner": "^0.77.6",
-    "@glimmer/runtime": "^0.77.6",
-    "@glimmer/tracking": "^2.0.0-beta.15",
-    "@glimmer/validator": "^0.77.6",
     "@wry/equality": "^0.5.2"
   },
   "devDependencies": {
@@ -59,11 +53,29 @@
   },
   "peerDependencies": {
     "@apollo/client": "^3.0.0",
+    "@glimmer/destroyable": "^0.77.6",
+    "@glimmer/manager": "^0.77.6",
+    "@glimmer/owner": "^0.77.6",
+    "@glimmer/runtime": "^0.77.6",
+    "@glimmer/tracking": "^2.0.0-beta.15",
+    "@glimmer/validator": "^0.77.6",
     "ember-source": "^3.27.0",
     "graphql": "^14.0.0 || ^15.0.0"
   },
   "peerDependenciesMeta": {
     "ember-source": {
+      "optional": true
+    },
+    "@glimmer/destroyable": {
+      "optional": true
+    },
+    "@glimmer/manager": {
+      "optional": true
+    },
+    "@glimmer/owner": {
+      "optional": true
+    },
+    "@glimmer/validator": {
       "optional": true
     }
   },
