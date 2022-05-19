@@ -8,7 +8,7 @@ import {
   QueryPositionalArgs,
   QueryResource,
   setClient,
-  useResource
+  useQuery
 } from 'glimmer-apollo';
 
 import { module, test } from 'qunit';
@@ -43,10 +43,7 @@ function useCustomQuery<TData = unknown, TVariables = OperationVariables>(
     return [passedArgs[0], options];
   };
 
-  return useResource<
-    QueryPositionalArgs<TData, TVariables>,
-    QueryResource<TData, TVariables>
-  >(parentDestroyable, QueryResource, customArgs);
+  return useQuery<TData, TVariables>(parentDestroyable, customArgs);
 }
 
 const USER_INFO = gql`

@@ -12,13 +12,12 @@ export type {
   UseSubscription
 } from './-private/usables';
 
-export { useResource } from './-private/use-resource';
-export {
+export type {
   QueryOptions,
   QueryResource,
   QueryPositionalArgs
 } from './-private/query';
-export {
+export type {
   MutationOptions,
   MutationResource,
   MutationPositionalArgs
