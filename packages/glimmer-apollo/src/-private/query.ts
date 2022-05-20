@@ -1,14 +1,16 @@
-import { getClient } from './client';
+import { ApolloError, NetworkStatus } from '@apollo/client/core';
+import { equal } from '@wry/equality';
+
 import {
   isDestroyed,
   isDestroying,
   tracked,
   waitForPromise
 } from '../environment';
+import { getClient } from './client';
 import ObservableResource from './observable';
-import { NetworkStatus, ApolloError } from '@apollo/client/core';
-import { equal } from '@wry/equality';
-import { getFastboot, createPromise, settled } from './utils';
+import { createPromise, getFastboot, settled } from './utils';
+
 import type {
   ApolloQueryResult,
   DocumentNode,
@@ -18,7 +20,7 @@ import type {
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
-interface QueryOptions<TData, TVariables>
+export interface QueryOptions<TData, TVariables>
   extends Omit<WatchQueryOptions<TVariables>, 'query'> {
   ssr?: boolean;
   clientId?: string;

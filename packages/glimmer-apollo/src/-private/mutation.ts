@@ -1,13 +1,15 @@
-import { Resource } from './resource';
-import { getClient } from './client';
+import { ApolloError } from '@apollo/client/core';
+
 import {
   isDestroyed,
   isDestroying,
   tracked,
   waitForPromise
 } from '../environment';
-import { ApolloError } from '@apollo/client/core';
+import { getClient } from './client';
+import { Resource } from './resource';
 import { settled } from './utils';
+
 import type {
   DocumentNode,
   FetchResult,
@@ -18,7 +20,7 @@ import type { TemplateArgs } from './types';
 
 type Maybe<T> = T | undefined | null;
 
-interface MutationOptions<TData, TVariables>
+export interface MutationOptions<TData, TVariables>
   extends Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> {
   clientId?: string;
   onComplete?: (data: Maybe<TData>) => void;

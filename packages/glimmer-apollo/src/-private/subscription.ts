@@ -18,7 +18,7 @@ import { equal } from '@wry/equality';
 import { getFastboot, createPromise, settled } from './utils';
 import type { TemplateArgs } from './types';
 
-interface SubscriptionOptions<TData, TVariables>
+export interface SubscriptionOptions<TData, TVariables>
   extends Omit<ApolloSubscriptionOptions<TVariables>, 'query'> {
   ssr?: boolean;
   clientId?: string;
