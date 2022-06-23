@@ -22,6 +22,7 @@
   "devDependencies": {
     "@apollo/client": "^3.5.8",
     "@ember/optional-features": "^2.0.0",
+    "@ember/render-modifiers": "^2.0.4",
     "@ember/test-helpers": "^2.6.0",
     "@embroider/compat": "^1.0.0",
     "@embroider/core": "^1.0.0",
