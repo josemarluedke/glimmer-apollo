@@ -19,7 +19,11 @@ const LOGIN = gql`
   }
 `;
 
-export default class PlaygroundExperiment extends Component {
+interface Args {
+  onDidUpdate?: () => void;
+}
+
+export default class PlaygroundExperiment extends Component<Args> {
   userInfo = useQuery(this, () => [
     USER_INFO,
     {
@@ -40,5 +44,11 @@ export default class PlaygroundExperiment extends Component {
 
   bla = (): void => {
     this.login.mutate();
+  };
+
+  onDidUpdate = (): void => {
+    if (typeof this.args.onDidUpdate === 'function') {
+      this.args.onDidUpdate();
+    }
   };
 }

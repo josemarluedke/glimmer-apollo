@@ -12,10 +12,14 @@ firstName:
   Error:
   {{this.userInfo.error.message}}
 {{/if}}
-<button type="button" {{on "click" this.userInfo.refetch}}>
+<button
+  type="button"
+  {{on "click" this.userInfo.refetch}}
+  data-test-id="experiment-user-refetch"
+>
   refetch
 </button>
-
+<div {{did-update this.onDidUpdate this.userInfo.data}}></div>
 <hr />
 <h2>
   Login
