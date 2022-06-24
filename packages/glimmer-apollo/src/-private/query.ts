@@ -127,7 +127,9 @@ export class QueryResource<
         ? new ApolloError({ graphQLErrors: errors })
         : undefined;
 
-    this.loading = loading;
+    if (this.loading !== loading) {
+      this.loading = loading;
+    }
     if (this.data !== data) {
       this.data = data;
     }
