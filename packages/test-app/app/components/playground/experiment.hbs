@@ -19,7 +19,6 @@ firstName:
 >
   refetch
 </button>
-<div {{did-update this.onDidUpdate this.userInfo.data}}></div>
 <hr />
 <h2>
   Login
@@ -40,18 +39,3 @@ firstName:
   Error:
   {{this.login.error.message}}
 {{/if}}
-<hr />
-<h2>
-  Colors
-</h2>
-{{#each this.colorsQuery.data.colors as |color|}}
-  <button
-    type="button"
-    data-test-id="color-{{color.id}}"
-    {{on "click" (fn this.onUpdateColor color.id color.color)}}
-  >
-    {{color.color}}
-  </button>
-{{else}}
-  loading
-{{/each}}

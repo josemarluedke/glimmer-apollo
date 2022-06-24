@@ -1,0 +1,29 @@
+<h2>
+  Colors
+</h2>
+<button
+  type="button"
+  {{on "click" this.colorsQuery.refetch}}
+  data-test-id="did-update-refetch"
+>
+  refetch
+</button>
+<button
+  type="button"
+  {{on "click" this.onFilter}}
+  data-test-id="did-update-filter"
+>
+  refetch
+</button>
+{{#each this.colorsQuery.data.colors as |color|}}
+  <button
+    type="button"
+    data-test-id="color-{{color.id}}"
+    {{on "click" (fn this.onUpdateColor color.id color.color)}}
+  >
+    {{color.color}}
+  </button>
+{{else}}
+  loading
+{{/each}}
+<div {{did-update this.onDidUpdate this.colorsQuery.data}}></div>

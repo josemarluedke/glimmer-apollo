@@ -194,11 +194,17 @@ export const handlers = [
   }),
 
   // Handles a "Colors" query
-  graphql.query<ColorsQuery, ColorsQueryVariables>('Colors', (_, res, ctx) => {
+  graphql.query<ColorsQuery, ColorsQueryVariables>('Colors', (
+    args,
+    res,
+    ctx
+  ) => {
     return res(
       ctx.delay(300),
       ctx.data({
-        colors: [...COLORS]
+        colors: args.variables?.ids?.length
+          ? [...COLORS.filter((color) => args.variables.ids.includes(color.id))]
+          : [...COLORS]
       })
     );
   }),

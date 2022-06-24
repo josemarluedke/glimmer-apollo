@@ -1,5 +1,3 @@
-import { action } from '@ember/object';
-import { waitFor } from '@ember/test-waiters';
 import Component from '@glimmer/component';
 import { useQuery, useMutation, gql } from 'glimmer-apollo';
 
@@ -8,24 +6,6 @@ const USER_INFO = gql`
     user {
       username
       firstName
-    }
-  }
-`;
-
-const COLORS = gql`
-  query Colors {
-    colors {
-      id
-      color
-    }
-  }
-`;
-
-const UPDATE_COLOR = gql`
-  mutation UpdateColor($id: String!, $color: String!) {
-    updateColor(id: $id, color: $color) {
-      id
-      color
     }
   }
 `;
@@ -52,16 +32,6 @@ export default class PlaygroundExperiment extends Component<Args> {
     }
   ]);
 
-  colorsQuery = useQuery(this, () => [COLORS]);
-
-  updateColorMutation = useMutation(this, () => [
-    UPDATE_COLOR,
-    {
-      refetchQueries: ['Colors'],
-      awaitRefetchQueries: true
-    }
-  ]);
-
   login = useMutation(this, () => [
     LOGIN,
     {
@@ -75,17 +45,4 @@ export default class PlaygroundExperiment extends Component<Args> {
   bla = (): void => {
     this.login.mutate();
   };
-
-  onDidUpdate = (): void => {
-    if (typeof this.args.onDidUpdate === 'function') {
-      this.args.onDidUpdate();
-    }
-  };
-
-  @action @waitFor async onUpdateColor(colorId: string): Promise<void> {
-    await this.updateColorMutation.mutate({
-      id: colorId,
-      color: 'white'
-    });
-  }
 }

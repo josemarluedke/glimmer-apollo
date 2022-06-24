@@ -3,14 +3,25 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | Experiment', function (hooks) {
+module('Integration | Component | DidUpdate', function (hooks) {
   setupRenderingTest(hooks);
 
   const template = hbs`
-    <Playground::Experiment @onDidUpdate={{this.onDidUpdate}} />
+    <DidUpdate @onDidUpdate={{this.onDidUpdate}} />
   `;
 
-  test('it calls did-update once', async function (assert) {
+  test('it does not call did-update on refetch', async function (assert) {
+    assert.expect(1);
+
+    this.set('onDidUpdate', () => {
+      assert.ok(true);
+    });
+
+    await render(template);
+    await click('[data-test-id="did-update-refetch"]');
+  });
+
+  test('it calls did-update once on filter change', async function (assert) {
     assert.expect(2);
 
     this.set('onDidUpdate', () => {
@@ -18,7 +29,7 @@ module('Integration | Component | Experiment', function (hooks) {
     });
 
     await render(template);
-    await click('[data-test-id="experiment-user-refetch"]');
+    await click('[data-test-id="did-update-filter"]');
   });
 
   test('it re-fetches query after mutation', async function (assert) {
