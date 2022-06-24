@@ -128,7 +128,9 @@ export class QueryResource<
         : undefined;
 
     this.loading = loading;
-    this.data = data;
+    if (this.data !== data) {
+      this.data = data;
+    }
     this.networkStatus = networkStatus;
     this.error = error;
     this.#handleOnCompleteOrOnError();
