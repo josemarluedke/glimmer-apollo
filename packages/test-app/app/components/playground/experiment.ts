@@ -19,11 +19,7 @@ const LOGIN = gql`
   }
 `;
 
-interface Args {
-  onDidUpdate?: () => void;
-}
-
-export default class PlaygroundExperiment extends Component<Args> {
+export default class PlaygroundExperiment extends Component {
   userInfo = useQuery(this, () => [
     USER_INFO,
     {
