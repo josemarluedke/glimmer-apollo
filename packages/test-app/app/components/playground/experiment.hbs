@@ -40,3 +40,25 @@ firstName:
   Error:
   {{this.login.error.message}}
 {{/if}}
+<hr />
+<h2>
+  Colors
+</h2>
+<button
+  type="button"
+  {{on "click" this.colorsQuery.refetch}}
+  data-test-id="colors-refetch"
+>
+  refetch
+</button>
+{{#each this.colorsQuery.data.colors as |color|}}
+  <button
+    type="button"
+    data-test-id="color-{{color.id}}"
+    {{on "click" (fn this.onUpdateColor color.id color.color)}}
+  >
+    {{color.color}}
+  </button>
+{{else}}
+  loading
+{{/each}}

@@ -14,6 +14,12 @@ type User = {
 type Message = {
   id: string;
   message: string;
+  __typename?: string;
+};
+
+type Color = {
+  id: string;
+  color: string;
 };
 
 export type UserInfoQueryVariables = Exact<{
@@ -26,6 +32,25 @@ export type UserInfoQuery = {
     { __typename?: 'User' } & Pick<User, 'id' | 'firstName' | 'lastName'>
   >;
 };
+
+export type ColorsQuery = {
+  __typename?: 'Query';
+  colors: Array<{ __typename?: 'Colors' } & Pick<Color, 'id' | 'color'>>;
+};
+
+export type ColorsQueryVariables = Exact<{
+  ids: string[];
+}>;
+
+export type UpdateColorMutation = {
+  __typename?: 'Mutation';
+  updateColor: Maybe<{ __typename?: 'Color' } & Pick<Color, 'id' | 'color'>>;
+};
+
+export type UpdateColorMutationVariables = Exact<{
+  id: string;
+  color: string;
+}>;
 
 export type LoginMutationVariables = Exact<{
   username: string;
@@ -60,6 +85,13 @@ const USERS: User[] = [
     firstName: 'Joth',
     lastName: 'Maverick'
   }
+];
+
+const COLORS: Color[] = [
+  { id: '1', color: 'red' },
+  { id: '2', color: 'green' },
+  { id: '3', color: 'blue' },
+  { id: '4', color: 'yellow' }
 ];
 
 export const handlers = [
@@ -159,5 +191,35 @@ export const handlers = [
         }
       })
     );
-  })
+  }),
+
+  // Handles a "Colors" query
+  graphql.query<ColorsQuery, ColorsQueryVariables>('Colors', (_, res, ctx) => {
+    return res(
+      ctx.delay(300),
+      ctx.data({
+        colors: [...COLORS]
+      })
+    );
+  }),
+
+  // Handles "UpdateColor" mutation
+  graphql.mutation<UpdateColorMutation, UpdateColorMutationVariables>(
+    'UpdateColor',
+    (req, res, ctx) => {
+      const color = COLORS.find((color) => color.id === req.variables.id);
+      if (color) {
+        color.color = req.variables.color;
+      }
+      return res(
+        ctx.data({
+          updateColor: {
+            __typename: 'Color',
+            id: req.variables.id,
+            color: req.variables.color
+          }
+        })
+      );
+    }
+  )
 ];
