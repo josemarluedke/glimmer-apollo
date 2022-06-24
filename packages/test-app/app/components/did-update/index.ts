@@ -5,8 +5,8 @@ import { tracked } from '@glimmer/tracking';
 import { useQuery, useMutation, gql } from 'glimmer-apollo';
 
 const COLORS = gql`
-  query Colors {
-    colors {
+  query Colors($ids: [String!]!) {
+    colors(ids: $ids) {
       id
       color
     }
@@ -32,7 +32,6 @@ export default class PlaygroundExperiment extends Component<Args> {
   colorsQuery = useQuery(this, () => [
     COLORS,
     {
-      fetchPolicy: 'network-only',
       variables: {
         ids: this.filterIds
       }
