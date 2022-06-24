@@ -131,8 +131,12 @@ export class QueryResource<
     if (this.data !== data) {
       this.data = data;
     }
-    this.networkStatus = networkStatus;
-    this.error = error;
+    if (this.networkStatus !== networkStatus) {
+      this.networkStatus = networkStatus;
+    }
+    if (this.error !== error) {
+      this.error = error;
+    }
     this.#handleOnCompleteOrOnError();
   }
 
