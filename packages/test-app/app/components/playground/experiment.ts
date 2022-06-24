@@ -54,7 +54,13 @@ export default class PlaygroundExperiment extends Component<Args> {
 
   colorsQuery = useQuery(this, () => [COLORS]);
 
-  updateColorMutation = useMutation(this, () => [UPDATE_COLOR]);
+  updateColorMutation = useMutation(this, () => [
+    UPDATE_COLOR,
+    {
+      refetchQueries: ['Colors'],
+      awaitRefetchQueries: true
+    }
+  ]);
 
   login = useMutation(this, () => [
     LOGIN,

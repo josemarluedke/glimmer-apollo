@@ -44,13 +44,6 @@ firstName:
 <h2>
   Colors
 </h2>
-<button
-  type="button"
-  {{on "click" this.colorsQuery.refetch}}
-  data-test-id="colors-refetch"
->
-  refetch
-</button>
 {{#each this.colorsQuery.data.colors as |color|}}
   <button
     type="button"
