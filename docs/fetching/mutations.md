@@ -328,7 +328,7 @@ allowing you to execute code when a specific event occurs.
 
 ### `onComplete`
 
-This callback gets called when the mutation completes execution.
+This callback gets called when the mutation successfully completes execution.
 
 ```ts
 createNote = useMutation(this, () => [
