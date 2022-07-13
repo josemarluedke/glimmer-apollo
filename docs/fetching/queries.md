@@ -317,7 +317,7 @@ allowing you to execute code when a specific event occurs.
 
 ### `onComplete`
 
-This callback gets called when the query completes execution and when the
+This callback gets called when the query successfully completes execution and when the
 cache associated with this query is updated.
 
 ```js
