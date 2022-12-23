@@ -76,6 +76,9 @@
     "@glimmer/owner": {
       "optional": true
     },
+    "@glimmer/runtime": {
+      "optional": true
+    },
     "@glimmer/validator": {
       "optional": true
     }
