@@ -4,6 +4,7 @@ import type {
   FetchMoreOptions,
   FetchMoreQueryOptions,
   ObservableQuery,
+  OperationVariables,
   SubscribeToMoreOptions,
   UpdateQueryOptions
 } from '@apollo/client/core';
@@ -11,7 +12,7 @@ import type { TemplateArgs } from './types';
 
 export default class ObservableResource<
   TData,
-  TVariables,
+  TVariables extends OperationVariables,
   Args extends TemplateArgs
 > extends Resource<Args> {
   private observable?: ObservableQuery<TData>;

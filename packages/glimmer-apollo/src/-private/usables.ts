@@ -7,7 +7,10 @@ import {
 } from './subscription';
 import type { OperationVariables } from '@apollo/client/core';
 
-export function useQuery<TData = unknown, TVariables = OperationVariables>(
+export function useQuery<
+  TData = unknown,
+  TVariables extends OperationVariables = OperationVariables
+>(
   parentDestroyable: object,
   args: () => QueryPositionalArgs<TData, TVariables>
 ): QueryResource<TData, TVariables> {
@@ -17,7 +20,10 @@ export function useQuery<TData = unknown, TVariables = OperationVariables>(
   >(parentDestroyable, QueryResource, args);
 }
 
-export function useMutation<TData = unknown, TVariables = OperationVariables>(
+export function useMutation<
+  TData = unknown,
+  TVariables extends OperationVariables = OperationVariables
+>(
   parentDestroyable: object,
   args: () => MutationPositionalArgs<TData, TVariables>
 ): MutationResource<TData, TVariables> {
@@ -40,14 +46,20 @@ export function useSubscription<
   >(parentDestroyable, SubscriptionResource, args);
 }
 
-export type UseQuery<TData = unknown, TVariables = OperationVariables> = {
+export type UseQuery<
+  TData = unknown,
+  TVariables extends OperationVariables = OperationVariables
+> = {
   args: () => QueryPositionalArgs<TData, TVariables>[1];
   return: QueryResource<TData, TVariables>;
   data: TData;
   variables: TVariables;
 };
 
-export type UseMutation<TData = unknown, TVariables = OperationVariables> = {
+export type UseMutation<
+  TData = unknown,
+  TVariables extends OperationVariables = OperationVariables
+> = {
   args: () => MutationPositionalArgs<TData, TVariables>[1];
   return: MutationResource<TData, TVariables>;
   data: TData;

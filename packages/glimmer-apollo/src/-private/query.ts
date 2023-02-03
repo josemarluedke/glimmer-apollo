@@ -35,7 +35,7 @@ export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
 
 export class QueryResource<
   TData,
-  TVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables
 > extends ObservableResource<
   TData,
   TVariables,
