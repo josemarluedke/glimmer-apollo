@@ -90,6 +90,7 @@ jobs:
           node-version: 14.x
           yarn-version: 1.x
       - run: yarn install --frozen-lockfile --non-interactive
+      - run: yarn build
       - run: yarn add --dev ${{ matrix.typescript }}
         working-directory: examples/glimmerx
       - run: yarn add --dev ${{ matrix.typescript }}
