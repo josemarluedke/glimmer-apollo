@@ -307,8 +307,7 @@ export default class Notes extends Component {
 ### `promise`
 
 This property holds a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves when the query finishes fetching the data from the network.
-The Promise will only be updated for the first execution of the Resource, meaning that it won't become an unresolved promise when Apollo Cache is updating or when refecting.
-This property is useful for executing queries in [Ember Routes](#ember-routes).
+The Promise will only be updated for the first execution of the Resource, meaning that it won't become an unresolved promise when Apollo Cache is updating or when refetching. This property is useful for executing queries in [Ember Routes](#ember-routes).
 
 ## Event Callbacks
 
