@@ -27,14 +27,14 @@ export interface MutationOptions<TData, TVariables>
   onError?: (error: ApolloError) => void;
 }
 
-export type MutationPositionalArgs<TData, TVariables = OperationVariables> = [
-  DocumentNode,
-  MutationOptions<TData, TVariables>?
-];
+export type MutationPositionalArgs<
+  TData,
+  TVariables extends OperationVariables = OperationVariables
+> = [DocumentNode, MutationOptions<TData, TVariables>?];
 
 export class MutationResource<
   TData,
-  TVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables
 > extends Resource<TemplateArgs<MutationPositionalArgs<TData, TVariables>>> {
   @tracked loading = false;
   @tracked called = false;

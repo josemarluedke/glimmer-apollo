@@ -27,7 +27,10 @@ import {
   UserInfoQueryVariables
 } from '../../app/mocks/handlers';
 
-function useCustomQuery<TData = unknown, TVariables = OperationVariables>(
+function useCustomQuery<
+  TData = unknown,
+  TVariables extends OperationVariables = OperationVariables
+>(
   parentDestroyable: object,
   args: () => QueryPositionalArgs<TData, TVariables>
 ): QueryResource<TData, TVariables> {
@@ -225,7 +228,7 @@ module('useCustomQuery', function (hooks) {
 
     const expectedError = 'User not found';
     assert.equal(query.error?.message, expectedError);
-    assert.equal(onErrorCalled!.message, expectedError);
+    assert.equal(onErrorCalled.message, expectedError);
   });
 
   test('it returns error with data', async function (assert) {
@@ -269,7 +272,7 @@ module('useCustomQuery', function (hooks) {
 
     const expectedError = 'Data With Error';
     assert.equal(query.error?.message, expectedError);
-    assert.equal(onErrorCalled!.message, expectedError);
+    assert.equal(onErrorCalled.message, expectedError);
   });
 
   test('it does not trigger query update if args references changes but values are the same', async function (assert) {

@@ -20,7 +20,7 @@ import type {
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
-export interface QueryOptions<TData, TVariables>
+export interface QueryOptions<TData, TVariables extends OperationVariables>
   extends Omit<WatchQueryOptions<TVariables>, 'query'> {
   ssr?: boolean;
   clientId?: string;
@@ -28,10 +28,10 @@ export interface QueryOptions<TData, TVariables>
   onError?: (error: ApolloError) => void;
 }
 
-export type QueryPositionalArgs<TData, TVariables = OperationVariables> = [
-  DocumentNode,
-  QueryOptions<TData, TVariables>?
-];
+export type QueryPositionalArgs<
+  TData,
+  TVariables extends OperationVariables = OperationVariables
+> = [DocumentNode, QueryOptions<TData, TVariables>?];
 
 export class QueryResource<
   TData,
