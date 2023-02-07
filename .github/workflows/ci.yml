@@ -82,6 +82,7 @@ jobs:
           - typescript@~4.7.0
           - typescript@~4.8.0
           - typescript@~4.9.0
+          - typescript@next
 
     steps:
       - uses: actions/checkout@v2
@@ -91,9 +92,13 @@ jobs:
           yarn-version: 1.x
       - run: yarn install --frozen-lockfile --non-interactive
       - run: yarn build
-      - run: yarn add --dev ${{ matrix.typescript }}
+      - run: |
+          yarn add --dev ${{ matrix.typescript }}
+          yarn tsc --version
         working-directory: examples/glimmerx
-      - run: yarn add --dev ${{ matrix.typescript }}
+      - run: |
+          yarn add --dev ${{ matrix.typescript }}
+          yarn tsc --version
         working-directory: packages/glimmer-apollo
       - run: yarn test:types
 
