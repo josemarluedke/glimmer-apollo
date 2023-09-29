@@ -23,6 +23,7 @@ export default class PlaygroundExperiment extends Component {
   userInfo = useQuery(this, () => [
     USER_INFO,
     {
+      variables: { id: '1-with-delay' },
       errorPolicy: 'all',
       notifyOnNetworkStatusChange: true
     }

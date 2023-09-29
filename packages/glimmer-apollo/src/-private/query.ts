@@ -50,6 +50,8 @@ export class QueryResource<
   #subscription?: ObservableSubscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
+  #firstPromiseReject: Function | undefined;
+
   /** @internal */
   async setup(): Promise<void> {
     this.#previousPositionalArgs = this.args.positional;
@@ -64,6 +66,7 @@ export class QueryResource<
     }
 
     let [promise, firstResolve, firstReject] = createPromise(); // eslint-disable-line prefer-const
+    this.#firstPromiseReject = firstReject;
     this.promise = promise;
     const observable = client.watchQuery({
       query,
@@ -82,9 +85,9 @@ export class QueryResource<
       },
       (error) => {
         this.#onError(error);
-        if (firstReject) {
-          firstReject();
-          firstReject = undefined;
+        if (this.#firstPromiseReject) {
+          this.#firstPromiseReject();
+          this.#firstPromiseReject = undefined;
         }
       }
     );
@@ -111,6 +114,10 @@ export class QueryResource<
   teardown(): void {
     if (this.#subscription) {
       this.#subscription.unsubscribe();
+    }
+    if (this.#firstPromiseReject) {
+      this.#firstPromiseReject();
+      this.#firstPromiseReject = undefined;
     }
   }
 
