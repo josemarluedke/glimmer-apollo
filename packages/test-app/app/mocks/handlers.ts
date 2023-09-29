@@ -84,6 +84,16 @@ export const handlers = [
           }
         })
       );
+    } else if (user && req.variables.id.includes('with-delay')) {
+      return res(
+        ctx.delay(300),
+        ctx.data({
+          user: {
+            __typename: 'User',
+            ...user
+          }
+        })
+      );
     } else if (user) {
       return res(
         ctx.data({
