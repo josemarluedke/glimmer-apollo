@@ -206,6 +206,10 @@ Glimmer Apollo supports SSR with [FastBoot](http://ember-fastboot.com/) by defau
 
 The `ssr` option allows disabling fetching of the query when running in SSR with FastBoot. It will skip the execution entirely in FastBoot but will execute when running in the Browser. This feature is useful if you are fetching secondary data to the page and can wait to be fetched.
 
+### `skip`
+
+The query will skip the execution while the `skip` option is true.
+
 ### `clientId`
 
 This option specifies which Apollo Client should be used for the given query. Glimmer Apollo supports defining multiple Apollo Clients that are distinguished by a custom identifier while setting the client to Glimmer Apollo.

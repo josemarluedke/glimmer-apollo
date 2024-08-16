@@ -22,6 +22,7 @@ import type { TemplateArgs } from './types';
 
 export interface QueryOptions<TData, TVariables extends OperationVariables>
   extends Omit<WatchQueryOptions<TVariables>, 'query'> {
+  skip?: boolean;
   ssr?: boolean;
   clientId?: string;
   onComplete?: (data: TData | undefined) => void;
@@ -41,7 +42,7 @@ export class QueryResource<
   TVariables,
   TemplateArgs<QueryPositionalArgs<TData, TVariables>>
 > {
-  @tracked loading = true;
+  @tracked loading = false;
   @tracked error?: ApolloError;
   @tracked data: TData | undefined;
   @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
@@ -55,22 +56,39 @@ export class QueryResource<
   /** @internal */
   async setup(): Promise<void> {
     this.#previousPositionalArgs = this.args.positional;
-    const [query, options] = this.args.positional;
-    const client = getClient(this, options?.clientId);
+    const [query, options = {}] = this.args.positional;
+    const client = getClient(this, options.clientId);
 
-    this.loading = true;
     const fastboot = getFastboot(this);
 
-    if (fastboot && fastboot.isFastBoot && options && options.ssr === false) {
+    if (
+      fastboot &&
+      fastboot.isFastBoot &&
+      (options.ssr === false || options.skip === true)
+    ) {
       return;
     }
 
     let [promise, firstResolve, firstReject] = createPromise(); // eslint-disable-line prefer-const
     this.#firstPromiseReject = firstReject;
     this.promise = promise;
+
+    if (options.skip) {
+      options.fetchPolicy = 'standby';
+    }
+
+    if (options.fetchPolicy === 'standby') {
+      if (firstResolve) {
+        firstResolve();
+        firstResolve = undefined;
+      }
+    } else {
+      this.loading = true;
+    }
+
     const observable = client.watchQuery({
       query,
-      ...(options || {})
+      ...options
     });
 
     this._setObservable(observable);
