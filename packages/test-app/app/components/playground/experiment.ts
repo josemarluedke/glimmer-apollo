@@ -29,6 +29,16 @@ export default class PlaygroundExperiment extends Component {
     }
   ]);
 
+  userInfoWithSkip = useQuery(this, () => [
+    USER_INFO,
+    {
+      variables: { id: '1-with-delay' },
+      errorPolicy: 'all',
+      notifyOnNetworkStatusChange: true,
+      skip: true
+    }
+  ]);
+
   login = useMutation(this, () => [
     LOGIN,
     {

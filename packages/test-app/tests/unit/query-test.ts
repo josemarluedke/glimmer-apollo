@@ -7,6 +7,7 @@ import {
   ApolloClient,
   ApolloError,
   InMemoryCache,
+  WatchQueryFetchPolicy,
   createHttpLink
 } from '@apollo/client/core';
 import {
@@ -14,6 +15,7 @@ import {
   UserInfoQueryVariables
 } from '../../app/mocks/handlers';
 import sinon from 'sinon';
+import { waitUntil } from '@ember/test-helpers';
 
 const USER_INFO = gql`
   query UserInfo($id: ID!) {
@@ -29,11 +31,13 @@ module('useQuery', function (hooks) {
   let ctx = {};
   const owner = {};
 
+  const link = createHttpLink({
+    uri: '/graphql'
+  });
+
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: createHttpLink({
-      uri: '/graphql'
-    })
+    link
   });
 
   hooks.beforeEach(() => {
@@ -139,6 +143,26 @@ module('useQuery', function (hooks) {
 
     assert.deepEqual(query.data as unknown, expectedData);
     assert.deepEqual(onCompleteCalled, expectedData);
+  });
+
+  test('it does not call onCompleted if skip is true', async function (assert) {
+    const sandbox = sinon.createSandbox();
+    const onCompleteCallback = sandbox.fake();
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '2' },
+        skip: true,
+        onComplete: onCompleteCallback
+      }
+    ]);
+
+    await query.settled();
+    assert.equal(query.loading, false);
+    assert.equal(query.data, undefined);
+    assert.equal(onCompleteCallback.callCount, 0);
+
+    sandbox.restore();
   });
 
   test('it calls onError', async function (assert) {
@@ -264,6 +288,157 @@ module('useQuery', function (hooks) {
       defaultClientWatchQuery.notCalled,
       'default client should not be used'
     );
+
+    sandbox.restore();
+  });
+
+  test('it skips running a query when skip is true', async function (assert) {
+    class Obj {
+      @tracked skip = true;
+    }
+    const options = new Obj();
+
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1' },
+        skip: options.skip
+      }
+    ]);
+
+    assert.equal(query.loading, false);
+    assert.equal(query.data, undefined);
+
+    options.skip = false;
+
+    assert.equal(query.loading, true);
+    assert.equal(query.data, undefined);
+    await query.settled();
+    assert.equal(query.loading, false);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Cathaline',
+        id: '1',
+        lastName: 'McCoy'
+      }
+    });
+  });
+
+  test('it does not make network requests when skip is true', async function (assert) {
+    const sandbox = sinon.createSandbox();
+
+    const requestSpy = sandbox.fake(link.request);
+    sandbox.replace(link, 'request', requestSpy);
+
+    class Obj {
+      @tracked skip = false;
+      @tracked id = '1';
+    }
+    const options = new Obj();
+
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: options.id },
+        skip: options.skip
+      }
+    ]);
+
+    assert.equal(query.loading, true);
+    assert.equal(query.data, undefined);
+
+    await query.settled();
+    assert.equal(query.loading, false);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Cathaline',
+        id: '1',
+        lastName: 'McCoy'
+      }
+    });
+
+    options.skip = true;
+    options.id = '2';
+
+    await query.settled();
+    assert.equal(query.loading, false);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Cathaline',
+        id: '1',
+        lastName: 'McCoy'
+      }
+    });
+    assert.equal(requestSpy.callCount, 1);
+
+    sandbox.restore();
+  });
+
+  test('it treats fetchPolicy standby like skip', async function (assert) {
+    class Obj {
+      @tracked fetchPolicy: WatchQueryFetchPolicy = 'standby';
+    }
+    const options = new Obj();
+
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1' },
+        fetchPolicy: options.fetchPolicy
+      }
+    ]);
+
+    assert.equal(query.loading, false);
+    assert.equal(query.data, undefined);
+
+    await query.settled();
+
+    options.fetchPolicy = 'cache-first';
+    assert.equal(query.data, undefined);
+
+    await query.settled();
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Cathaline',
+        id: '1',
+        lastName: 'McCoy'
+      }
+    });
+  });
+
+  test('it refetches the query when skip is true', async function (assert) {
+    const sandbox = sinon.createSandbox();
+
+    const requestSpy = sandbox.fake(link.request);
+    sandbox.replace(link, 'request', requestSpy);
+
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1' },
+        skip: true
+      }
+    ]);
+
+    query.refetch();
+
+    assert.equal(query.loading, false);
+    await waitUntil(() => query.data !== undefined);
+    assert.ok(requestSpy.calledOnce);
+    assert.equal(query.loading, false);
+    assert.equal(query.networkStatus, 7);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Cathaline',
+        id: '1',
+        lastName: 'McCoy'
+      }
+    });
 
     sandbox.restore();
   });

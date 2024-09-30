@@ -17,6 +17,25 @@ firstName:
 </button>
 
 <hr />
+<h2 data-test-id="experiment">
+  User Info w/ skip
+</h2>
+
+loading:
+{{this.userInfoWithSkip.loading}}
+<br />
+firstName:
+{{this.userInfoWithSkip.data.user.firstName}}
+
+{{#if this.userInfoWithSkip.error}}
+  Error:
+  {{this.userInfoWithSkip.error.message}}
+{{/if}}
+<button type="button" {{on "click" this.userInfoWithSkip.refetch}}>
+  refetch
+</button>
+
+<hr />
 <h2>
   Login
 </h2>
