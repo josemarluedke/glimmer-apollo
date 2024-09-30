@@ -11,6 +11,12 @@
   "repository": "http://github.com/josemarluedke/glimmer-apollo",
   "license": "MIT",
   "author": "Josemar Luedke <josemarluedke@gmail.com>",
+  "files": [
+    "./dist",
+    "README.md",
+    "ember-addon-main.js",
+    "package.json"
+  ],
   "exports": {
     ".": "./dist/index.js",
     "./*": "./dist/*",
