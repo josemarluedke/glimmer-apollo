@@ -1,6 +1,6 @@
 {
   "name": "test-app",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "private": true,
   "description": "Small description for test-app goes here",
   "repository": "",
@@ -76,7 +76,7 @@
     "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^3.7.0",
     "ember-try": "^2.0.0",
-    "glimmer-apollo": "^0.6.5",
+    "glimmer-apollo": "^0.6.6",
     "graphql": "^16.3.0",
     "loader.js": "^4.7.0",
     "msw": "^0.36.7",
