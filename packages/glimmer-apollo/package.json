@@ -12,7 +12,7 @@
   "license": "MIT",
   "author": "Josemar Luedke <josemarluedke@gmail.com>",
   "files": [
-    "./dist",
+    "dist",
     "README.md",
     "ember-addon-main.js",
     "package.json"
