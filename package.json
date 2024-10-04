@@ -9,9 +9,9 @@
   "scripts": {
     "build": "yarn workspace glimmer-apollo build",
     "lint:js": "eslint . --ext .js,.ts",
+    "test": "yarn workspace glimmer-apollo ember test",
     "test:types": "yarn workspaces run test:types",
-    "start": "yarn workspace glimmer-apollo ember start",
-    "test": "yarn workspace glimmer-apollo ember test"
+    "start": "yarn workspace glimmer-apollo ember start"
   },
   "resolutions": {
     "@ember/test-waiters": "^3.0.1",
