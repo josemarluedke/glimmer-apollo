@@ -40,6 +40,7 @@ of this file can be something like `app/apollo.js`. It's totally up to you.
 
 ```ts:app/apollo.ts
 import { setClient } from 'glimmer-apollo';
+import 'glimmer-apollo/environment-ember';
 import {
   ApolloClient,
   InMemoryCache,
