@@ -1,4 +1,5 @@
-import { setOwner } from '@ember/application';
+import { setOwner } from '@ember/owner';
+import type Owner from '@ember/owner';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 
@@ -61,7 +62,7 @@ const USER_INFO = gql`
 
 module('useCustomQuery', function (hooks) {
   let ctx = {};
-  const owner = {};
+  const owner: Owner = {} as Owner;
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),

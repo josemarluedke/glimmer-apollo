@@ -6,12 +6,13 @@ import {
   clearClients
 } from 'glimmer-apollo';
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
-import { setOwner } from '@ember/application';
 import { destroy } from '@ember/destroyable';
+import { setOwner } from '@ember/owner';
+import type Owner from '@ember/owner';
 
 module('setClient & getClient', function (hooks) {
   let ctx = {};
-  const owner = {};
+  const owner: Owner = {} as Owner;
 
   const cache = new InMemoryCache();
   const client = new ApolloClient({ cache });

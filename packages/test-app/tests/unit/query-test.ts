@@ -2,7 +2,8 @@ import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 import { setClient, getClient, useQuery, gql } from 'glimmer-apollo';
-import { setOwner } from '@ember/application';
+import { setOwner } from '@ember/owner';
+import type Owner from '@ember/owner';
 import {
   ApolloClient,
   ApolloError,
@@ -29,7 +30,7 @@ const USER_INFO = gql`
 
 module('useQuery', function (hooks) {
   let ctx = {};
-  const owner = {};
+  const owner: Owner = {} as Owner;
 
   const link = createHttpLink({
     uri: '/graphql'
