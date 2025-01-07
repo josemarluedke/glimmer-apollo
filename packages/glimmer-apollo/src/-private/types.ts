@@ -1,5 +1,3 @@
-export type { Cache } from '@glimmer/validator';
-
 export interface TemplateArgs<
   T extends readonly unknown[] = readonly unknown[]
 > {

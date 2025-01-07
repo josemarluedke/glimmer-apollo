@@ -1,6 +1,7 @@
 import { invokeHelper, getValue } from '../environment';
 import type { Resource } from './resource';
-import type { TemplateArgs, Cache } from './types';
+import type { TemplateArgs } from './types';
+import type { Cache } from '@glimmer/tracking/primitives/cache';
 
 type Args = TemplateArgs | TemplateArgs['positional'] | TemplateArgs['named'];
 

@@ -1,8 +1,10 @@
 import { getOwner, registerDestructor } from '../environment';
 import type { ApolloClient } from '@apollo/client/core';
 
+type Owner = object;
+
 const CLIENTS: WeakMap<
-  object,
+  Owner,
   Map<string, ApolloClient<unknown>>
 > = new WeakMap();
 const DEFAULT_CLIENT_ID = 'default';
@@ -12,7 +14,7 @@ export function setClient<TCache = unknown>(
   client: ApolloClient<TCache>,
   clientId: string = DEFAULT_CLIENT_ID
 ): void {
-  const owner = getOwner(context);
+  const owner = getOwner(context) as Owner | null;
 
   if (!owner) {
     throw new Error(
@@ -35,7 +37,7 @@ export function getClient<TCache = unknown>(
   context: object,
   clientId: string = DEFAULT_CLIENT_ID
 ): ApolloClient<TCache> {
-  const owner = getOwner(context);
+  const owner = getOwner(context) as Owner | null;
 
   if (!owner) {
     throw new Error(
@@ -54,7 +56,7 @@ export function getClient<TCache = unknown>(
 }
 
 export function clearClients(context: object): void {
-  const owner = getOwner(context);
+  const owner = getOwner(context) as Owner | null;
   if (!owner) {
     throw new Error(
       'Unable to find owner from the given context in glimmer-apollo clearClients'
@@ -73,7 +75,7 @@ export function clearClient(
   context: object,
   clientId: string = DEFAULT_CLIENT_ID
 ): void {
-  const owner = getOwner(context);
+  const owner = getOwner(context) as Owner | null;
   if (!owner) {
     throw new Error(
       'Unable to find owner from the given context in glimmer-apollo clearClient'

@@ -8,7 +8,8 @@ import {
   registerDestructor,
   associateDestroyableChild
 } from '../environment';
-import type { TemplateArgs, Cache } from './types';
+import type { TemplateArgs } from './types';
+import type { Cache } from '@glimmer/tracking/primitives/cache';
 
 declare const HELPER_DEFINITION: unique symbol;
 type HelperDefinition<T = unknown> = T & {

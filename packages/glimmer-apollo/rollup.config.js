@@ -54,7 +54,7 @@ export default {
     // package names.
     addon.dependencies(),
 
-    addon.keepAssets(['ember-initializer.js']),
+    // addon.keepAssets(['ember-initializer.js']),
 
     // Remove leftover build artifacts when starting a new build.
     addon.clean()

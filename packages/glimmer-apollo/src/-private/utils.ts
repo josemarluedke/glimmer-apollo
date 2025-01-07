@@ -1,4 +1,5 @@
 import { getOwner } from '../environment';
+import type Owner from '@ember/application';
 import type { Fastboot } from './types';
 
 function hasFastBoot(obj: unknown): obj is { FastBoot: unknown } {
@@ -18,7 +19,7 @@ export function getFastboot(ctx: Object): Fastboot | undefined {
     hasFastBoot(self) &&
     typeof self.FastBoot !== 'undefined'
   ) {
-    const owner = getOwner(ctx);
+    const owner = getOwner(ctx) as object | undefined;
 
     if (ownerHasLookup(owner) && typeof owner.lookup === 'function') {
       return owner.lookup('service:fastboot') as Fastboot;
@@ -40,7 +41,7 @@ export function createPromise(): [
     rejectPromise = reject;
   });
 
-    return [promise, resolvePromise!, rejectPromise!]; //eslint-disable-line
+  return [promise, resolvePromise!, rejectPromise!]; //eslint-disable-line
 }
 
 export function settled(promise?: Promise<unknown>): Promise<void> {
