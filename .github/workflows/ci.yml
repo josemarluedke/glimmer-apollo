@@ -95,25 +95,5 @@ jobs:
       - run: |
           yarn add --dev ${{ matrix.typescript }}
           yarn tsc --version
-        working-directory: examples/glimmerx
-      - run: |
-          yarn add --dev ${{ matrix.typescript }}
-          yarn tsc --version
         working-directory: packages/glimmer-apollo
       - run: yarn test:types
-
-
-  examples-glimmerx:
-    name: GlimmerX Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: volta-cli/action@v1
-        with:
-          node-version: 14.x
-          yarn-version: 1.x
-      - run: yarn install --frozen-lockfile --non-interactive
-      - run: yarn build
-      - name: Test
-        run: yarn workspace glimmerx run test
