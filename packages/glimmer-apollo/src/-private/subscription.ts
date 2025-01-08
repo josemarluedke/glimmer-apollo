@@ -1,11 +1,11 @@
-import { getClient } from './client';
+import { getClient } from './client.ts';
 import {
   isDestroyed,
   isDestroying,
   tracked,
   waitForPromise
-} from '../environment';
-import { Resource } from './resource';
+} from '../environment.ts';
+import { Resource } from './resource.ts';
 import { ApolloError } from '@apollo/client/core';
 import type {
   DocumentNode,
@@ -15,7 +15,7 @@ import type {
   ObservableSubscription
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
-import { getFastboot, createPromise, settled } from './utils';
+import { getFastboot, createPromise, settled } from './utils.ts';
 import type { TemplateArgs } from './types';
 
 export interface SubscriptionOptions<TData, TVariables>

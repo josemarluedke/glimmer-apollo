@@ -7,19 +7,25 @@ import {
   destroy,
   registerDestructor,
   associateDestroyableChild
-} from '../environment';
+} from '../environment.ts';
 import type { TemplateArgs } from './types';
-import type { Cache } from '@glimmer/tracking/primitives/cache';
+type Cache<T> = ReturnType<typeof createCache<T>>;
+import type Owner from '@ember/owner';
 
-declare const HELPER_DEFINITION: unique symbol;
-type HelperDefinition<T = unknown> = T & {
-  readonly [HELPER_DEFINITION]: true;
-};
-type Owner = object;
+type HelperDefinition<
+  T = unknown,
+  Args extends TemplateArgs<readonly unknown[]> = TemplateArgs<
+    readonly unknown[]
+  >
+> = new (owner: Owner, args: Args) => Resource<Args> & {};
 
 type Thunk = (...args: any[]) => void; // eslint-disable-line
 
-export abstract class Resource<Args extends TemplateArgs = TemplateArgs> {
+export abstract class Resource<
+  Args extends TemplateArgs<readonly unknown[]> = TemplateArgs<
+    readonly unknown[]
+  >
+> {
   protected readonly args!: Args;
 
   constructor(ownerOrThunk: Owner | Thunk, args: Args) {
@@ -28,7 +34,7 @@ export abstract class Resource<Args extends TemplateArgs = TemplateArgs> {
       return { definition: this.constructor, args: ownerOrThunk };
     }
 
-    setOwner(this, ownerOrThunk);
+    setOwner(this, ownerOrThunk as Owner);
     this.args = args;
   }
 
@@ -51,7 +57,11 @@ class ResourceManager {
     this.owner = owner;
   }
 
-  createHelper<Args extends TemplateArgs = TemplateArgs>(
+  createHelper<
+    Args extends TemplateArgs<readonly unknown[]> = TemplateArgs<
+      readonly unknown[]
+    >
+  >(
     Class: HelperDefinition<new (owner: Owner, args: Args) => Resource>,
     args: Args
   ): Cache<Resource> {
@@ -91,12 +101,12 @@ class ResourceManager {
   }
 
   getValue(cache: Cache<Resource>): Resource | undefined {
-    const instance = getValue(cache);
+    const instance = getValue<Resource>(cache);
 
     return instance;
   }
 
-  getDestroyable(cache: Cache): Cache {
+  getDestroyable(cache: Cache<Resource>): Cache<Resource> {
     return cache;
   }
 
@@ -106,11 +116,13 @@ class ResourceManager {
   }
 }
 
-function setupInstance<T extends Resource>(
-  cache: Cache,
-  Class: new (owner: Owner, args: TemplateArgs) => T,
+function setupInstance<T extends Resource<TemplateArgs<readonly unknown[]>>>(
+  cache: Cache<T>,
+  Class: HelperDefinition<
+    new (owner: Owner, args: TemplateArgs<readonly unknown[]>) => T
+  >,
   owner: Owner,
-  args: TemplateArgs,
+  args: TemplateArgs<readonly unknown[]>,
   hasTeardown: boolean
 ): T {
   const instance = new Class(owner, args);
@@ -121,7 +133,10 @@ function setupInstance<T extends Resource>(
     registerDestructor(instance, () => instance.teardown!()); // eslint-disable-line
   }
 
-  return instance;
+  return instance as T;
 }
 
-setHelperManager((owner: Owner) => new ResourceManager(owner), Resource);
+setHelperManager(
+  (owner: Owner | undefined) => new ResourceManager(owner as Owner),
+  Resource
+);

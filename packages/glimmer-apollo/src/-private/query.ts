@@ -6,17 +6,18 @@ import {
   isDestroying,
   tracked,
   waitForPromise
-} from '../environment';
-import { getClient } from './client';
-import ObservableResource from './observable';
-import { createPromise, getFastboot, settled } from './utils';
+} from '../environment.ts';
+import { getClient } from './client.ts';
+import ObservableResource from './observable.ts';
+import { createPromise, getFastboot, settled } from './utils.ts';
 
 import type {
   ApolloQueryResult,
   DocumentNode,
   OperationVariables,
   WatchQueryOptions,
-  ObservableSubscription
+  ObservableSubscription,
+  ObservableQuery
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
@@ -91,7 +92,9 @@ export class QueryResource<
       ...options
     });
 
-    this._setObservable(observable);
+    this._setObservable(
+      observable as ObservableQuery<TData, OperationVariables>
+    );
 
     this.#subscription = observable.subscribe(
       (result) => {

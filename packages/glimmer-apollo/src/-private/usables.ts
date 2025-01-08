@@ -1,10 +1,10 @@
-import { useResource } from './use-resource';
-import { MutationPositionalArgs, MutationResource } from './mutation';
-import { QueryPositionalArgs, QueryResource } from './query';
+import { useResource } from './use-resource.ts';
+import { type MutationPositionalArgs, MutationResource } from './mutation.ts';
+import { type QueryPositionalArgs, QueryResource } from './query.ts';
 import {
-  SubscriptionPositionalArgs,
+  type SubscriptionPositionalArgs,
   SubscriptionResource
-} from './subscription';
+} from './subscription.ts';
 import type { OperationVariables } from '@apollo/client/core';
 
 export function useQuery<

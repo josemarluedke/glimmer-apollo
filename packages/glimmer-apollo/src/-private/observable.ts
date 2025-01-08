@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type */
-import { Resource } from './resource';
+import { Resource } from './resource.ts';
 import type {
   FetchMoreOptions,
   FetchMoreQueryOptions,
@@ -27,7 +27,11 @@ export default class ObservableResource<
   fetchMore = (
     fetchMoreOptions: FetchMoreQueryOptions<TVariables, TData> &
       FetchMoreOptions<TData, TVariables>
-  ) => this.observable?.fetchMore(fetchMoreOptions);
+  ) =>
+    this.observable?.fetchMore(
+      fetchMoreOptions as FetchMoreQueryOptions<OperationVariables, TData> &
+        FetchMoreOptions<TData, OperationVariables>
+    );
 
   updateQuery = <TVars = TVariables>(
     mapFn: (

@@ -1,7 +1,8 @@
-import { invokeHelper, getValue } from '../environment';
-import type { Resource } from './resource';
+import { invokeHelper, getValue } from '../environment.ts';
+import type { Resource } from './resource.ts';
 import type { TemplateArgs } from './types';
-import type { Cache } from '@glimmer/tracking/primitives/cache';
+import { createCache } from '@glimmer/tracking/primitives/cache';
+type Cache<T> = ReturnType<typeof createCache<T>>;
 
 type Args = TemplateArgs | TemplateArgs['positional'] | TemplateArgs['named'];
 

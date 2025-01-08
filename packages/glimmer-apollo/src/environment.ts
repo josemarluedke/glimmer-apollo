@@ -1,7 +1,7 @@
 import ApplicationInstance from '@ember/application/instance';
 export { tracked } from '@glimmer/tracking';
 import { getOwner as _getOwner } from '@ember/application';
-export { setOwner } from '@ember/application';
+export { setOwner } from '@ember/owner';
 export { getValue, createCache } from '@glimmer/tracking/primitives/cache';
 export { invokeHelper } from '@ember/helper';
 export {

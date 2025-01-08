@@ -5,10 +5,10 @@ import {
   isDestroying,
   tracked,
   waitForPromise
-} from '../environment';
-import { getClient } from './client';
-import { Resource } from './resource';
-import { settled } from './utils';
+} from '../environment.ts';
+import { getClient } from './client.ts';
+import { Resource } from './resource.ts';
+import { settled } from './utils.ts';
 
 import type {
   DocumentNode,

@@ -71,6 +71,8 @@ typings/
 dist
 dummy-dist
 /packages/glimmer-apollo/build/
+/packages/glimmer-apollo/declarations/
+/packages/glimmer-apollo/dist/
 
 # FuseBox cache
 .fusebox/

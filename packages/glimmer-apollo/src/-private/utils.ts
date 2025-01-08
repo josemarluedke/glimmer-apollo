@@ -1,4 +1,4 @@
-import { getOwner } from '../environment';
+import { getOwner } from '../environment.ts';
 import type Owner from '@ember/application';
 import type { Fastboot } from './types';
 
@@ -34,8 +34,8 @@ export function createPromise(): [
   (() => void) | undefined,
   (() => void) | undefined
 ] {
-  let resolvePromise: (val?: unknown) => void | undefined;
-  let rejectPromise: (val?: undefined) => void | undefined;
+  let resolvePromise: (val?: void | Promise<void>) => unknown | undefined;
+  let rejectPromise: (val?: undefined) => unknown | undefined;
   const promise = new Promise<void>((resolve, reject) => {
     resolvePromise = resolve;
     rejectPromise = reject;

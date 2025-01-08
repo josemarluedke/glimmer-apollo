@@ -1,4 +1,4 @@
-import { getOwner, registerDestructor } from '../environment';
+import { getOwner, registerDestructor } from '../environment.ts';
 import type { ApolloClient } from '@apollo/client/core';
 
 type Owner = object;

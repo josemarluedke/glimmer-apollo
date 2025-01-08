@@ -5,13 +5,12 @@ module.exports = {
   parserOptions: {
     project: join(__dirname, './tsconfig.eslint.json')
   },
-  plugins: ['@glimmerx'],
+  plugins: [],
   extends: ['@underline/eslint-config-ember-typescript'],
   rules: {
     '@typescript-eslint/no-empty-interface': 'off',
     'ember/no-empty-glimmer-component-classes': 'off',
-    '@typescript-eslint/ban-types': ['off', { types: { object: null } }],
-    '@glimmerx/template-vars': 'error'
+    '@typescript-eslint/ban-types': ['off', { types: { object: null } }]
   },
   overrides: [
     {
