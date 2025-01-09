@@ -1,40 +1,25 @@
 {
-  "name": "root",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "examples/*",
-    "site"
-  ],
+  "license": "MIT",
   "scripts": {
-    "build": "yarn workspace glimmer-apollo build",
-    "lint:js": "eslint . --ext .js,.ts",
-    "test": "yarn workspace glimmer-apollo ember test",
-    "test:types": "yarn workspaces run test:types",
-    "start": "yarn workspace glimmer-apollo ember start"
-  },
-  "resolutions": {
-    "@ember/test-waiters": "^3.0.1",
-    "@embroider/macros": "^1.0.0",
-    "@embroider/shared-internals": "^1.0.0",
-    "@embroider/util": "^1.0.0",
-    "@glimmer/tracking": "^2.0.0-beta.17",
-    "babel-plugin-htmlbars-inline-precompile": "^5.2.1"
+    "build": "npm run build --workspace glimmer-apollo",
+    "lint": "npm run lint --workspaces --if-present",
+    "lint:fix": "npm run lint:fix --workspaces --if-present",
+    "start": "concurrently 'npm:start:*' --restart-after 5000 --prefix-colors cyan,white,yellow",
+    "start:addon": "npm start --workspace glimmer-apollo -- --no-watch.clearScreen",
+    "start:test-app": "npm start --workspace test-app",
+    "test": "npm run test --workspaces --if-present",
+    "test:ember": "npm run test:ember --workspaces --if-present"
   },
   "devDependencies": {
-    "prettier-plugin-ember-template-tag": "^2.0.4",
-    "@underline/eslint-config-ember-typescript": "^0.12.0",
-    "@underline/eslint-config-node": "^0.12.0",
-    "@underline/eslint-config-typescript": "^0.12.0",
-    "eslint": "^8.8.0",
-    "fast-glob": "^3.2.11",
-    "lerna": "^4.0.0",
-    "typescript": "^5.7.2"
+    "@glint/core": "^1.5.1",
+    "concurrently": "^8.2.2",
+    "prettier": "^3.4.2",
+    "prettier-plugin-ember-template-tag": "^2.0.4"
   },
-  "engines": {
-    "node": ">= 12"
-  },
-  "dependencies": {
-    "babel-plugin-htmlbars-inline-precompile": "^5.2.1"
-  }
+  "workspaces": [
+    "glimmer-apollo",
+    "test-app",
+    "site"
+  ]
 }

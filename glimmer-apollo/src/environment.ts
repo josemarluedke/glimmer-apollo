@@ -1,9 +1,9 @@
 import ApplicationInstance from '@ember/application/instance';
+import type Owner from '@ember/owner';
 export { tracked } from '@glimmer/tracking';
-import { getOwner as _getOwner } from '@ember/application';
+import { getOwner as _getOwner } from '@ember/owner';
 export { setOwner } from '@ember/owner';
 export { getValue, createCache } from '@glimmer/tracking/primitives/cache';
-export { invokeHelper } from '@ember/helper';
 export {
   isDestroying,
   isDestroyed,
@@ -14,14 +14,15 @@ export {
 export { waitForPromise } from '@ember/test-waiters';
 
 export {
+  invokeHelper ,
   setHelperManager,
   capabilities as helperCapabilities
 } from '@ember/helper';
 
-export function getOwner<O extends object>(obj: object): O | undefined {
-  if (obj instanceof ApplicationInstance) {
-    return obj as O;
+export function getOwner(obj: object): Owner | undefined {
+  if (obj instanceof ApplicationInstance || ('lookup' in obj && 'factoryFor' in obj)) {
+    return obj as Owner;
   }
 
-  return _getOwner(obj) as O;
+  return _getOwner(obj);
 }

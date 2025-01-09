@@ -1,3 +1,4 @@
+import { assert } from '@ember/debug';
 import {
   setHelperManager,
   helperCapabilities,
@@ -51,9 +52,9 @@ class ResourceManager {
     hasDestroyable: true
   });
 
-  private readonly owner: Owner;
+  private readonly owner?: Owner;
 
-  constructor(owner: Owner) {
+  constructor(owner?: Owner) {
     this.owner = owner;
   }
 
@@ -62,15 +63,28 @@ class ResourceManager {
       readonly unknown[]
     >
   >(
-    Class: HelperDefinition<new (owner: Owner, args: Args) => Resource>,
+    definition: {Class: HelperDefinition<new (owner: Owner, args: Args) => Resource>, owner: Owner} | HelperDefinition<new (owner: Owner, args: Args) => Resource>,
     args: Args
   ): Cache<Resource> {
+    let owner = this.owner;
+    let Class: HelperDefinition<new (owner: Owner, args: Args) => Resource>;
+
+    if ('Class' in definition) {
+      Class = definition.Class;
+      if (definition.owner) {
+        owner = definition.owner
+      }
+    } else {
+      Class = definition;
+    }
+
+    assert("Cannot create resource without an owner", owner);
+
     const { update, teardown } = Class.prototype as Resource;
 
     const hasUpdate = typeof update === 'function';
     const hasTeardown = typeof teardown === 'function';
 
-    const owner = this.owner;
 
     let instance: Resource | undefined;
     let cache: Cache<Resource>;
@@ -137,6 +151,12 @@ function setupInstance<T extends Resource<TemplateArgs<readonly unknown[]>>>(
 }
 
 setHelperManager(
-  (owner: Owner | undefined) => new ResourceManager(owner as Owner),
+  (owner: Owner | undefined) => {
+    return new ResourceManager(owner)
+  },
   Resource
 );
+
+export const ResourceManagerFactory = (owner: Owner | undefined) => {
+  return new ResourceManager(owner);
+};

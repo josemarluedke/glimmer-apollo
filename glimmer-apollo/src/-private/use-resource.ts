@@ -1,5 +1,6 @@
-import { invokeHelper, getValue } from '../environment.ts';
-import type { Resource } from './resource.ts';
+import { getOwner } from '@ember/owner';
+import { invokeHelper, getValue, setHelperManager } from '../environment.ts';
+import { ResourceManagerFactory, Resource } from './resource.ts';
 import type { TemplateArgs } from './types';
 import { createCache } from '@glimmer/tracking/primitives/cache';
 type Cache<T> = ReturnType<typeof createCache<T>>;
@@ -28,15 +29,24 @@ function normalizeArgs(args: Args): TemplateArgs {
 export function useUnproxiedResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
->(destroyable: object, definition: object, args?: () => TArgs): { value: T } {
+>(context: object, Class: object, args?: () => TArgs): { value: T } {
   let resource: Cache<T>;
+
+
 
   return {
     get value(): T {
       if (!resource) {
+
+ const owner = getOwner(context);
+  const definition = { Class, owner };
+setHelperManager(
+ ResourceManagerFactory,
+  definition,
+);
         resource = invokeHelper(
-          destroyable,
-          definition, // eslint-disable-line
+          context,
+          definition,
           () => {
             return normalizeArgs(args?.() || {});
           }
@@ -51,8 +61,8 @@ export function useUnproxiedResource<
 export function useResource<
   TArgs = Args,
   T extends Resource<TemplateArgs> = Resource<TemplateArgs>
->(destroyable: object, definition: object, args?: () => TArgs): T {
-  const target = useUnproxiedResource<TArgs, T>(destroyable, definition, args);
+>(context: object, definition: object, args?: () => TArgs): T {
+  const target = useUnproxiedResource<TArgs, T>(context, definition, args);
 
   return new Proxy(target, {
     get(target, key): unknown {

@@ -61,7 +61,7 @@
     "ember-try": "^2.0.0",
     "eslint-plugin-n": "^17.15.1",
     "eslint-plugin-qunit": "^8.1.2",
-    "glimmer-apollo": "^0.6.6",
+    "glimmer-apollo": "../../glimmer-apollo",
     "globals": "^15.14.0",
     "graphql": "^16.3.0",
     "loader.js": "^4.7.0",

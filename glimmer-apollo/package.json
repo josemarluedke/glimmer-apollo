@@ -51,6 +51,7 @@
     "decorator-transforms": "^2.2.2"
   },
   "devDependencies": {
+    "@apollo/client": "^3.12.4",
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-typescript": "^7.25.2",
     "@babel/runtime": "^7.25.6",
@@ -61,9 +62,9 @@
     "@glint/template": "^1.4.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@tsconfig/ember": "^3.0.8",
-    "babel-plugin-ember-template-compilation": "^2.2.5",
+    "babel-plugin-ember-template-compilation": "^2.3.0",
     "concurrently": "^9.0.1",
-    "ember-source": "^5.4.0",
+    "ember-source": "^5.12.0",
     "ember-template-lint": "^6.0.0",
     "prettier": "^3.3.3",
     "prettier-plugin-ember-template-tag": "^2.0.2",
@@ -72,7 +73,8 @@
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "ember-source": ">= 4.12.0"
+    "@apollo/client": "^3.0.0",
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0"
   },
   "ember": {
     "edition": "octane"

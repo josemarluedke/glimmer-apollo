@@ -37,7 +37,7 @@ export function getClient<TCache = unknown>(
   context: object,
   clientId: string = DEFAULT_CLIENT_ID
 ): ApolloClient<TCache> {
-  const owner = getOwner(context) as Owner | null;
+  const owner = getOwner(context)
 
   if (!owner) {
     throw new Error(
