@@ -1,12 +1,12 @@
 import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, render, waitFor } from '@ember/test-helpers';
+import { click, render, TestContext, waitFor } from '@ember/test-helpers';
 
 module('Integration | Components | Playground', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('no waiters should be left behind when resource is teardown before resolving', async function (this, assert) {
+  test('no waiters should be left behind when resource is teardown before resolving', async function (this: TestContext, assert) {
     await render(hbs`<Playground />`);
 
     click('[dates-test-id="toggle"]');

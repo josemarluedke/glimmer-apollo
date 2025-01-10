@@ -1,0 +1,88 @@
+{
+  "name": "glimmer-apollo",
+  "version": "0.6.6",
+  "description": "Ember and Glimmer integration for Apollo Client",
+  "keywords": [
+    "ember-addon"
+  ],
+  "repository": "http://github.com/josemarluedke/glimmer-apollo",
+  "license": "MIT",
+  "author": "Josemar Luedke <josemarluedke@gmail.com>",
+  "exports": {
+    ".": {
+      "types": "./declarations/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./declarations/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./addon-main.js": "./addon-main.cjs"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "declarations/*"
+      ]
+    }
+  },
+  "files": [
+    "addon-main.cjs",
+    "declarations",
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup --config",
+    "lint": "concurrently \":lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \":lint:*:fix\" --names \"fix:\"",
+    "lint:hbs": "ember-template-lint . --no-error-on-unmatched-pattern",
+    "lint:hbs:fix": "ember-template-lint . --fix --no-error-on-unmatched-pattern",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --fix",
+    "lint:types": "glint",
+    "prepack": "concurrently ':build:*'",
+    "start": "rollup --config --watch",
+    "test": "echo 'A v2 addon does not have tests, run tests in test-app'"
+  },
+  "dependencies": {
+    "@ember/test-waiters": "^4.0.0",
+    "@embroider/addon-shim": "^1.8.9",
+    "@wry/equality": "^0.5.2",
+    "decorator-transforms": "^2.2.2"
+  },
+  "devDependencies": {
+    "@apollo/client": "^3.12.4",
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-transform-typescript": "^7.25.2",
+    "@babel/runtime": "^7.25.6",
+    "@embroider/addon-dev": "^7.1.0",
+    "@glint/core": "^1.4.0",
+    "@glint/environment-ember-loose": "^1.4.0",
+    "@glint/environment-ember-template-imports": "^1.4.0",
+    "@glint/template": "^1.4.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@tsconfig/ember": "^3.0.8",
+    "babel-plugin-ember-template-compilation": "^2.3.0",
+    "concurrently": "^9.0.1",
+    "ember-source": "^5.12.0",
+    "ember-template-lint": "^6.0.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-ember-template-tag": "^2.0.2",
+    "rollup": "^4.22.5",
+    "rollup-plugin-copy": "^3.5.0",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "@apollo/client": "^3.0.0",
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "ember-addon": {
+    "version": 2,
+    "type": "addon",
+    "main": "addon-main.cjs",
+    "app-js": {}
+  }
+}

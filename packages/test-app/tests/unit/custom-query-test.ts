@@ -1,4 +1,5 @@
-import { setOwner } from '@ember/application';
+import { setOwner } from '@ember/owner';
+import type Owner from '@ember/owner';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 
@@ -61,7 +62,7 @@ const USER_INFO = gql`
 
 module('useCustomQuery', function (hooks) {
   let ctx = {};
-  const owner = {};
+  const owner: Owner = {} as Owner;
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -209,7 +210,7 @@ module('useCustomQuery', function (hooks) {
   });
 
   test('it calls onError', async function (assert) {
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ApolloError | undefined;
     const query = useCustomQuery<UserInfoQuery, UserInfoQueryVariables>(
       ctx,
       () => [
@@ -228,12 +229,12 @@ module('useCustomQuery', function (hooks) {
 
     const expectedError = 'User not found';
     assert.equal(query.error?.message, expectedError);
-    assert.equal(onErrorCalled.message, expectedError);
+    assert.equal(onErrorCalled?.message, expectedError);
   });
 
   test('it returns error with data', async function (assert) {
     let onCompleteCalled: unknown;
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ApolloError | undefined;
     const query = useCustomQuery<UserInfoQuery, UserInfoQueryVariables>(
       ctx,
       () => [
@@ -272,7 +273,7 @@ module('useCustomQuery', function (hooks) {
 
     const expectedError = 'Data With Error';
     assert.equal(query.error?.message, expectedError);
-    assert.equal(onErrorCalled.message, expectedError);
+    assert.equal(onErrorCalled?.message, expectedError);
   });
 
   test('it does not trigger query update if args references changes but values are the same', async function (assert) {

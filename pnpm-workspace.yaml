@@ -1,0 +1,6 @@
+packages:
+  - glimmer-apollo
+  - test-app
+  - site
+  # - site/lib/docfy-theme
+

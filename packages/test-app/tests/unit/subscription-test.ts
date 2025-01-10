@@ -3,7 +3,8 @@ import { waitUntil } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';
 import { setClient, getClient, useSubscription, gql } from 'glimmer-apollo';
-import { setOwner } from '@ember/application';
+import { setOwner } from '@ember/owner';
+import type Owner from '@ember/owner';
 import { ApolloClient, ApolloError, InMemoryCache } from '@apollo/client/core';
 import {
   OnMessageAddedSubscription,
@@ -34,7 +35,7 @@ module('useSubscription', function (hooks) {
   }));
 
   let ctx = {};
-  const owner = {};
+  const owner: Owner = {} as Owner;
   const link = new MockSubscriptionLink();
 
   const client = new ApolloClient({

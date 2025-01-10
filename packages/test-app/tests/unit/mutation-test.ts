@@ -7,7 +7,8 @@ import {
   getClient,
   gql
 } from 'glimmer-apollo';
-import { setOwner } from '@ember/application';
+import { setOwner } from '@ember/owner';
+import type Owner from '@ember/owner';
 import { tracked } from '@glimmer/tracking';
 import {
   ApolloClient,
@@ -33,7 +34,7 @@ const LOGIN = gql`
 
 module('useMutation', function (hooks) {
   let ctx = {};
-  const owner = {};
+  const owner: Owner = {} as Owner;
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),
