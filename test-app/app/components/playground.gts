@@ -4,7 +4,7 @@ import { on } from '@ember/modifier/on';
 import Experiment from './experiment';
 
 export default class Playground extends Component {
-  @tracked isExperimenting = true;
+  @tracked isExperimenting = false;
 
   toggle = (): void => {
     this.isExperimenting = !this.isExperimenting;

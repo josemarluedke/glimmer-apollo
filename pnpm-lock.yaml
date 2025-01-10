@@ -225,9 +225,6 @@ importers:
       ember-resolver:
         specifier: ^13.1.0
         version: 13.1.0(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.4.1-unstable.34c4510)(rsvp@4.8.5)(webpack@5.97.1))
-      ember-resources:
-        specifier: ^7.0.3
-        version: 7.0.3(@glimmer/component@2.0.0)(@glimmer/tracking@1.1.2)(@glint/template@1.4.1-unstable.34c4510)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.4.1-unstable.34c4510)(rsvp@4.8.5)(webpack@5.97.1))
       ember-route-template:
         specifier: ^1.0.3
         version: 1.0.3
@@ -3320,17 +3317,6 @@ packages:
       ember-source: ^4.12.0 || >= 5.0.0
     peerDependenciesMeta:
       ember-source:
-        optional: true
-
-  ember-resources@7.0.3:
-    resolution: {integrity: sha512-aebWpULjdWEUnxheoOz5e6XZ8kDV8b79CerPSMcUkdzOcKS7N4HC8FuyCPG6M6MiVuYYqgsrhzSxyW8H1164MA==}
-    peerDependencies:
-      '@glimmer/component': '>= 1.1.2 || >= 2.0.0'
-      '@glimmer/tracking': '>= 1.1.2'
-      '@glint/template': '>= 1.0.0'
-      ember-source: ^3.28.0 || ^4.0.0 || >= 5.0.0
-    peerDependenciesMeta:
-      '@glimmer/component':
         optional: true
 
   ember-rfc176-data@0.3.18:
@@ -10543,18 +10529,6 @@ snapshots:
       ember-cli-babel: 7.26.11
     optionalDependencies:
       ember-source: 5.12.0(@glimmer/component@2.0.0)(@glint/template@1.4.1-unstable.34c4510)(rsvp@4.8.5)(webpack@5.97.1)
-    transitivePeerDependencies:
-      - supports-color
-
-  ember-resources@7.0.3(@glimmer/component@2.0.0)(@glimmer/tracking@1.1.2)(@glint/template@1.4.1-unstable.34c4510)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.4.1-unstable.34c4510)(rsvp@4.8.5)(webpack@5.97.1)):
-    dependencies:
-      '@embroider/addon-shim': 1.9.0
-      '@embroider/macros': 1.16.10(@glint/template@1.4.1-unstable.34c4510)
-      '@glimmer/tracking': 1.1.2
-      '@glint/template': 1.4.1-unstable.34c4510
-      ember-source: 5.12.0(@glimmer/component@2.0.0)(@glint/template@1.4.1-unstable.34c4510)(rsvp@4.8.5)(webpack@5.97.1)
-    optionalDependencies:
-      '@glimmer/component': 2.0.0
     transitivePeerDependencies:
       - supports-color
 

@@ -1,21 +1,6 @@
 import Component from '@glimmer/component';
 import { useQuery, useMutation, gql } from 'glimmer-apollo';
 import { on } from '@ember/modifier/on';
-import { cell, resource, use } from 'ember-resources';
-
-export const Now = resource(({ on }) => {
-  const now = cell(Date.now());
-
-  const timer = setInterval(() => {
-    now.set(Date.now());
-  });
-
-  on.cleanup(() => {
-    clearInterval(timer);
-  });
-
-  return now;
-});
 
 const USER_INFO = gql`
   query GetUserInfo {
@@ -36,8 +21,6 @@ const LOGIN = gql`
 `;
 
 export default class PlaygroundExperiment extends Component {
-  @use now = Now;
-
   userInfo = useQuery(this, () => [
     USER_INFO,
     {
