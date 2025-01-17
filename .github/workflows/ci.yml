@@ -4,93 +4,83 @@ on:
   push:
     branches:
       - main
-      - 'v*'
+      - master
   pull_request: {}
 
-env:
-  CI: 'true'
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Linting
+  test:
+    name: "Tests"
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: volta-cli/action@v4
-        with:
-          node-version: 22.x
-          yarn-version: 1.x
-
-      - run: yarn install --frozen-lockfile --non-interactive
-      - run: yarn lint:js
-      - run: yarn build
-
-  package-tests:
-    name: Glimmer Apollo Tests
-    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
-      - uses: volta-cli/action@v4
+      - uses: pnpm/action-setup@v4
         with:
-          node-version: 22.x
-          yarn-version: 1.x
-      - run: yarn install --frozen-lockfile --non-interactive
-      - run: yarn build
-      - name: Test Glimmer Apollo
-        run: yarn workspace glimmer-apollo run test
-      - name: Test App
-        run: yarn workspace test-app run test
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Run Tests
+        run: pnpm test
+
+  floating:
+    name: "Floating Dependencies"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --no-lockfile
+      - name: Run Tests
+        run: pnpm test
 
   try-scenarios:
-    name: ${{ matrix.ember-try-scenario }}
+    name: ${{ matrix.try-scenario }}
     runs-on: ubuntu-latest
+    needs: 'test'
+    timeout-minutes: 10
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        ember-try-scenario:
-          - ember-4.12
+        try-scenario:
+          - ember-lts-4.12
+          - ember-lts-5.4
           - ember-release
           - ember-beta
           - ember-canary
-          - ember-embroider
+          - embroider-safe
+          - embroider-optimized
 
     steps:
       - uses: actions/checkout@v4
-      - uses: volta-cli/action@v4
+      - uses: pnpm/action-setup@v4
         with:
-          node-version: 22.x
-          yarn-version: 1.x
-      - run: yarn install --frozen-lockfile --non-interactive
-      - run: yarn build
-      - name: Test
-        env:
-          EMBER_TRY_SCENARIO: ${{ matrix.ember-try-scenario }}
-        run: yarn workspace test-app run ember try:one $EMBER_TRY_SCENARIO
-
-  typescript:
-    name: ${{ matrix.typescript }}
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: true
-      matrix:
-        typescript:
-          - typescript@~4.9.0
-          - typescript@~5.6.0
-          - typescript@next
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: volta-cli/action@v4
+          version: 9
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
-          yarn-version: 1.x
-      - run: yarn install --frozen-lockfile --non-interactive
-      - run: yarn build
-      - run: |
-          yarn add --dev ${{ matrix.typescript }}
-          yarn tsc --version
-        working-directory: packages/glimmer-apollo
-      - run: yarn test:types
+          node-version: 18
+          cache: pnpm
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run Tests
+        run: ./node_modules/.bin/ember try:one ${{ matrix.try-scenario }} --skip-cleanup
+        working-directory: test-app
