@@ -34,7 +34,7 @@ export type SubscriptionPositionalArgs<
 
 export class SubscriptionResource<
   TData,
-  TVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables
 > extends Resource<
   TemplateArgs<SubscriptionPositionalArgs<TData, TVariables>>
 > {

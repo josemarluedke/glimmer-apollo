@@ -50,7 +50,7 @@ class ResourceManager {
   readonly capabilities = helperCapabilities('3.23', {
     hasValue: true,
     hasDestroyable: true
-  });
+  }) as never;
 
   private readonly owner?: Owner;
 

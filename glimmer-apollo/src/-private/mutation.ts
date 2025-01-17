@@ -14,7 +14,8 @@ import type {
   DocumentNode,
   FetchResult,
   MutationOptions as ApolloMutationOptions,
-  OperationVariables
+  OperationVariables,
+  MaybeMasked
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
@@ -23,7 +24,7 @@ type Maybe<T> = T | undefined | null;
 export interface MutationOptions<TData, TVariables>
   extends Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> {
   clientId?: string;
-  onComplete?: (data: Maybe<TData>) => void;
+  onComplete?: (data: Maybe<MaybeMasked<TData>>) => void;
   onError?: (error: ApolloError) => void;
 }
 
@@ -39,8 +40,8 @@ export class MutationResource<
   @tracked loading = false;
   @tracked called = false;
   @tracked error?: ApolloError;
-  @tracked data: Maybe<TData>;
-  @tracked promise!: Promise<Maybe<TData>>;
+  @tracked data: Maybe<MaybeMasked<TData>>;
+  @tracked promise!: Promise<Maybe<MaybeMasked<TData>>>;
 
   async mutate(
     variables?: TVariables | undefined,
@@ -48,7 +49,7 @@ export class MutationResource<
       MutationOptions<TData, TVariables>,
       'variables' | 'mutation'
     > = {}
-  ): Promise<Maybe<TData>> {
+  ): Promise<Maybe<MaybeMasked<TData>>> {
     this.loading = true;
     const [mutation, originalOptions] = this.args.positional;
     const options = { ...originalOptions, ...overrideOptions };
@@ -86,7 +87,7 @@ export class MutationResource<
     return settled(this.promise);
   }
 
-  #onComplete(result: FetchResult<TData>): void {
+  #onComplete(result: FetchResult<MaybeMasked<TData>>): void {
     const { data, errors } = result;
     const error =
       errors && errors.length > 0

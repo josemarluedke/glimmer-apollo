@@ -3,7 +3,7 @@ import {
   setClient,
   getClient,
   clearClient,
-  clearClients
+  clearClients,
 } from 'glimmer-apollo';
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { destroy } from '@ember/destroyable';
@@ -50,7 +50,7 @@ module('setClient & getClient', function (hooks) {
 
   test('geClient/setClient with context withou owner', function (assert) {
     assert.throws(
-      () => setClient({}, client),
+      () => { setClient({}, client); },
       / Unable to find owner from the given context in glimmer-apollo setClient/
     );
     assert.throws(

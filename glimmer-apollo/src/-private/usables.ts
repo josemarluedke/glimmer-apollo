@@ -35,7 +35,7 @@ export function useMutation<
 
 export function useSubscription<
   TData = unknown,
-  TVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables
 >(
   parentDestroyable: object,
   args: () => SubscriptionPositionalArgs<TData, TVariables>
@@ -68,7 +68,7 @@ export type UseMutation<
 
 export type UseSubscription<
   TData = unknown,
-  TVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables
 > = {
   args: () => SubscriptionPositionalArgs<TData, TVariables>[1];
   return: SubscriptionResource<TData, TVariables>;

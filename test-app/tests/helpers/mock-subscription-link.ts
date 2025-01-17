@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Origianl Implementation: https://github.com/apollographql/apollo-client/blob/main/src/utilities/testing/mocking/mockSubscriptionLink.ts
 
 import { Observable } from '@apollo/client/utilities';

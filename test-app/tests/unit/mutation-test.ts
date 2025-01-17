@@ -130,7 +130,7 @@ module('useMutation', function (hooks) {
     mutation.mutate({ username: 'john' });
 
     assert.ok(mutate.called);
-    assert.deepEqual(mutate.args[0]![0]?.variables, { username: 'john' });
+    assert.deepEqual(mutate.args[0]![0].variables, { username: 'john' });
 
     sandbox.restore();
   });
