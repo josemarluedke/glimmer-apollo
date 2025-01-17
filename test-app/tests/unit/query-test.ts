@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/unbound-method */
 import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import { tracked } from '@glimmer/tracking';

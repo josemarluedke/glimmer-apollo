@@ -26,11 +26,11 @@
     "test:ember": "vite build --mode test && ember test --path dist"
   },
   "devDependencies": {
-    "@apollo/client": "^3.12.4",
+    "@apollo/client": "^3.12.6",
     "@babel/core": "^7.26.0",
-    "@babel/eslint-parser": "^7.25.9",
+    "@babel/eslint-parser": "^7.26.5",
     "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/plugin-transform-typescript": "^7.26.3",
+    "@babel/plugin-transform-typescript": "^7.26.5",
     "@babel/runtime": "^7.26.0",
     "@ember/optional-features": "^2.2.0",
     "@ember/test-helpers": "^4.0.4",
@@ -46,7 +46,7 @@
     "@glint/core": "1.4.1-unstable.34c4510",
     "@glint/environment-ember-loose": "1.4.1-unstable.34c4510",
     "@glint/environment-ember-template-imports": "1.4.1-unstable.34c4510",
-    "@glint/template": "1.4.1-unstable.34c4510",
+    "@glint/template": "1.5.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@tsconfig/ember": "^3.0.8",
     "@types/eslint__js": "^8.42.3",
@@ -90,9 +90,9 @@
     "stylelint": "^16.12.0",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-prettier": "^5.0.2",
-    "tracked-built-ins": "^3.4.0",
+    "tracked-built-ins": "^4.0.0",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.19.1",
+    "typescript-eslint": "^8.20.0",
     "vite": "^5.4.11"
   },
   "engines": {

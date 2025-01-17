@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import {
@@ -112,7 +113,7 @@ module('useMutation', function (hooks) {
     assert.equal(mutation.error?.message, 'User not found with given username');
   });
 
-  test('it uses variables passed into mutate', async function (assert) {
+  test('it uses variables passed into mutate', function (assert) {
     const sandbox = sinon.createSandbox();
     const client = getClient(ctx);
 
@@ -135,7 +136,7 @@ module('useMutation', function (hooks) {
     sandbox.restore();
   });
 
-  test('it merges variables passed into mutate', async function (assert) {
+  test('it merges variables passed into mutate', function (assert) {
     const sandbox = sinon.createSandbox();
     const client = getClient(ctx);
 
@@ -161,7 +162,7 @@ module('useMutation', function (hooks) {
     sandbox.restore();
   });
 
-  test('it merges options passed into mutate', async function (assert) {
+  test('it merges options passed into mutate', function (assert) {
     const sandbox = sinon.createSandbox();
     const client = getClient(ctx);
 
@@ -284,7 +285,7 @@ module('useMutation', function (hooks) {
     assert.equal(onErrorCalled!.message, 'Error with Data');
   });
 
-  test('it updates when args changes', async function (assert) {
+  test('it updates when args changes', function (assert) {
     class Obj {
       @tracked username = 'non-existing';
     }
@@ -321,7 +322,7 @@ module('useMutation', function (hooks) {
     sandbox.restore();
   });
 
-  test('it uses correct client based on clientId option', async function (assert) {
+  test('it uses correct client based on clientId option', function (assert) {
     class Obj {
       @tracked username = 'non-existing';
     }

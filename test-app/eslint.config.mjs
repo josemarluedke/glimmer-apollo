@@ -28,112 +28,120 @@ const parserOptions = {
   },
 };
 
-export default ts.config(
-  js.configs.recommended,
-  prettier,
-  {
-    files: ['**/*.js'],
-    languageOptions: {
-      parser: babelParser,
-      parserOptions: parserOptions.esm.js,
-      globals: {
-        ...globals.browser,
+export default [
+  ...ts.config(
+    js.configs.recommended,
+    prettier,
+    {
+      files: ['**/*.js'],
+      languageOptions: {
+        parser: babelParser,
+        parserOptions: parserOptions.esm.js,
+        globals: {
+          ...globals.browser,
+        },
+      },
+      plugins: {
+        ember,
+      },
+      rules: {
+        ...emberRecommended.rules,
       },
     },
-    plugins: {
-      ember,
-    },
-    rules: {
-      ...emberRecommended.rules,
-    },
-  },
-  {
-    files: ['**/*.ts'],
-    plugins: { ember },
-    languageOptions: {
-      parserOptions: parserOptions.esm.ts,
-    },
-    extends: [...ts.configs.strictTypeChecked, ...emberRecommended],
-  },
-  {
-    files: ['**/*.gjs'],
-    languageOptions: {
-      parser: emberParser,
-      parserOptions: parserOptions.esm.js,
-      globals: {
-        ...globals.browser,
+    {
+      files: ['**/*.ts'],
+      plugins: { ember },
+      languageOptions: {
+        parserOptions: parserOptions.esm.ts,
+      },
+      extends: [...ts.configs.strictTypeChecked, ...emberRecommended],
+      rules: {
+        '@typescript-eslint/no-floating-promises': 'off',
       },
     },
-    plugins: {
-      ember,
+    {
+      files: ['**/*.gjs'],
+      languageOptions: {
+        parser: emberParser,
+        parserOptions: parserOptions.esm.js,
+        globals: {
+          ...globals.browser,
+        },
+      },
+      plugins: {
+        ember,
+      },
+      rules: {
+        ...emberRecommended.rules,
+        ...gjsRecommended.rules,
+      },
     },
-    rules: {
-      ...emberRecommended.rules,
-      ...gjsRecommended.rules,
+    {
+      files: ['**/*.gts'],
+      plugins: { ember },
+      languageOptions: {
+        parserOptions: parserOptions.esm.ts,
+      },
+      extends: [
+        ...ts.configs.strictTypeChecked,
+        ...emberRecommended,
+        ...gtsRecommended,
+      ],
+      rules: {
+        '@typescript-eslint/no-floating-promises': 'off',
+      },
     },
-  },
-  {
-    files: ['**/*.gts'],
-    plugins: { ember },
-    languageOptions: {
-      parserOptions: parserOptions.esm.ts,
+    {
+      files: ['tests/**/*-test.{js,gjs}'],
+      plugins: {
+        qunit,
+      },
     },
-    extends: [
-      ...ts.configs.strictTypeChecked,
-      ...emberRecommended,
-      ...gtsRecommended,
-    ],
-  },
-  {
-    files: ['tests/**/*-test.{js,gjs}'],
-    plugins: {
-      qunit,
-    },
-  },
-  /**
-   * CJS node files
-   */
-  {
-    files: [
-      '**/*.cjs',
-      'config/**/*.js',
-      'testem.js',
-      'testem*.js',
-      '.prettierrc.js',
-      '.stylelintrc.js',
-      '.template-lintrc.js',
-      'ember-cli-build.js',
-    ],
-    plugins: {
-      n,
-    },
+    /**
+     * CJS node files
+     */
+    {
+      files: [
+        '**/*.cjs',
+        'config/**/*.js',
+        'testem.js',
+        'testem*.js',
+        '.prettierrc.js',
+        '.stylelintrc.js',
+        '.template-lintrc.js',
+        'ember-cli-build.js',
+      ],
+      plugins: {
+        n,
+      },
 
-    languageOptions: {
-      sourceType: 'script',
-      ecmaVersion: 'latest',
-      globals: {
-        ...globals.node,
+      languageOptions: {
+        sourceType: 'script',
+        ecmaVersion: 'latest',
+        globals: {
+          ...globals.node,
+        },
       },
     },
-  },
-  /**
-   * ESM node files
-   */
-  {
-    files: ['*.mjs'],
-    plugins: {
-      n,
-    },
+    /**
+     * ESM node files
+     */
+    {
+      files: ['*.mjs'],
+      plugins: {
+        n,
+      },
 
-    languageOptions: {
-      sourceType: 'module',
-      ecmaVersion: 'latest',
-      parserOptions: parserOptions.esm.js,
-      globals: {
-        ...globals.node,
+      languageOptions: {
+        sourceType: 'module',
+        ecmaVersion: 'latest',
+        parserOptions: parserOptions.esm.js,
+        globals: {
+          ...globals.node,
+        },
       },
     },
-  },
+  ),
   /**
    * Settings
    */
@@ -143,4 +151,4 @@ export default ts.config(
       reportUnusedDisableDirectives: 'error',
     },
   },
-);
+];

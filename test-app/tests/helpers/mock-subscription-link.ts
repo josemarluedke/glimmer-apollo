@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 // Origianl Implementation: https://github.com/apollographql/apollo-client/blob/main/src/utilities/testing/mocking/mockSubscriptionLink.ts
 
 import { Observable } from '@apollo/client/utilities';

@@ -1,4 +1,3 @@
-import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, render, waitFor } from '@ember/test-helpers';
