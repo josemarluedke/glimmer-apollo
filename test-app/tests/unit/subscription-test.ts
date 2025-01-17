@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { module, test } from 'qunit';
 import { waitUntil } from '@ember/test-helpers';
 import { destroy } from '@ember/destroyable';

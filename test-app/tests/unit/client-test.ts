@@ -49,10 +49,9 @@ module('setClient & getClient', function (hooks) {
   });
 
   test('geClient/setClient with context withou owner', function (assert) {
-    assert.throws(
-      () => { setClient({}, client); },
-      / Unable to find owner from the given context in glimmer-apollo setClient/
-    );
+    assert.throws(() => {
+      setClient({}, client);
+    }, / Unable to find owner from the given context in glimmer-apollo setClient/);
     assert.throws(
       () => getClient({}),
       / Unable to find owner from the given context in glimmer-apollo getClient/

@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 import config from 'test-app/config/environment';
 import { importSync } from '@embroider/macros';
 
