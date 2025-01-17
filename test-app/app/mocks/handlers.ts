@@ -65,7 +65,7 @@ const USERS: User[] = [
 export const handlers = [
   graphql.query<UserInfoQuery, UserInfoQueryVariables>(
     'UserInfo',
-    async (req, res, ctx) => {
+    async (req) => {
       const user = USERS[Number(req.variables.id.charAt(0)) - 1];
 
       if (user && req.variables.id.includes('with-error')) {
@@ -102,19 +102,19 @@ export const handlers = [
           },
         });
       } else {
-        return res(
-          ctx.errors([
+        return HttpResponse.json({
+          errors: [
             {
               message: 'User not found',
             },
-          ])
-        );
+          ],
+        });
       }
     }
   ),
 
   // Capture a "Login" mutation
-  graphql.mutation('Login', (req, res, ctx) => {
+  graphql.mutation('Login', (req) => {
     const { username } = req.variables;
 
     if (username === 'non-existing') {
@@ -154,7 +154,7 @@ export const handlers = [
   }),
 
   // Handles a "GetUserInfo" query
-  graphql.query('GetUserInfo', async (_, res, ctx) => {
+  graphql.query('GetUserInfo', async () => {
     await delay(300);
     return HttpResponse.json({
       data: {
