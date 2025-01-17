@@ -47,7 +47,7 @@ export class SubscriptionResource<
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
   /** @internal */
-  async setup(): Promise<void> {
+  setup(): void {
     this.#previousPositionalArgs = this.args.positional;
     const [query, options] = this.args.positional;
     const client = getClient(this, options?.clientId);
@@ -77,7 +77,7 @@ export class SubscriptionResource<
           firstResolve = undefined;
         }
       },
-      error: (error) => {
+      error: (error: ApolloError) => {
         if (isDestroyed(this) || isDestroying(this)) {
           return;
         }

@@ -7,17 +7,16 @@ import {
   setOwner,
   destroy,
   registerDestructor,
-  associateDestroyableChild
+  associateDestroyableChild,
 } from '../environment.ts';
 import type { TemplateArgs } from './types';
 type Cache<T> = ReturnType<typeof createCache<T>>;
 import type Owner from '@ember/owner';
 
 type HelperDefinition<
-  T = unknown,
   Args extends TemplateArgs<readonly unknown[]> = TemplateArgs<
     readonly unknown[]
-  >
+  >,
 > = new (owner: Owner, args: Args) => Resource<Args> & {};
 
 type Thunk = (...args: any[]) => void; // eslint-disable-line
@@ -25,7 +24,7 @@ type Thunk = (...args: any[]) => void; // eslint-disable-line
 export abstract class Resource<
   Args extends TemplateArgs<readonly unknown[]> = TemplateArgs<
     readonly unknown[]
-  >
+  >,
 > {
   protected readonly args!: Args;
 
@@ -35,11 +34,10 @@ export abstract class Resource<
       return { definition: this.constructor, args: ownerOrThunk };
     }
 
-    setOwner(this, ownerOrThunk as Owner);
+    setOwner(this, ownerOrThunk);
     this.args = args;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setup(): void {}
 
   update?(): void;
@@ -49,7 +47,7 @@ export abstract class Resource<
 class ResourceManager {
   readonly capabilities = helperCapabilities('3.23', {
     hasValue: true,
-    hasDestroyable: true
+    hasDestroyable: true,
   }) as never;
 
   private readonly owner?: Owner;
@@ -61,30 +59,35 @@ class ResourceManager {
   createHelper<
     Args extends TemplateArgs<readonly unknown[]> = TemplateArgs<
       readonly unknown[]
-    >
+    >,
   >(
-    definition: {Class: HelperDefinition<new (owner: Owner, args: Args) => Resource>, owner: Owner} | HelperDefinition<new (owner: Owner, args: Args) => Resource>,
-    args: Args
+    definition:
+      | {
+          Class: HelperDefinition;
+          owner: Owner;
+        }
+      | HelperDefinition,
+    args: Args,
   ): Cache<Resource> {
     let owner = this.owner;
-    let Class: HelperDefinition<new (owner: Owner, args: Args) => Resource>;
+    let Class: HelperDefinition;
 
     if ('Class' in definition) {
       Class = definition.Class;
       if (definition.owner) {
-        owner = definition.owner
+        owner = definition.owner;
       }
     } else {
       Class = definition;
     }
 
-    assert("Cannot create resource without an owner", owner);
+    assert('Cannot create resource without an owner', owner);
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { update, teardown } = Class.prototype as Resource;
 
     const hasUpdate = typeof update === 'function';
     const hasTeardown = typeof teardown === 'function';
-
 
     let instance: Resource | undefined;
     let cache: Cache<Resource>;
@@ -94,7 +97,7 @@ class ResourceManager {
         if (instance === undefined) {
           instance = setupInstance(cache, Class, owner, args, hasTeardown);
         } else {
-          instance.update!(); // eslint-disable-line
+          instance.update!();
         }
 
         return instance;
@@ -132,30 +135,25 @@ class ResourceManager {
 
 function setupInstance<T extends Resource<TemplateArgs<readonly unknown[]>>>(
   cache: Cache<T>,
-  Class: HelperDefinition<
-    new (owner: Owner, args: TemplateArgs<readonly unknown[]>) => T
-  >,
+  Class: HelperDefinition,
   owner: Owner,
   args: TemplateArgs<readonly unknown[]>,
-  hasTeardown: boolean
+  hasTeardown: boolean,
 ): T {
   const instance = new Class(owner, args);
   associateDestroyableChild(cache, instance);
   instance.setup();
 
   if (hasTeardown) {
-    registerDestructor(instance, () => instance.teardown!()); // eslint-disable-line
+    registerDestructor(instance, () => instance.teardown!());
   }
 
   return instance as T;
 }
 
-setHelperManager(
-  (owner: Owner | undefined) => {
-    return new ResourceManager(owner)
-  },
-  Resource
-);
+setHelperManager((owner: Owner | undefined) => {
+  return new ResourceManager(owner);
+}, Resource);
 
 export const ResourceManagerFactory = (owner: Owner | undefined) => {
   return new ResourceManager(owner);

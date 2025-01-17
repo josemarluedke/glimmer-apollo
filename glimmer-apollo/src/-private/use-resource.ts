@@ -15,7 +15,7 @@ function normalizeArgs(args: Args): TemplateArgs {
   if ('positional' in args || 'named' in args) {
     return {
       positional: (args.positional as TemplateArgs['positional']) || [],
-      named: (args.named as TemplateArgs['named']) || {}
+      named: (args.named as TemplateArgs['named']) || {},
     };
   }
 
@@ -28,39 +28,29 @@ function normalizeArgs(args: Args): TemplateArgs {
 
 export function useUnproxiedResource<
   TArgs = Args,
-  T extends Resource<TemplateArgs> = Resource<TemplateArgs>
+  T extends Resource<TemplateArgs> = Resource<TemplateArgs>,
 >(context: object, Class: object, args?: () => TArgs): { value: T } {
   let resource: Cache<T>;
-
-
 
   return {
     get value(): T {
       if (!resource) {
-
- const owner = getOwner(context);
-  const definition = { Class, owner };
-setHelperManager(
- ResourceManagerFactory,
-  definition,
-);
-        resource = invokeHelper(
-          context,
-          definition,
-          () => {
-            return normalizeArgs(args?.() || {});
-          }
-        ) as Cache<T>;
+        const owner = getOwner(context);
+        const definition = { Class, owner };
+        setHelperManager(ResourceManagerFactory, definition);
+        resource = invokeHelper(context, definition, () => {
+          return normalizeArgs(args?.() || {});
+        }) as Cache<T>;
       }
 
-      return getValue<T>(resource)!; // eslint-disable-line
-    }
+      return getValue<T>(resource)!;
+    },
   };
 }
 
 export function useResource<
   TArgs = Args,
-  T extends Resource<TemplateArgs> = Resource<TemplateArgs>
+  T extends Resource<TemplateArgs> = Resource<TemplateArgs>,
 >(context: object, definition: object, args?: () => TArgs): T {
   const target = useUnproxiedResource<TArgs, T>(context, definition, args);
 
@@ -76,6 +66,6 @@ export function useResource<
     },
     getOwnPropertyDescriptor(target, key): PropertyDescriptor | undefined {
       return Reflect.getOwnPropertyDescriptor(target.value, key);
-    }
+    },
   }) as never as T;
 }

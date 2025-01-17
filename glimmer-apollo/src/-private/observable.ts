@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type */
 import { Resource } from './resource.ts';
 import type {
   FetchMoreQueryOptions,
@@ -6,14 +5,14 @@ import type {
   OperationVariables,
   SubscribeToMoreOptions,
   Unmasked,
-  WatchQueryOptions
+  WatchQueryOptions,
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
 export default class ObservableResource<
   TData,
   TVariables extends OperationVariables,
-  Args extends TemplateArgs
+  Args extends TemplateArgs,
 > extends Resource<Args> {
   private observable?: ObservableQuery<TData>;
 
@@ -24,18 +23,26 @@ export default class ObservableResource<
   refetch = (variables?: Partial<TVariables>) =>
     this.observable?.refetch(variables);
 
-
-  fetchMore = <TFetchData = TData, TFetchVars extends OperationVariables = TVariables>(fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {
-        updateQuery?: (previousQueryResult: Unmasked<TData>, options: {
-            fetchMoreResult: Unmasked<TFetchData>;
-            variables: TFetchVars;
-        }) => Unmasked<TData>;
-    }) =>
-    this.observable?.fetchMore(
-      fetchMoreOptions   );
+  fetchMore = <
+    TFetchData = TData,
+    TFetchVars extends OperationVariables = TVariables,
+  >(
+    fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {
+      updateQuery?: (
+        previousQueryResult: Unmasked<TData>,
+        options: {
+          fetchMoreResult: Unmasked<TFetchData>;
+          variables: TFetchVars;
+        },
+      ) => Unmasked<TData>;
+    },
+  ) => this.observable?.fetchMore(fetchMoreOptions);
 
   updateQuery = (
-mapFn: (previousQueryResult: Unmasked<TData>, options: Pick<WatchQueryOptions<TVariables, TData>, "variables">) => Unmasked<TData>
+    mapFn: (
+      previousQueryResult: Unmasked<TData>,
+      options: Pick<WatchQueryOptions<TVariables, TData>, 'variables'>,
+    ) => Unmasked<TData>,
   ) => this.observable?.updateQuery(mapFn);
 
   startPolling = (pollInterval: number) => {
@@ -48,12 +55,12 @@ mapFn: (previousQueryResult: Unmasked<TData>, options: Pick<WatchQueryOptions<TV
 
   subscribeToMore = <
     TSubscriptionData = TData,
-    TSubscriptionVariables extends OperationVariables = TVariables
+    TSubscriptionVariables extends OperationVariables = TVariables,
   >(
     options: SubscribeToMoreOptions<
       TData,
       TSubscriptionVariables,
       TSubscriptionData
-    >
+    >,
   ) => this.observable?.subscribeToMore(options);
 }

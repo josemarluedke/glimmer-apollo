@@ -65,6 +65,7 @@ export function clearClients(context: object): void {
 
   const bucket = CLIENTS.get(owner);
   bucket?.forEach((client) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     client.clearStore();
   });
 
@@ -86,6 +87,7 @@ export function clearClient(
 
   const client = bucket?.get(clientId);
   if (client) {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     client.clearStore();
   }
   bucket?.delete(clientId);

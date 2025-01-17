@@ -4,7 +4,7 @@ import {
   isDestroyed,
   isDestroying,
   tracked,
-  waitForPromise
+  waitForPromise,
 } from '../environment.ts';
 import { getClient } from './client.ts';
 import { Resource } from './resource.ts';
@@ -15,7 +15,7 @@ import type {
   FetchResult,
   MutationOptions as ApolloMutationOptions,
   OperationVariables,
-  MaybeMasked
+  MaybeMasked,
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
@@ -30,12 +30,12 @@ export interface MutationOptions<TData, TVariables>
 
 export type MutationPositionalArgs<
   TData,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > = [DocumentNode, MutationOptions<TData, TVariables>?];
 
 export class MutationResource<
   TData,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > extends Resource<TemplateArgs<MutationPositionalArgs<TData, TVariables>>> {
   @tracked loading = false;
   @tracked called = false;
@@ -44,11 +44,11 @@ export class MutationResource<
   @tracked promise!: Promise<Maybe<MaybeMasked<TData>>>;
 
   async mutate(
-    variables?: TVariables | undefined,
+    variables?: TVariables,
     overrideOptions: Omit<
       MutationOptions<TData, TVariables>,
       'variables' | 'mutation'
-    > = {}
+    > = {},
   ): Promise<Maybe<MaybeMasked<TData>>> {
     this.loading = true;
     const [mutation, originalOptions] = this.args.positional;
@@ -60,7 +60,7 @@ export class MutationResource<
     } else if (variables && originalOptions?.variables) {
       variables = {
         ...originalOptions.variables,
-        ...variables
+        ...variables,
       };
     }
 
@@ -68,16 +68,16 @@ export class MutationResource<
       client.mutate<TData, TVariables>({
         mutation,
         ...options,
-        variables
-      })
+        variables,
+      }),
     )
       .then((result) => {
         this.#onComplete(result);
         return this.data;
       })
-      .catch((error) => {
+      .catch((error: ApolloError) => {
         this.#onError(error);
-        return error;
+        return this.data
       });
 
     return this.promise;

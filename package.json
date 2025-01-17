@@ -2,14 +2,14 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "npm run build --workspace glimmer-apollo",
-    "lint": "npm run lint --workspaces --if-present",
-    "lint:fix": "npm run lint:fix --workspaces --if-present",
-    "start": "concurrently 'npm:start:*' --restart-after 5000 --prefix-colors cyan,white,yellow",
-    "start:addon": "npm start --workspace glimmer-apollo -- --no-watch.clearScreen",
-    "start:test-app": "npm start --workspace test-app",
-    "test": "npm run test --workspaces --if-present",
-    "test:ember": "npm run test:ember --workspaces --if-present"
+    "build": "pnpm --filter glimmer-apollo build",
+    "lint": "pnpm --filter '*' lint",
+    "lint:fix": "pnpm --filter '*' lint:fix",
+    "start": "concurrently 'pnpm:start:*' --restart-after 5000 --prefixColors auto",
+    "start:addon": "pnpm --filter glimmer-apollo start --no-watch.clearScreen",
+    "start:test-app": "pnpm --filter test-app start",
+    "test": "pnpm --filter '*' test",
+    "test:ember": "pnpm --filter '*' test:ember"
   },
   "devDependencies": {
     "@glint/core": "^1.5.1",

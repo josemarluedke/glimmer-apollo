@@ -52,10 +52,10 @@ export class QueryResource<
   #subscription?: ObservableSubscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
-  #firstPromiseReject: Function | undefined;
+  #firstPromiseReject: (()=>unknown) | undefined;
 
   /** @internal */
-  async setup(): Promise<void> {
+  setup(): void {
     this.#previousPositionalArgs = this.args.positional;
     const [query, options = {}] = this.args.positional;
     const client = getClient(this, options.clientId);
@@ -97,16 +97,16 @@ export class QueryResource<
     );
 
     this.#subscription = observable.subscribe(
-      (result) => {
+      (result: ApolloQueryResult<TData>) => {
         this.#onComplete(result);
         if (firstResolve) {
           firstResolve();
           firstResolve = undefined;
         }
       },
-      (error) => {
+      (error: ApolloError) => {
         this.#onError(error);
-        if (this.#firstPromiseReject) {
+        if (typeof this.#firstPromiseReject === 'function') {
           this.#firstPromiseReject();
           this.#firstPromiseReject = undefined;
         }
@@ -136,7 +136,7 @@ export class QueryResource<
     if (this.#subscription) {
       this.#subscription.unsubscribe();
     }
-    if (this.#firstPromiseReject) {
+    if (typeof this.#firstPromiseReject === 'function') {
       this.#firstPromiseReject();
       this.#firstPromiseReject = undefined;
     }
