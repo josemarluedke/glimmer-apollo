@@ -20,8 +20,12 @@ export default class ObservableResource<
     this.observable = observable;
   }
 
-  refetch = (variables?: Partial<TVariables>) =>
-    this.observable?.refetch(variables);
+  refetch = (variables?: Partial<TVariables> | MouseEvent) => {
+    if (variables instanceof MouseEvent) {
+      return this.observable?.refetch();
+    }
+    return this.observable?.refetch(variables);
+  };
 
   fetchMore = <
     TFetchData = TData,

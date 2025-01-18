@@ -1,6 +1,12 @@
 import Component from '@glimmer/component';
 import { useQuery, useMutation, gql } from 'glimmer-apollo';
 import { on } from '@ember/modifier/on';
+import type {
+  UserInfoQuery,
+  UserInfoQueryVariables,
+  LoginMutation,
+  LoginMutationVariables,
+} from 'test-app/mocks/handlers';
 
 const USER_INFO = gql`
   query GetUserInfo {
@@ -21,7 +27,7 @@ const LOGIN = gql`
 `;
 
 export default class PlaygroundExperiment extends Component {
-  userInfo = useQuery(this, () => [
+  userInfo = useQuery<UserInfoQuery, UserInfoQueryVariables>(this, () => [
     USER_INFO,
     {
       variables: { id: '1-with-delay' },
@@ -30,21 +36,24 @@ export default class PlaygroundExperiment extends Component {
     },
   ]);
 
-  userInfoWithSkip = useQuery(this, () => [
-    USER_INFO,
-    {
-      variables: { id: '1-with-delay' },
-      errorPolicy: 'all',
-      notifyOnNetworkStatusChange: true,
-      skip: true,
-    },
-  ]);
+  userInfoWithSkip = useQuery<UserInfoQuery, UserInfoQueryVariables>(
+    this,
+    () => [
+      USER_INFO,
+      {
+        variables: { id: '1-with-delay' },
+        errorPolicy: 'all',
+        notifyOnNetworkStatusChange: true,
+        skip: true,
+      },
+    ]
+  );
 
-  login = useMutation(this, () => [
+  login = useMutation<LoginMutation, LoginMutationVariables>(this, () => [
     LOGIN,
     {
       variables: {
-        // username: 'non-existing'
+        username: undefined as never,
       },
       errorPolicy: 'all',
     },
@@ -55,7 +64,6 @@ export default class PlaygroundExperiment extends Component {
   };
 
   <template>
-    {{this.now}}
     <h2 data-test-id="experiment">
       User Info
     </h2>
