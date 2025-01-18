@@ -2,27 +2,27 @@ export {
   getClient,
   setClient,
   clearClient,
-  clearClients
+  clearClients,
 } from './-private/client.ts';
 export { gql } from '@apollo/client/core';
 export { useQuery, useMutation, useSubscription } from './-private/usables.ts';
 export type {
   UseQuery,
   UseMutation,
-  UseSubscription
+  UseSubscription,
 } from './-private/usables.ts';
 export type {
   QueryOptions,
   QueryResource,
-  QueryPositionalArgs
+  QueryPositionalArgs,
 } from './-private/query.ts';
 export type {
   MutationOptions,
   MutationResource,
-  MutationPositionalArgs
+  MutationPositionalArgs,
 } from './-private/mutation.ts';
 export type {
   SubscriptionOptions,
   SubscriptionResource,
-  SubscriptionPositionalArgs
+  SubscriptionPositionalArgs,
 } from './-private/subscription.ts';

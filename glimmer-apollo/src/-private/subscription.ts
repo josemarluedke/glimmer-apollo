@@ -3,7 +3,7 @@ import {
   isDestroyed,
   isDestroying,
   tracked,
-  waitForPromise
+  waitForPromise,
 } from '../environment.ts';
 import { Resource } from './resource.ts';
 import { ApolloError } from '@apollo/client/core';
@@ -12,7 +12,7 @@ import type {
   OperationVariables,
   FetchResult,
   SubscriptionOptions as ApolloSubscriptionOptions,
-  ObservableSubscription
+  ObservableSubscription,
 } from '@apollo/client/core';
 import { equal } from '@wry/equality';
 import { getFastboot, createPromise, settled } from './utils.ts';
@@ -29,12 +29,12 @@ export interface SubscriptionOptions<TData, TVariables>
 
 export type SubscriptionPositionalArgs<
   TData,
-  TVariables = OperationVariables
+  TVariables = OperationVariables,
 > = [DocumentNode, SubscriptionOptions<TData, TVariables>?];
 
 export class SubscriptionResource<
   TData,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > extends Resource<
   TemplateArgs<SubscriptionPositionalArgs<TData, TVariables>>
 > {
@@ -63,7 +63,7 @@ export class SubscriptionResource<
     this.promise = promise;
     const observable = client.subscribe({
       query,
-      ...(options || {})
+      ...(options || {}),
     });
 
     this.#subscription = observable.subscribe({
@@ -92,7 +92,7 @@ export class SubscriptionResource<
           return;
         }
         this.#onComplete();
-      }
+      },
     });
 
     waitForPromise(promise).catch(() => {

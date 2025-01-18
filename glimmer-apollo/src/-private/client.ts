@@ -12,13 +12,13 @@ const DEFAULT_CLIENT_ID = 'default';
 export function setClient<TCache = unknown>(
   context: object,
   client: ApolloClient<TCache>,
-  clientId: string = DEFAULT_CLIENT_ID
+  clientId: string = DEFAULT_CLIENT_ID,
 ): void {
   const owner = getOwner(context) as Owner | null;
 
   if (!owner) {
     throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo setClient'
+      'Unable to find owner from the given context in glimmer-apollo setClient',
     );
   }
 
@@ -35,20 +35,20 @@ export function setClient<TCache = unknown>(
 
 export function getClient<TCache = unknown>(
   context: object,
-  clientId: string = DEFAULT_CLIENT_ID
+  clientId: string = DEFAULT_CLIENT_ID,
 ): ApolloClient<TCache> {
-  const owner = getOwner(context)
+  const owner = getOwner(context);
 
   if (!owner) {
     throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo getClient'
+      'Unable to find owner from the given context in glimmer-apollo getClient',
     );
   }
 
   const client = CLIENTS.get(owner)?.get(clientId);
   if (!client) {
     throw new Error(
-      `Apollo client with id ${clientId} has not been set yet, use setClient(new ApolloClient({ ... }, '${clientId}')) to define it`
+      `Apollo client with id ${clientId} has not been set yet, use setClient(new ApolloClient({ ... }, '${clientId}')) to define it`,
     );
   }
 
@@ -59,7 +59,7 @@ export function clearClients(context: object): void {
   const owner = getOwner(context) as Owner | null;
   if (!owner) {
     throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo clearClients'
+      'Unable to find owner from the given context in glimmer-apollo clearClients',
     );
   }
 
@@ -74,12 +74,12 @@ export function clearClients(context: object): void {
 
 export function clearClient(
   context: object,
-  clientId: string = DEFAULT_CLIENT_ID
+  clientId: string = DEFAULT_CLIENT_ID,
 ): void {
   const owner = getOwner(context) as Owner | null;
   if (!owner) {
     throw new Error(
-      'Unable to find owner from the given context in glimmer-apollo clearClient'
+      'Unable to find owner from the given context in glimmer-apollo clearClient',
     );
   }
 

@@ -1,5 +1,5 @@
 export interface TemplateArgs<
-  T extends readonly unknown[] = readonly unknown[]
+  T extends readonly unknown[] = readonly unknown[],
 > {
   positional: T;
   named: Record<string, unknown>;
@@ -12,5 +12,5 @@ export interface Fastboot {
 
 export declare function IWaitForPromise<T, KindOfPromise extends Promise<T>>(
   promise: KindOfPromise,
-  label?: string
+  label?: string,
 ): KindOfPromise;

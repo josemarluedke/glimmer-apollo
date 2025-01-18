@@ -5,7 +5,7 @@ import {
   isDestroyed,
   isDestroying,
   tracked,
-  waitForPromise
+  waitForPromise,
 } from '../environment.ts';
 import { getClient } from './client.ts';
 import ObservableResource from './observable.ts';
@@ -17,7 +17,7 @@ import type {
   OperationVariables,
   WatchQueryOptions,
   ObservableSubscription,
-  ObservableQuery
+  ObservableQuery,
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
@@ -32,12 +32,12 @@ export interface QueryOptions<TData, TVariables extends OperationVariables>
 
 export type QueryPositionalArgs<
   TData,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > = [DocumentNode, QueryOptions<TData, TVariables>?];
 
 export class QueryResource<
   TData,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > extends ObservableResource<
   TData,
   TVariables,
@@ -52,7 +52,7 @@ export class QueryResource<
   #subscription?: ObservableSubscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
-  #firstPromiseReject: (()=>unknown) | undefined;
+  #firstPromiseReject: (() => unknown) | undefined;
 
   /** @internal */
   setup(): void {
@@ -89,11 +89,11 @@ export class QueryResource<
 
     const observable = client.watchQuery({
       query,
-      ...options
+      ...options,
     });
 
     this._setObservable(
-      observable as ObservableQuery<TData, OperationVariables>
+      observable as ObservableQuery<TData, OperationVariables>,
     );
 
     this.#subscription = observable.subscribe(
@@ -110,7 +110,7 @@ export class QueryResource<
           this.#firstPromiseReject();
           this.#firstPromiseReject = undefined;
         }
-      }
+      },
     );
 
     waitForPromise(promise).catch(() => {

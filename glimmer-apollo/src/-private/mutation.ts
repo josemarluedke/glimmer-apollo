@@ -77,7 +77,7 @@ export class MutationResource<
       })
       .catch((error: ApolloError) => {
         this.#onError(error);
-        return this.data
+        return this.data;
       });
 
     return this.promise;

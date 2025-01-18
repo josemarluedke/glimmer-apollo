@@ -3,16 +3,16 @@ import { type MutationPositionalArgs, MutationResource } from './mutation.ts';
 import { type QueryPositionalArgs, QueryResource } from './query.ts';
 import {
   type SubscriptionPositionalArgs,
-  SubscriptionResource
+  SubscriptionResource,
 } from './subscription.ts';
 import type { OperationVariables } from '@apollo/client/core';
 
 export function useQuery<
   TData = unknown,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 >(
   parentDestroyable: object,
-  args: () => QueryPositionalArgs<TData, TVariables>
+  args: () => QueryPositionalArgs<TData, TVariables>,
 ): QueryResource<TData, TVariables> {
   return useResource<
     QueryPositionalArgs<TData, TVariables>,
@@ -22,10 +22,10 @@ export function useQuery<
 
 export function useMutation<
   TData = unknown,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 >(
   parentDestroyable: object,
-  args: () => MutationPositionalArgs<TData, TVariables>
+  args: () => MutationPositionalArgs<TData, TVariables>,
 ): MutationResource<TData, TVariables> {
   return useResource<
     MutationPositionalArgs<TData, TVariables>,
@@ -35,10 +35,10 @@ export function useMutation<
 
 export function useSubscription<
   TData = unknown,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 >(
   parentDestroyable: object,
-  args: () => SubscriptionPositionalArgs<TData, TVariables>
+  args: () => SubscriptionPositionalArgs<TData, TVariables>,
 ): SubscriptionResource<TData, TVariables> {
   return useResource<
     SubscriptionPositionalArgs<TData, TVariables>,
@@ -48,7 +48,7 @@ export function useSubscription<
 
 export type UseQuery<
   TData = unknown,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > = {
   args: () => QueryPositionalArgs<TData, TVariables>[1];
   return: QueryResource<TData, TVariables>;
@@ -58,7 +58,7 @@ export type UseQuery<
 
 export type UseMutation<
   TData = unknown,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > = {
   args: () => MutationPositionalArgs<TData, TVariables>[1];
   return: MutationResource<TData, TVariables>;
@@ -68,7 +68,7 @@ export type UseMutation<
 
 export type UseSubscription<
   TData = unknown,
-  TVariables extends OperationVariables = OperationVariables
+  TVariables extends OperationVariables = OperationVariables,
 > = {
   args: () => SubscriptionPositionalArgs<TData, TVariables>[1];
   return: SubscriptionResource<TData, TVariables>;

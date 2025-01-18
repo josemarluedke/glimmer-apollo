@@ -9,18 +9,21 @@ export {
   isDestroyed,
   destroy,
   registerDestructor,
-  associateDestroyableChild
+  associateDestroyableChild,
 } from '@ember/destroyable';
 export { waitForPromise } from '@ember/test-waiters';
 
 export {
-  invokeHelper ,
+  invokeHelper,
   setHelperManager,
-  capabilities as helperCapabilities
+  capabilities as helperCapabilities,
 } from '@ember/helper';
 
 export function getOwner(obj: object): Owner | undefined {
-  if (obj instanceof ApplicationInstance || ('lookup' in obj && 'factoryFor' in obj)) {
+  if (
+    obj instanceof ApplicationInstance ||
+    ('lookup' in obj && 'factoryFor' in obj)
+  ) {
     return obj as Owner;
   }
 
