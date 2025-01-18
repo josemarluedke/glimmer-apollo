@@ -151,7 +151,7 @@ export default [
       'node_modules/',
       'coverage/',
       '!**/.*',
-      'vite.config.mjs.timestamp*',
+      'vite.config.mjs.*',
     ],
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
