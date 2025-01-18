@@ -146,7 +146,7 @@ export default [
    * Settings
    */
   {
-    ignores: ['dist/', 'node_modules/', 'coverage/', '!**/.*'],
+    ignores: ['dist/', 'node_modules/', 'coverage/', '!**/.*', 'vite.config.mjs.timestamp*'],
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
     },
