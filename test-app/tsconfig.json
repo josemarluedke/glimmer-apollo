@@ -3,12 +3,6 @@
   "include": [
     "app", "tests", "types"
   ],
-  "glint": {
-    "environment": [
-      "ember-loose",
-      "ember-template-imports"
-    ]
-  },
   "compilerOptions": {
     "allowJs": true,
     /**
@@ -39,7 +33,9 @@
       ]
     },
     "types": [
-      "ember-source/types"
+      "ember-source/types",
+      "@glint/ember-tsc/types",
+      "@embroider/core/virtual"
     ]
   },
 }

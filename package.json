@@ -12,7 +12,6 @@
     "test:ember": "pnpm --filter '*' test:ember"
   },
   "devDependencies": {
-    "@glint/core": "^1.5.2",
     "concurrently": "^9.2.1",
     "prettier": "^3.7.4",
     "prettier-plugin-ember-template-tag": "^2.1.2"

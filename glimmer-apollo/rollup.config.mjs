@@ -54,8 +54,8 @@ export default {
     // Ensure that .gjs files are properly integrated as Javascript
     addon.gjs(),
 
-    // Emit .d.ts declaration files
-    addon.declarations('declarations'),
+    // Emit .d.ts declaration files using Glint v2's ember-tsc
+    addon.declarations('declarations', 'ember-tsc --declaration'),
 
     // addons are allowed to contain imports of .css files, which we want rollup
     // to leave alone and keep in the published output.
