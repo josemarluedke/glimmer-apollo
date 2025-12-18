@@ -1752,13 +1752,6 @@
   dependencies:
     "@glimmer/env" "^0.1.7"
 
-"@glimmer/global-context@0.84.0":
-  version "0.84.0"
-  resolved "https://registry.yarnpkg.com/@glimmer/global-context/-/global-context-0.84.0.tgz#48c58e3f28572bef5972d61dd69ed78b7b23558a"
-  integrity sha512-xfq8CwHYifqP6ZfpYwIrBAZt1y6waObQHguWs1GfwLj9njoFaq29/9Ri42srq67ge/qGm3cIlXCvrEhk4AovmA==
-  dependencies:
-    "@glimmer/env" "^0.1.7"
-
 "@glimmer/global-context@0.92.3":
   version "0.92.3"
   resolved "https://registry.yarnpkg.com/@glimmer/global-context/-/global-context-0.92.3.tgz#a0dc2f0c04e029088fce7bfbee57369ebcb56871"
@@ -1986,13 +1979,13 @@
     "@handlebars/parser" "~2.0.0"
     simple-html-tokenizer "^0.5.11"
 
-"@glimmer/tracking@^1.0.2", "@glimmer/tracking@^1.0.4", "@glimmer/tracking@^2.0.0-beta.17":
-  version "2.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/@glimmer/tracking/-/tracking-2.0.0-beta.21.tgz#f57419387c130b62dbac73b68c543cdd8fbb8ee4"
-  integrity sha512-7QNWukWWtE+NWEWZzpQIPip4/vk08ki17Ct9CqQjv2qPz+A4Jqj/iMjMagztXY2vgMINYcWtszkhxY0idrmPSA==
+"@glimmer/tracking@^1.0.2", "@glimmer/tracking@^1.0.4":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@glimmer/tracking/-/tracking-1.1.2.tgz#74e71be07b0a7066518d24044d2665d0cf8281eb"
+  integrity sha512-cyV32zsHh+CnftuRX84ALZpd2rpbDrhLhJnTXn9W//QpqdRZ5rdMsxSY9fOsj0CKEc706tmEU299oNnDc0d7tA==
   dependencies:
     "@glimmer/env" "^0.1.7"
-    "@glimmer/validator" "0.84.0"
+    "@glimmer/validator" "^0.44.0"
 
 "@glimmer/util@0.65.4":
   version "0.65.4"
@@ -2045,14 +2038,6 @@
     "@glimmer/env" "^0.1.7"
     "@glimmer/global-context" "0.65.4"
 
-"@glimmer/validator@0.84.0":
-  version "0.84.0"
-  resolved "https://registry.yarnpkg.com/@glimmer/validator/-/validator-0.84.0.tgz#d2bd9bcdb2685f91abc521e0f18517f7f789f02f"
-  integrity sha512-8kNz2FIxX8HWS1RvqHCIGcUK2w+t0/TJgZdhCP7ZNTLpS2QpDMoA4TnTRPk/wMxrgBOtrhFXODk3jk8ko+bTVw==
-  dependencies:
-    "@glimmer/env" "^0.1.7"
-    "@glimmer/global-context" "0.84.0"
-
 "@glimmer/validator@0.92.3":
   version "0.92.3"
   resolved "https://registry.yarnpkg.com/@glimmer/validator/-/validator-0.92.3.tgz#40acee9a558e1fc89aa4b2b8d3bb067717552c03"
@@ -2062,6 +2047,11 @@
     "@glimmer/global-context" "0.92.3"
     "@glimmer/interfaces" "0.92.3"
     "@glimmer/util" "0.92.3"
+
+"@glimmer/validator@^0.44.0":
+  version "0.44.0"
+  resolved "https://registry.yarnpkg.com/@glimmer/validator/-/validator-0.44.0.tgz#03d127097dc9cb23052cdb7fcae59d0a9dca53e1"
+  integrity sha512-i01plR0EgFVz69GDrEuFgq1NheIjZcyTy3c7q+w7d096ddPVeVcRzU3LKaqCfovvLJ+6lJx40j45ecycASUUyw==
 
 "@glimmer/vm-babel-plugins@0.92.3":
   version "0.92.3"
