@@ -1,8 +1,6 @@
-# Site was temporarily removed in 915e656 - skip deploy until restored
 [build]
-  command = "echo 'Site temporarily removed (see commit 915e656)'"
-  publish = "."
-  ignore = "exit 0"
+  command = "pnpm install && pnpm --filter site build"
+  publish = "site/dist"
 
 [build.environment]
   NODE_VERSION = "20"
