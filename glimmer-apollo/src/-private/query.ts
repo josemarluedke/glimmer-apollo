@@ -21,8 +21,10 @@ import type {
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
-export interface QueryOptions<TData, TVariables extends OperationVariables>
-  extends Omit<WatchQueryOptions<TVariables>, 'query'> {
+export interface QueryOptions<
+  TData,
+  TVariables extends OperationVariables,
+> extends Omit<WatchQueryOptions<TVariables>, 'query'> {
   skip?: boolean;
   ssr?: boolean;
   clientId?: string;
