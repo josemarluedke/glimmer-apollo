@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectName": "glimmer-apollo",
+  "packages": [
+    {
+      "name": "@embroider/addon-blueprint",
+      "version": "3.2.0",
+      "blueprints": [
+        {
+          "name": "@embroider/addon-blueprint",
+          "isBaseBlueprint": true,
+          "options": [
+            "--ci-provider=github",
+            "--typescript"
+          ]
+        }
+      ]
+    }
+  ]
+}
