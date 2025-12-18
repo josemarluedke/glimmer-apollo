@@ -20,7 +20,7 @@ import {
 setEnviromentContext({
   owner: ApplicationInstance,
   getOwner,
-  setOwner,
+  setOwner: setOwner as typeof import('@glimmer/owner').setOwner,
   createCache: createCache as never,
   getValue,
   invokeHelper,

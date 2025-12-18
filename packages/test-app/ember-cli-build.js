@@ -4,18 +4,21 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
-    // Add options here
+    'ember-cli-babel': {
+      enableTypeScriptTransform: true,
+    },
   });
 
-  if (process.env.EMBROIDER) {
-    const { Webpack } = require('@embroider/webpack');
+  const { Webpack } = require('@embroider/webpack');
 
-    return require('@embroider/compat').compatBuild(app, Webpack, {
-      staticAddonTestSupportTrees: true,
-      staticAddonTrees: true,
-      staticHelpers: true,
-      staticComponents: true
-    });
-  }
-  return app.toTree();
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    staticAddonTestSupportTrees: true,
+    staticAddonTrees: true,
+    staticInvokables: true,
+    skipBabel: [
+      {
+        package: 'qunit',
+      },
+    ],
+  });
 };

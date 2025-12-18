@@ -36,7 +36,7 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@ember/test-waiters": "^3.0.1",
+    "@ember/test-waiters": "^4.1.1",
     "@embroider/addon-shim": "^1.0.0",
     "@glimmer/env": "^0.1.7",
     "@wry/equality": "^0.5.2"
@@ -54,7 +54,7 @@
     "@embroider/addon-dev": "^1.0.0",
     "graphql": "^16.3.0",
     "rollup": "^2.66.1",
-    "rollup-plugin-ts": "^2.0.4",
+    "rollup-plugin-ts": "^3.4.5",
     "typescript": "^4.5.5",
     "walk-sync": "^3.0.0"
   },

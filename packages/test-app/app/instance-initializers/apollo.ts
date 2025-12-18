@@ -4,7 +4,6 @@ import {
   InMemoryCache,
   createHttpLink
 } from '@apollo/client/core';
-import fetch from 'fetch';
 import type ApplicationInstance from '@ember/application/instance';
 
 export function initialize(appInstance: ApplicationInstance): void {
@@ -13,8 +12,7 @@ export function initialize(appInstance: ApplicationInstance): void {
     new ApolloClient({
       cache: new InMemoryCache(),
       link: createHttpLink({
-        uri: '/graphql',
-        fetch
+        uri: '/graphql'
       })
     })
   );

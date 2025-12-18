@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "types": [],
     "paths": {
       "glimmer-apollo": ["src"],
       "glimmer-apollo/*": ["src/*"],
