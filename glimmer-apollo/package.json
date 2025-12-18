@@ -51,7 +51,7 @@
     "decorator-transforms": "^2.2.2"
   },
   "devDependencies": {
-    "@apollo/client": "^3.12.6",
+    "@apollo/client": "^3.14.0",
     "@babel/core": "^7.28.5",
     "@babel/eslint-parser": "^7.28.5",
     "@babel/plugin-transform-typescript": "^7.28.5",

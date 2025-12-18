@@ -64,7 +64,8 @@ export default class ObservableResource<
     options: SubscribeToMoreOptions<
       TData,
       TSubscriptionVariables,
-      TSubscriptionData
+      TSubscriptionData,
+      TVariables
     >,
   ) => this.observable?.subscribeToMore(options);
 }
