@@ -72,7 +72,10 @@ export default class CreateNote extends Component {
 - The mutation will not be executed until `mutate` function is called.
 - The second argument to `useMutation` should always be a function that returns an array.
 
-```ts:create-note.ts
+```gts:create-note.gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useMutation } from 'glimmer-apollo';
 import {
   CREATE_NOTE,
@@ -82,23 +85,27 @@ import {
 
 export default class CreateNote extends Component {
   createNote = useMutation<CreateNoteMutation, CreateNoteMutationVariables>(
-    CREATE_NOTE,
-    {
-      /* options */
-    }
-  ]);
+    this,
+    () => [
+      CREATE_NOTE,
+      {
+        /* options */
+      }
+    ]
+  );
 
-  submit = async (): Promise<void> => {
-    await this.createNote.mutate(
+  @action
+  async submit(): Promise<void> {
+    await this.createNote.mutate({
       input: {
         title: 'Title',
         description: 'Description',
         isArchived: false
       }
     });
-  };
+  }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.submit}}>
       Create Note
     </button>
@@ -114,7 +121,7 @@ export default class CreateNote extends Component {
         Description: {{this.createNote.data.createNote.description}}
       </div>
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -223,7 +230,10 @@ notes = useMutation(this, () => [
 
 This boolean property informs if the `mutate` function gets called.
 
-```ts:create-note.ts
+```gts:create-note.gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useMutation } from 'glimmer-apollo';
 import {
   CREATE_NOTE,
@@ -237,11 +247,12 @@ export default class CreateNote extends Component {
     () => [CREATE_NOTE]
   );
 
-  submit = async (): Promise<void> => {
+  @action
+  async submit(): Promise<void> {
     await this.createNote.mutate(/* variables */);
-  };
+  }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.submit}}>
       Create Note
     </button>
@@ -249,7 +260,7 @@ export default class CreateNote extends Component {
     {{#if this.createNote.called}}
       Mutate function called.
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -257,7 +268,10 @@ export default class CreateNote extends Component {
 
 This is a handy property that allows us to inform our interface that we are saving data.
 
-```ts:create-note.ts
+```gts:create-note.gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useMutation } from 'glimmer-apollo';
 import {
   CREATE_NOTE,
@@ -271,11 +285,12 @@ export default class CreateNote extends Component {
     () => [CREATE_NOTE]
   );
 
-  submit = async (): Promise<void> => {
+  @action
+  async submit(): Promise<void> {
     await this.createNote.mutate(/* variables */);
-  };
+  }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.submit}}>
       Create Note
     </button>
@@ -283,7 +298,7 @@ export default class CreateNote extends Component {
     {{#if this.createNote.loading}}
       Creating...
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -291,7 +306,10 @@ export default class CreateNote extends Component {
 
 This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your mutation. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
 
-```ts:create-note.ts
+```gts:create-note.gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useMutation } from 'glimmer-apollo';
 import {
   CREATE_NOTE,
@@ -305,11 +323,12 @@ export default class CreateNote extends Component {
     () => [CREATE_NOTE]
   );
 
-  submit = async (): Promise<void> => {
+  @action
+  async submit(): Promise<void> {
     await this.createNote.mutate(/* variables */);
-  };
+  }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.submit}}>
       Create Note
     </button>
@@ -317,7 +336,7 @@ export default class CreateNote extends Component {
     {{#if this.createNote.error}}
       {{this.createNote.error.message}}
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -374,7 +393,10 @@ The purpose of an update function is to modify the cached data to match the modi
 
 In the example below, we use `GetNotes` query from the previous section to demonstrate how to update the cache when creating a new note.
 
-```ts:create-notes.ts
+```gts:create-notes.gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useMutation } from 'glimmer-apollo';
 import {
   CREATE_NOTE,
@@ -414,7 +436,8 @@ export default class CreateNote extends Component {
     ]
   );
 
-  submit = async (): Promise<void> => {
+  @action
+  async submit(): Promise<void> {
     await this.createNote.mutate({
       input: {
         title: 'Title',
@@ -422,9 +445,9 @@ export default class CreateNote extends Component {
         isArchived: false
       }
     });
-  };
+  }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.submit}}>
       Create Note
     </button>
@@ -440,6 +463,6 @@ export default class CreateNote extends Component {
         Description: {{this.createNote.data.createNote.description}}
       </div>
     {{/if}}
-  `;
+  </template>
 }
 ```

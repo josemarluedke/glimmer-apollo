@@ -1,6 +1,6 @@
 # Introduction
 
-This library integrates Apollo Client in your Ember or Glimmer app with declarative API to query, mutate and access GraphQL data.
+This library integrates Apollo Client in your Ember app with declarative API to query, mutate and access GraphQL data.
 
 ## What is GraphQL?
 
@@ -16,7 +16,7 @@ It is one of the most popular options to execute GraphQL queries and mutations i
 
 ## Why Glimmer Apollo?
 
-Glimmer Apollo uses the concept of [Resources](https://www.pzuraq.com/introducing-use/) to allow easy integration of Glimmer's auto-tracking system with Apollo Client. It's built on top of public primitives available in Ember and Glimmer.js.
+Glimmer Apollo uses the concept of [Resources](https://www.pzuraq.com/introducing-use/) to allow easy integration of Glimmer's auto-tracking system with Apollo Client. It's built on top of public primitives available in Ember.
 
 The alternative in Ember, [ember-apollo-client](https://github.com/ember-graphql/ember-apollo-client/), is built using services and their own concept of query manager using decorators. While ember-apollo-client has been working for many applications in production just fine, it has a different take on how to fetch data. There is no reactive system to refetch queries when arguments change, for example. Glimmer Apollo takes full advantage of the auto-tracking system that Glimmer provides, allowing us to have a declarative API to query, mutate and access GraphQL data.
 

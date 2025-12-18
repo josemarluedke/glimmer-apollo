@@ -9,11 +9,9 @@ It assumes you're familiar with how GraphQL queries work. If you aren't,
 we recommend this [guide](https://graphql.org/learn/queries/) to learn more
 about GraphQL Queries.
 
-For the purpose of this guide, we will be using Glimmer components with
-template literals instead of separated template files. This approach can
-be used in Ember.js ([with template-imports](https://github.com/ember-template-imports/ember-template-imports))
-as well as Glimmer.js. We have omitted its imports because of the different
-import paths for `Component` and `hbs`.
+For the purpose of this guide, we will be using GTS (Glimmer TypeScript) format
+with inline templates instead of separated template files. This approach uses
+the modern `<template>` syntax available in Ember.js.
 
 ## Executing a Query
 
@@ -69,7 +67,8 @@ export default class Notes extends Component {
 - The query will not be executed until a property is accessed. For example, accessing `loading` or `data` will trigger the query to be executed.
 - The second argument to `useQuery` should always be a function that returns an array. We can refer to this argument as `Args Thunk.`
 
-```ts:notes.ts
+```gts:notes.gts
+import Component from '@glimmer/component';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
@@ -78,7 +77,7 @@ export default class Notes extends Component {
     GET_NOTES
   ]);
 
-  static template = hbs`
+  <template>
     {{#if this.notes.loading}}
       Loading...
     {{else if this.notes.error}}
@@ -91,7 +90,7 @@ export default class Notes extends Component {
         </div>
       {{/each}}
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -139,8 +138,11 @@ export type GetNotesQueryVariables = {
 };
 ```
 
-```ts:notes.ts
+```gts:notes.gts
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
@@ -152,11 +154,12 @@ export default class Notes extends Component {
     { variables: { isArchived: this.isArchived } }
   ]);
 
-  toggleIsArchived = (): void => {
+  @action
+  toggleIsArchived(): void {
     this.isArchived = !this.isArchived;
-  };
+  }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.toggleIsArchived}}>
       {{#if this.isArchived}}
         Show not archived
@@ -177,7 +180,7 @@ export default class Notes extends Component {
         </div>
       {{/each}}
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -233,7 +236,8 @@ notes = useQuery(this, () => [GET_NOTES, { clientId: 'my-custom-client' }]);
 
 This is a handy property that allows us to inform our interface that we are loading data.
 
-```ts
+```gts
+import Component from '@glimmer/component';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
@@ -242,13 +246,13 @@ export default class Notes extends Component {
     GET_NOTES
   ]);
 
-  static template = hbs`
+  <template>
     {{#if this.notes.loading}}
       Loading...
     {{/if}}
 
-    // ...
-  `;
+    {{! ... }}
+  </template>
 }
 ```
 
@@ -256,7 +260,8 @@ export default class Notes extends Component {
 
 This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your query. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
 
-```ts
+```gts
+import Component from '@glimmer/component';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
@@ -266,13 +271,13 @@ export default class Notes extends Component {
     { errorPolicy: 'all' }
   ]);
 
-  static template = hbs`
+  <template>
     {{#if this.notes.error}}
       {{this.notes.error}}
     {{/if}}
 
-    // ...
-  `;
+    {{! ... }}
+  </template>
 }
 ```
 
@@ -283,7 +288,8 @@ For most cases, it's usually sufficient to check for the `loading` state, then t
 This property is a number indicating the current network state of the query's associated request.
 Similar to the error property, `networkStatus` should be used in conjunction with the `notifyOnNetworkStatusChange` option for detailed info about the network status.
 
-```ts
+```gts
+import Component from '@glimmer/component';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 import { NetworkStatus } from '@apollo/client/core';
@@ -294,17 +300,17 @@ export default class Notes extends Component {
     { notifyOnNetworkStatusChange: true }
   ]);
 
-  isRefetching(): boolean {
+  get isRefetching(): boolean {
     return this.notes.networkStatus === NetworkStatus.refetch;
   }
 
-  static template = hbs`
+  <template>
     {{#if this.isRefetching}}
       Refetching...
     {{/if}}
 
-    // ...
-  `;
+    {{! ... }}
+  </template>
 }
 ```
 
@@ -360,7 +366,8 @@ Deriving data is very simple due to how auto-tracking works. As result, you can 
 
 Let's say we want to have a count of notes that are displayed.
 
-```ts:notes.ts
+```gts:notes.gts
+import Component from '@glimmer/component';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
@@ -373,8 +380,8 @@ export default class Notes extends Component {
     return this.notes.data?.notes.length || 0;
   }
 
-  static template = hbs`
-    /// ...
+  <template>
+    {{! ... }}
     Displaying {{this.totalNotes}} notes
 
     {{#each this.notes.data.notes as |note|}}
@@ -383,7 +390,7 @@ export default class Notes extends Component {
         Description: {{note.description}}
       </div>
     {{/each}}
-  `;
+  </template>
 }
 ```
 
@@ -419,7 +426,9 @@ export default class NotesRoute extends Route {
 Below you can find a few helper functions available from Apollo Client's Query Object.
 You can access these directly from the Query Resource as shown below:
 
-```ts:notes.ts
+```gts:notes.gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
 
@@ -428,8 +437,8 @@ export default class Notes extends Component {
     GET_NOTES
   ]);
 
-  static template = hbs`
-    <button {{on "click" this.notes.refetch}}>Refech</button>
+  <template>
+    <button {{on "click" this.notes.refetch}}>Refetch</button>
 
     {{#each this.notes.data.notes as |note|}}
       <div>
@@ -437,7 +446,7 @@ export default class Notes extends Component {
         Description: {{note.description}}
       </div>
     {{/each}}
-  `;
+  </template>
 }
 ```
 
