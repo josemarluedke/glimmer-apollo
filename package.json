@@ -18,7 +18,6 @@
   },
   "workspaces": [
     "glimmer-apollo",
-    "test-app",
-    "site"
+    "test-app"
   ]
 }
