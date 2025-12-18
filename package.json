@@ -14,9 +14,8 @@
     "start": "yarn workspace glimmer-apollo ember start"
   },
   "resolutions": {
-    "ember-power-select": "^8.0.0",
-    "ember-basic-dropdown": "^8.0.0",
-    "ember-concurrency": "^4.0.0"
+    "@frontile/overlays": "^0.16.2",
+    "@frontile/core": "^0.16.2"
   },
   "devDependencies": {
     "@glimmerx/eslint-plugin": "^0.6.6",
