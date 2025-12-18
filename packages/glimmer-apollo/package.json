@@ -50,6 +50,7 @@
     "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/plugin-transform-typescript": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@babel/runtime": "^7.16.7",
     "@embroider/addon-dev": "^1.0.0",
     "graphql": "^16.3.0",

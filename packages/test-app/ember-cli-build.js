@@ -5,8 +5,8 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     'ember-cli-babel': {
-      enableTypeScriptTransform: true,
-    },
+      enableTypeScriptTransform: true
+    }
   });
 
   const { Webpack } = require('@embroider/webpack');
@@ -17,8 +17,8 @@ module.exports = function (defaults) {
     staticInvokables: true,
     skipBabel: [
       {
-        package: 'qunit',
-      },
-    ],
+        package: 'qunit'
+      }
+    ]
   });
 };

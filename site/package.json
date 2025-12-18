@@ -27,7 +27,6 @@
     "@frontile/core": "^0.13.0",
     "@frontile/overlays": "^0.13.0",
     "@glimmer/component": "^1.1.2",
-    "@glimmer/tracking": "^1.0.3 | ^2.0.0-beta.17",
     "@tailwindcss/typography": "^0.4.1",
     "autoprefixer": "^10.4.2",
     "broccoli-asset-rev": "^3.0.0",
@@ -63,7 +62,7 @@
     "webpack": "^5.67.0"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 14"
   },
   "ember": {
     "edition": "octane"
