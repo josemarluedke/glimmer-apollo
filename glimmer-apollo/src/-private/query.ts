@@ -95,7 +95,7 @@ export class QueryResource<
     });
 
     this._setObservable(
-      observable as ObservableQuery<TData, OperationVariables>,
+      observable as ObservableQuery<TData, TVariables>,
     );
 
     this.#subscription = observable.subscribe(

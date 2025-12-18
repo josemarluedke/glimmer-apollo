@@ -14,9 +14,9 @@ export default class ObservableResource<
   TVariables extends OperationVariables,
   Args extends TemplateArgs,
 > extends Resource<Args> {
-  private observable?: ObservableQuery<TData>;
+  private observable?: ObservableQuery<TData, TVariables>;
 
-  protected _setObservable(observable: ObservableQuery<TData>) {
+  protected _setObservable(observable: ObservableQuery<TData, TVariables>) {
     this.observable = observable;
   }
 
