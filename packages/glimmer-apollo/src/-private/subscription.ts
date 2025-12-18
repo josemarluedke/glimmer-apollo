@@ -1,8 +1,8 @@
+import { tracked } from '@glimmer/tracking';
 import { getClient } from './client';
 import {
   isDestroyed,
   isDestroying,
-  tracked,
   waitForPromise
 } from '../environment';
 import { Resource } from './resource';

@@ -1,9 +1,9 @@
 import { ApolloError } from '@apollo/client/core';
+import { tracked } from '@glimmer/tracking';
 
 import {
   isDestroyed,
   isDestroying,
-  tracked,
   waitForPromise
 } from '../environment';
 import { getClient } from './client';

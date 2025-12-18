@@ -1,10 +1,10 @@
 import { ApolloError, NetworkStatus } from '@apollo/client/core';
+import { tracked } from '@glimmer/tracking';
 import { equal } from '@wry/equality';
 
 import {
   isDestroyed,
   isDestroying,
-  tracked,
   waitForPromise
 } from '../environment';
 import { getClient } from './client';
