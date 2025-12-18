@@ -9,10 +9,10 @@ module('Integration | Components | Playground', function (hooks) {
   test('no waiters should be left behind when resource is teardown before resolving', async function (assert) {
     await render(<template><Playground /></template>);
 
-    click('[dates-test-id="toggle"]');
+    click('[data-test-id="toggle"]');
     await waitFor('[data-test-id="experiment"]', { timeout: 100 });
 
-    await click('[dates-test-id="toggle"]');
+    await click('[data-test-id="toggle"]');
     assert.ok(true);
   });
 });

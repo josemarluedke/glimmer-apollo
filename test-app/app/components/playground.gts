@@ -11,7 +11,7 @@ export default class Playground extends Component {
   };
 
   <template>
-    <button type="button" {{on "click" this.toggle}} dates-test-id="toggle">
+    <button type="button" {{on "click" this.toggle}} data-test-id="toggle">
       Toggle Experiment
     </button>
 

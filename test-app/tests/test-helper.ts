@@ -11,5 +11,5 @@ export async function start() {
   setup(QUnit.assert);
   await worker.start();
 
-  qunitStart({ loadTests: false });
+  qunitStart();
 }
