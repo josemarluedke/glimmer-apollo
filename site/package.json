@@ -83,6 +83,8 @@
     "./*": "./app/*"
   },
   "dependencies": {
-    "@frontile/overlays": "0.17.1"
+    "@fontsource/inter": "^5.2.8",
+    "@frontile/overlays": "0.17.1",
+    "ember-modifier": "^4.2.2"
   }
 }

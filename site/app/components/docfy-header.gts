@@ -1,83 +1,75 @@
 import Component from '@glimmer/component';
 import { LinkTo } from '@ember/routing';
+import DocfyThemeSwitcher from './docfy-theme-switcher';
 
 interface Signature {
   Args: {
-    name?: string;
+    indexRoute?: string;
     darkOnly?: boolean;
     githubUrl?: string;
+    disableThemeSwitcher?: boolean;
   };
   Blocks: {
     title: [];
-    left: [];
+    left: [linkClass: string, linkClassActive: string];
     right: [linkClass: string, linkClassActive: string];
   };
-  Element: HTMLElement;
+  Element: HTMLDivElement;
 }
 
+const linkClass = "transition pb-1.5 pt-1.5 border-b-2 border-transparent hover:border-pink-700 dark:hover:border-pink-500 outline-none focus-visible:ring hover:text-gray-800 dark:hover:text-gray-400";
+const linkClassActive = "border-pink-700 dark:border-pink-500";
+
 export default class DocfyHeader extends Component<Signature> {
-  get headerClass() {
-    const base = 'sticky top-0 z-50 flex items-center justify-between px-4 py-3 border-b';
-    if (this.args.darkOnly) {
-      // When darkOnly, use slate (blue-gray) colors directly
-      return `${base} bg-slate-800 text-slate-100 border-slate-700`;
-    }
-    return `${base} bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-700`;
-  }
-
-  get linkClass() {
-    if (this.args.darkOnly) {
-      return 'px-3 py-2 rounded text-slate-300 hover:bg-slate-700 hover:text-white';
-    }
-    return 'px-3 py-2 rounded text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white';
-  }
-
-  get linkClassActive() {
-    if (this.args.darkOnly) {
-      return 'text-pink-400';
-    }
-    return 'text-pink-600 dark:text-pink-400';
-  }
-
-  get iconClass() {
-    if (this.args.darkOnly) {
-      return 'text-slate-400 hover:text-white';
-    }
-    return 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white';
-  }
-
   <template>
-    <header
-      class={{this.headerClass}}
-      ...attributes
-    >
-      <div class="flex items-center space-x-4">
-        <LinkTo @route="index" class="flex items-center">
-          {{yield to="title"}}
-        </LinkTo>
-        {{yield to="left"}}
-      </div>
-
-      <div class="flex items-center space-x-4">
-        {{yield this.linkClass this.linkClassActive to="right"}}
-
-        {{#if @githubUrl}}
-          <a
-            href={{@githubUrl}}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={{this.iconClass}}
+    <div class="sticky top-0 z-10 {{if @darkOnly 'dark'}}">
+      <div
+        class="h-16 border-b border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 backdrop-blur
+          {{if @darkOnly 'dark:bg-opacity-90' 'bg-opacity-50 dark:bg-opacity-50'}}"
+        ...attributes
+      >
+        <div class="flex h-full px-4 mx-auto sm:px-6 max-w-screen-2xl">
+          <div class="flex items-center mr-4">
+            <LinkTo
+              @route={{if @indexRoute @indexRoute "index"}}
+              class="text-black dark:text-white text-lg font-bold outline-none focus-visible:ring"
+            >
+              {{yield to="title"}}
+            </LinkTo>
+          </div>
+          <div
+            class="flex items-center justify-between flex-grow px-2 md:px-6 text-gray-800 dark:text-gray-200"
           >
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-              />
-            </svg>
-          </a>
-        {{/if}}
+            <div class="flex items-center gap-4">
+              {{yield linkClass linkClassActive to="left"}}
+            </div>
+
+            <div class="flex items-center gap-4 sm:gap-6 ml-4">
+              {{yield linkClass linkClassActive to="right"}}
+
+              {{#if @githubUrl}}
+                <a
+                  href={{@githubUrl}}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="transition text-gray-800 dark:text-gray-200 outline-none focus-visible:ring hover:text-gray-800 dark:hover:text-gray-400"
+                >
+                  <svg viewBox="0 0 20 20" class="w-6 h-6 fill-current">
+                    <title>GitHub</title>
+                    <path
+                      d="M10 0a10 10 0 0 0-3.16 19.49c.5.1.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69a3.6 3.6 0 0 1 .1-2.64s.84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.37.2 2.4.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .26.18.58.69.48A10 10 0 0 0 10 0"
+                    ></path>
+                  </svg>
+                </a>
+              {{/if}}
+
+              {{#unless @disableThemeSwitcher}}
+                <DocfyThemeSwitcher class="sm:ml-6" />
+              {{/unless}}
+            </div>
+          </div>
+        </div>
       </div>
-    </header>
+    </div>
   </template>
 }

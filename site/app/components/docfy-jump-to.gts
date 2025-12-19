@@ -110,6 +110,7 @@ export default class DocfyJumpTo extends Component<Signature> {
             <input
               type="text"
               autocomplete="off"
+              autofocus
               placeholder="Search..."
               class="p-4 bg-slate-900 text-slate-100 placeholder-slate-500 w-full focus:outline-none border-b border-slate-700"
               value={{this.query}}

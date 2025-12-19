@@ -126,9 +126,15 @@ importers:
 
   site:
     dependencies:
+      '@fontsource/inter':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@frontile/overlays':
         specifier: 0.17.1
         version: 0.17.1(@babel/core@7.28.5)(@babel/runtime@7.28.4)(ember-source@6.9.0(@glimmer/component@2.0.0)(rsvp@4.8.5))(tailwindcss@4.1.18)(webpack@5.104.1)
+      ember-modifier:
+        specifier: ^4.2.2
+        version: 4.2.2(@babel/core@7.28.5)
     devDependencies:
       '@babel/core':
         specifier: ^7.28.5
@@ -1460,6 +1466,9 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@fontsource/inter@5.2.8':
+    resolution: {integrity: sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==}
 
   '@frontile/buttons@0.17.1':
     resolution: {integrity: sha512-Ir1t7HX3vlRPF6Iqib8W85yKBvIUpgo4D5NPcVLo5SchctKV2DlflHUjOeglChPCqlt4KTKtHg01Xh8G4uidhw==}
@@ -9452,6 +9461,8 @@ snapshots:
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@fontsource/inter@5.2.8': {}
 
   '@frontile/buttons@0.17.1(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@glint/template@1.5.2)(ember-source@6.9.0(@glimmer/component@2.0.0)(rsvp@4.8.5))(tailwindcss@4.1.18)(webpack@5.104.1)':
     dependencies:
