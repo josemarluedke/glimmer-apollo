@@ -11,7 +11,7 @@
     <GlimmerApolloLogo class="h-7" />
   </:title>
   <:left>
-    <DocfyJumpTo />
+    <DocfyJumpTo @darkOnly={{true}} />
   </:left>
 
   <:right as |linkClass linkClassActive|>
@@ -22,6 +22,7 @@
     >
       Docs
     </LinkTo>
+    <ThemeSwitcher class="text-slate-400" />
   </:right>
 </DocfyHeader>
 

@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm --filter test-app test:ember:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(npx msw:*)",
+      "Bash(pnpm exec msw:*)",
+      "Bash(pnpm exec ember:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm test:ember:*)",
+      "Bash(pnpm why:*)",
+      "Bash(pnpm install:*)",
+      "Bash(tee:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(pnpm --filter glimmer-apollo lint:fix:*)",
+      "Bash(pnpm --filter test-app lint:js:*)",
+      "Bash(find:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(pnpm update:*)",
+      "Bash(pnpm --filter site build:*)",
+      "Bash(git ls-remote:*)",
+      "Bash(ls:*)",
+      "Bash(node:*)",
+      "Bash(node -e:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:frontile.dev)",
+      "Bash(pnpm --filter site add:*)",
+      "WebFetch(domain:glimmer-apollo.com)",
+      "Bash(pnpm --filter site start)"
+    ]
+  }
+}
