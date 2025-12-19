@@ -34,6 +34,16 @@ export default [
     prettier,
     {
       files: ['**/*.js'],
+      ignores: [
+        'config/**/*.js',
+        'app/config/**/*.js',
+        'testem.js',
+        'testem*.js',
+        'ember-cli-build.js',
+        '.prettierrc.js',
+        '.stylelintrc.js',
+        '.template-lintrc.js',
+      ],
       languageOptions: {
         parser: babelParser,
         parserOptions: parserOptions.esm.js,
@@ -143,16 +153,22 @@ export default [
     },
   ),
   /**
-   * Settings
+   * Global ignores - must be in their own object
    */
   {
     ignores: [
       'dist/',
       'node_modules/',
       'coverage/',
+      'public/',
       '!**/.*',
       'vite.config.mjs.*',
     ],
+  },
+  /**
+   * Linter options
+   */
+  {
     linterOptions: {
       reportUnusedDisableDirectives: 'error',
     },

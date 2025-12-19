@@ -1,8 +1,12 @@
 import { getOwner } from '@ember/owner';
-import { invokeHelper, getValue, setHelperManager } from '../environment.ts';
+import {
+  invokeHelper,
+  getValue,
+  setHelperManager,
+  createCache,
+} from '../environment.ts';
 import { ResourceManagerFactory, Resource } from './resource.ts';
 import type { TemplateArgs } from './types';
-import { createCache } from '@glimmer/tracking/primitives/cache';
 type Cache<T> = ReturnType<typeof createCache<T>>;
 
 type Args = TemplateArgs | TemplateArgs['positional'] | TemplateArgs['named'];

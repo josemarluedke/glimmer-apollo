@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { useQuery, useMutation, gql } from 'glimmer-apollo';
-import { on } from '@ember/modifier/on';
+import { on } from '@ember/modifier';
 import type {
   UserInfoQuery,
   UserInfoQueryVariables,

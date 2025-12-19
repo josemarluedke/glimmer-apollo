@@ -18,8 +18,10 @@ import { equal } from '@wry/equality';
 import { getFastboot, createPromise, settled } from './utils.ts';
 import type { TemplateArgs } from './types';
 
-export interface SubscriptionOptions<TData, TVariables>
-  extends Omit<ApolloSubscriptionOptions<TVariables>, 'query'> {
+export interface SubscriptionOptions<TData, TVariables> extends Omit<
+  ApolloSubscriptionOptions<TVariables>,
+  'query'
+> {
   ssr?: boolean;
   clientId?: string;
   onData?: (data: TData | undefined) => void;

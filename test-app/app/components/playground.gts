@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { on } from '@ember/modifier/on';
+import { on } from '@ember/modifier';
 import Experiment from './experiment';
 
 export default class Playground extends Component {
@@ -11,7 +11,7 @@ export default class Playground extends Component {
   };
 
   <template>
-    <button type="button" {{on "click" this.toggle}} dates-test-id="toggle">
+    <button type="button" {{on "click" this.toggle}} data-test-id="toggle">
       Toggle Experiment
     </button>
 

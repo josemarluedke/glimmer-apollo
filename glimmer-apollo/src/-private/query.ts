@@ -21,8 +21,10 @@ import type {
 } from '@apollo/client/core';
 import type { TemplateArgs } from './types';
 
-export interface QueryOptions<TData, TVariables extends OperationVariables>
-  extends Omit<WatchQueryOptions<TVariables>, 'query'> {
+export interface QueryOptions<
+  TData,
+  TVariables extends OperationVariables,
+> extends Omit<WatchQueryOptions<TVariables>, 'query'> {
   skip?: boolean;
   ssr?: boolean;
   clientId?: string;
@@ -93,7 +95,7 @@ export class QueryResource<
     });
 
     this._setObservable(
-      observable as ObservableQuery<TData, OperationVariables>,
+      observable as ObservableQuery<TData, TVariables>,
     );
 
     this.#subscription = observable.subscribe(

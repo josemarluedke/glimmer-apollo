@@ -21,8 +21,10 @@ import type { TemplateArgs } from './types';
 
 type Maybe<T> = T | undefined | null;
 
-export interface MutationOptions<TData, TVariables>
-  extends Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> {
+export interface MutationOptions<TData, TVariables> extends Omit<
+  ApolloMutationOptions<TData, TVariables>,
+  'mutation'
+> {
   clientId?: string;
   onComplete?: (data: Maybe<MaybeMasked<TData>>) => void;
   onError?: (error: ApolloError) => void;
