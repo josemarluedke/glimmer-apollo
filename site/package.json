@@ -59,6 +59,7 @@
     "postcss-import": "^16.1.1",
     "postcss-nested": "^7.0.2",
     "prettier": "^3.7.4",
+    "prettier-plugin-ember-template-tag": "^2.1.2",
     "qunit": "^2.17.2",
     "qunit-dom": "^3.5.0",
     "remark-autolink-headings": "^8.0.0",

@@ -23,8 +23,9 @@ interface Signature {
 
 export default class DocfySidebarNavContent extends Component<Signature> {
   <template>
-    <div ...attributes>
-      <ul class="space-y-2" {{on "click" @onSidebarClick}}>
+    {{! template-lint-disable no-invalid-interactive }}
+    <div {{on "click" @onSidebarClick}} ...attributes>
+      <ul class="space-y-2">
         {{#each @node.pages as |page|}}
           <li>
             <DocfyLink

@@ -16,7 +16,7 @@ import GlimmerApolloLogo from '../components/glimmer-apollo-logo';
       <VisuallyHidden>Glimmer Apollo</VisuallyHidden>
       <GlimmerApolloLogo class="h-7" />
     </:title>
-    <:left as |linkClass linkClassActive|>
+    <:left>
       <DocfyJumpTo />
     </:left>
 

@@ -256,6 +256,9 @@ importers:
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
+      prettier-plugin-ember-template-tag:
+        specifier: ^2.1.2
+        version: 2.1.2(prettier@3.7.4)
       qunit:
         specifier: ^2.17.2
         version: 2.24.3
