@@ -5,35 +5,30 @@
   <a href="https://github.com/josemarluedke/glimmer-apollo/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license"></a>
 </p>
 
-
-Glimmer Apollo: Ember and Glimmer integration for Apollo Client.
+Glimmer Apollo: Ember integration for Apollo Client.
 
 ## Documentation
 
 Visit [glimmer-apollo.com](https://glimmer-apollo.com/) to read the docs.
 
-
 ## Compatibility
 
 - Apollo Client v3.0 or above
-- GlimmerX v0.6 or above
+- Ember.js v3.27 or above
+- Ember CLI v2.13 or above
+- Embroider or ember-auto-import v2
 - Node.js v12 or above
 - FastBoot 1.0+
 
-## Ember Requirements
-
-- Embroider or ember-auto-import v2.
-- Ember.js v3.27 or above
-- Ember CLI v2.13 or above
-
 ## API
-
 
 ### useQuery(ctx, args)
 
-```js
-import Component, { hbs, tracked } from '@glimmerx/component';
-import { on, action } from '@glimmerx/modifier';
+```gts
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { on } from '@ember/modifier';
+import { action } from '@ember/object';
 import { useQuery, gql } from 'glimmer-apollo';
 import Todo from './todo';
 
@@ -58,7 +53,7 @@ export default class Todos extends Component {
     this.isDone = !this.isDone;
   }
 
-  static template = hbs`
+  <template>
     <button {{on "click" this.toggleDone}}>Toggle completed todos</button>
 
     {{#if this.todos.loading}}
@@ -68,18 +63,27 @@ export default class Todos extends Component {
     {{#each this.todos.data as |todo|}}
       <Todo @todo={{todo}} />
     {{/each}}
-  `;
+  </template>
 }
 ```
 
 ### useMutation(ctx, args)
 
-```js
-import Component, { hbs } from '@glimmerx/component';
-import { on } from '@glimmerx/modifier';
+```gts
+import Component from '@glimmer/component';
+import { on } from '@ember/modifier';
 import { useMutation, gql } from 'glimmer-apollo';
 
-export default class Todo extends Component {
+interface Signature {
+  Args: {
+    todo: {
+      id: string;
+      description: string;
+    };
+  };
+}
+
+export default class Todo extends Component<Signature> {
   deleteTodo = useMutation(this, () => [
     gql`
       mutation($id: ID!) {
@@ -91,7 +95,7 @@ export default class Todo extends Component {
     { variables: { id: this.args.todo.id } }
   ]);
 
-  static template = hbs`
+  <template>
     <div>
       {{@todo.description}}
       <button
@@ -105,19 +109,30 @@ export default class Todo extends Component {
         {{/if}}
       </button>
     </div>
-  `;
+  </template>
 }
 ```
 
 ### useSubscription(ctx, args)
 
-```js
-import Component, { hbs, tracked } from '@glimmerx/component';
-import { on } from '@glimmerx/modifier';
+```gts
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { useSubscription, gql } from 'glimmer-apollo';
 
-export default class Messages extends Component {
-  @tracked receivedMessages = [];
+interface Signature {
+  Args: {
+    channel: string;
+  };
+}
+
+interface Message {
+  id: string;
+  message: string;
+}
+
+export default class Messages extends Component<Signature> {
+  @tracked receivedMessages: Message[] = [];
 
   messageAdded = useSubscription(this, () => [
     gql`
@@ -139,7 +154,7 @@ export default class Messages extends Component {
     }
   ]);
 
-  static template = hbs`
+  <template>
     <div>
       {{#if this.messageAdded.loading}}
         Connecting...
@@ -149,7 +164,7 @@ export default class Messages extends Component {
         {{item.message}}
       {{/each}}
     </div>
-  `;
+  </template>
 }
 ```
 
@@ -157,18 +172,27 @@ export default class Messages extends Component {
 
 Where `ctx` is an object with owner.
 
-```js
+```gts
+import Component from '@glimmer/component';
 import { setClient } from 'glimmer-apollo';
-import { ApolloClient } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 
-class App extends Component {
-  constructor() {
-    super(...arguments);
+export default class App extends Component {
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
 
-    setClient(this, new ApolloClient({ ... });
+    setClient(
+      this,
+      new ApolloClient({
+        uri: 'https://api.example.com/graphql',
+        cache: new InMemoryCache()
+      })
+    );
   }
 
-  // ...
+  <template>
+    {{! Your app content }}
+  </template>
 }
 ```
 
@@ -176,17 +200,23 @@ class App extends Component {
 
 Where `ctx` is an object with owner.
 
-```js
+```gts
+import Component from '@glimmer/component';
 import { getClient } from 'glimmer-apollo';
+import type { ApolloClient } from '@apollo/client/core';
 
-class MyComponent extends Component {
-  constructor() {
-    super(...arguments);
+export default class MyComponent extends Component {
+  client: ApolloClient<unknown>;
 
-    const client = getClient(this);
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
+    this.client = getClient(this);
   }
 
-  // ...
+  <template>
+    {{! Your component content }}
+  </template>
 }
 ```
 

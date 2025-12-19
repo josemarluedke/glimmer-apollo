@@ -143,7 +143,8 @@ export default class LatestMessage extends Component {
 - The second argument to `useSubscription` should always be a function that returns an array.
 - The subscription will not be executed until any property of the resource is accessed.
 
-```ts:latest-message.ts
+```gts:latest-message.gts
+import Component from '@glimmer/component';
 import { useSubscription } from 'glimmer-apollo';
 import {
   ON_MESSAGED_ADDED,
@@ -167,7 +168,7 @@ export default class LatestMessage extends Component {
     ]
   );
 
-  static template = hbs`
+  <template>
     {{#if this.latestMessage.loading}}
       Connecting..
     {{else if this.latestMessage.error}}
@@ -177,7 +178,7 @@ export default class LatestMessage extends Component {
         New Message: {{this.latestMessage.data.messageAdded.message}}
       </div>
     {{/if}}
-  `;
+  </template>
 }
 ```
 
@@ -240,7 +241,8 @@ latestMessages = useSubscription(this, () => [ON_MESSAGED_ADDED, { clientId: 'my
 
 This is a handy property that allows us to inform our interface that we are loading data.
 
-```ts
+```gts
+import Component from '@glimmer/component';
 import { useSubscription } from 'glimmer-apollo';
 import {
   ON_MESSAGED_ADDED,
@@ -262,13 +264,13 @@ export default class LatestMessage extends Component {
     ]
   );
 
-  static template = hbs`
+  <template>
     {{#if this.latestMessage.loading}}
       Loading..
     {{/if}}
 
-    // ...
-  `;
+    {{! ... }}
+  </template>
 }
 ```
 
@@ -276,7 +278,8 @@ export default class LatestMessage extends Component {
 
 This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your query. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
 
-```ts
+```gts
+import Component from '@glimmer/component';
 import { useSubscription } from 'glimmer-apollo';
 import {
   ON_MESSAGED_ADDED,
@@ -299,15 +302,15 @@ export default class LatestMessage extends Component {
     ]
   );
 
-  static template = hbs`
+  <template>
     {{#if this.latestMessage.loading}}
       Connecting..
     {{else if this.latestMessage.error}}
       Error!: {{this.latestMessage.error.message}}
     {{/if}}
 
-    // ...
-  `;
+    {{! ... }}
+  </template>
 }
 ```
 
