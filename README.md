@@ -24,7 +24,7 @@ Visit [glimmer-apollo.com](https://glimmer-apollo.com/) to read the docs.
 
 ### useQuery(ctx, args)
 
-```gts
+```glimmer-ts
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
@@ -69,7 +69,7 @@ export default class Todos extends Component {
 
 ### useMutation(ctx, args)
 
-```gts
+```glimmer-ts
 import Component from '@glimmer/component';
 import { on } from '@ember/modifier';
 import { useMutation, gql } from 'glimmer-apollo';
@@ -115,7 +115,7 @@ export default class Todo extends Component<Signature> {
 
 ### useSubscription(ctx, args)
 
-```gts
+```glimmer-ts
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { useSubscription, gql } from 'glimmer-apollo';
@@ -172,7 +172,7 @@ export default class Messages extends Component<Signature> {
 
 Where `ctx` is an object with owner.
 
-```gts
+```glimmer-ts
 import Component from '@glimmer/component';
 import { setClient } from 'glimmer-apollo';
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
@@ -200,7 +200,7 @@ export default class App extends Component {
 
 Where `ctx` is an object with owner.
 
-```gts
+```glimmer-ts
 import Component from '@glimmer/component';
 import { getClient } from 'glimmer-apollo';
 import type { ApolloClient } from '@apollo/client/core';

@@ -1,0 +1,91 @@
+{
+  "name": "site",
+  "version": "0.6.5",
+  "private": true,
+  "description": "Small description for site goes here",
+  "repository": "",
+  "license": "MIT",
+  "author": "",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "vite build",
+    "lint:hbs": "ember-template-lint .",
+    "start": "vite",
+    "test": "vite build --mode test && ember test --path dist",
+    "test:types": "echo 'no type tests'",
+    "test:ember": "vite build --mode test && ember test --path dist"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/plugin-transform-runtime": "^7.28.5",
+    "@babel/plugin-transform-typescript": "^7.28.5",
+    "@babel/runtime": "^7.28.4",
+    "@docfy/ember": "^0.11.0",
+    "@docfy/ember-vite": "^0.11.0",
+    "@docfy/plugin-with-prose": "^0.11.0",
+    "@ember/optional-features": "^2.0.0",
+    "@ember/test-helpers": "^5.4.1",
+    "@embroider/compat": "4.1.11",
+    "@embroider/config-meta-loader": "1.0.0",
+    "@embroider/core": "4.4.1",
+    "@embroider/vite": "1.4.4",
+    "@frontile/theme": "^0.17.1",
+    "@glimmer/component": "^2.0.0",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@shikijs/langs": "^3.20.0",
+    "@shikijs/rehype": "^3.20.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.18",
+    "autoprefixer": "^10.4.2",
+    "babel-plugin-ember-template-compilation": "^3.0.1",
+    "decorator-transforms": "^2.2.2",
+    "ember-auto-import": "^2.4.0",
+    "ember-cli": "~6.9.1",
+    "ember-cli-app-version": "^7.0.0",
+    "ember-cli-babel": "^8.2.0",
+    "ember-cli-dependency-checker": "^3.2.0",
+    "ember-cli-htmlbars": "^7.0.0",
+    "ember-load-initializers": "^3.0.1",
+    "ember-page-title": "^9.0.3",
+    "ember-qunit": "^9.0.4",
+    "ember-resolver": "^13.1.1",
+    "ember-source": "~6.9.0",
+    "ember-template-lint": "^7.9.3",
+    "frontile": "^0.17.1",
+    "loader.js": "^4.7.0",
+    "postcss-import": "^16.1.1",
+    "postcss-nested": "^7.0.2",
+    "prettier": "^3.7.4",
+    "prettier-plugin-ember-template-tag": "^2.1.2",
+    "qunit": "^2.17.2",
+    "qunit-dom": "^3.5.0",
+    "remark-autolink-headings": "^8.0.0",
+    "remark-code-titles": "^0.1.2",
+    "shiki": "^3.20.0",
+    "tailwindcss": "^4.1.18",
+    "unist-util-visit": "^5.0.0",
+    "vite": "^7.3.0"
+  },
+  "engines": {
+    "node": ">= 18"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "ember-addon": {
+    "type": "app",
+    "version": 2
+  },
+  "exports": {
+    "./tests/*": "./tests/*",
+    "./*": "./app/*"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@frontile/overlays": "0.17.1",
+    "ember-modifier": "^4.2.2"
+  }
+}

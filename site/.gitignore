@@ -1,0 +1,11 @@
+# Build output
+/dist/
+
+# Temporary files
+/tmp/
+
+# Generated templates (recreated at build time)
+/app/templates/docs/
+
+# Generated docfy files
+/public/docfy-urls.json
