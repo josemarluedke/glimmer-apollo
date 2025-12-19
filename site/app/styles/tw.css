@@ -11,6 +11,19 @@
 @theme {
   --font-family-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --color-gray-1000: #12161f;
+
+  /* Primary color (pink) */
+  --color-primary-50: #fdf2f8;
+  --color-primary-100: #fce7f3;
+  --color-primary-200: #fbcfe8;
+  --color-primary-300: #f9a8d4;
+  --color-primary-400: #f472b6;
+  --color-primary-500: #ec4899;
+  --color-primary-600: #db2777;
+  --color-primary-700: #be185d;
+  --color-primary-800: #9d174d;
+  --color-primary-900: #831843;
+  --color-primary-950: #500724;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -249,16 +262,16 @@ html, body {
   > p a,
   > ul li a,
   > ol li a {
-    @apply text-green-700;
+    @apply text-primary-700;
 
     &:hover {
-      @apply text-green-800;
+      @apply text-primary-800;
     }
     strong {
-      @apply text-green-700;
+      @apply text-primary-700;
     }
     code {
-      @apply text-green-700;
+      @apply text-primary-700;
     }
   }
 
@@ -279,7 +292,7 @@ html, body {
   > h4 > code,
   > h5 > code,
   > h6 > code {
-    @apply bg-yellow-200/50;
+    @apply bg-gray-100 text-gray-900;
   }
 
   > pre,
@@ -343,16 +356,16 @@ html, body {
     > p a,
     > ul li a,
     > ol li a {
-      @apply text-green-500;
+      @apply text-primary-500;
 
       &:hover {
-        @apply text-green-600;
+        @apply text-primary-600;
       }
       strong {
-        @apply text-green-500;
+        @apply text-primary-500;
       }
       code {
-        @apply text-green-500;
+        @apply text-primary-500;
       }
     }
 
@@ -373,8 +386,7 @@ html, body {
     > h4 > code,
     > h5 > code,
     > h6 > code {
-      @apply bg-gray-1000;
-      @apply text-green-500;
+      @apply bg-gray-800 text-gray-200;
     }
 
     > pre,
@@ -422,216 +434,6 @@ html, body {
   }
 }
 
-/* ==========================================================================
-   Highlight.js Syntax Highlighting - GitHub Dark Theme
-   ========================================================================== */
-
-.hljs {
-  color: #c9d1d9;
-}
-
-.hljs-doctag,
-.hljs-keyword,
-.hljs-meta .hljs-keyword,
-.hljs-template-tag,
-.hljs-template-variable,
-.hljs-type,
-.hljs-variable.language_ {
-  color: #ff7b72;
-}
-
-.hljs-title,
-.hljs-title.class_,
-.hljs-title.class_.inherited__,
-.hljs-title.function_ {
-  color: #d2a8ff;
-}
-
-.hljs-attr,
-.hljs-attribute,
-.hljs-literal,
-.hljs-meta,
-.hljs-number,
-.hljs-operator,
-.hljs-variable,
-.hljs-selector-attr,
-.hljs-selector-class,
-.hljs-selector-id {
-  color: #79c0ff;
-}
-
-.hljs-regexp,
-.hljs-string,
-.hljs-meta .hljs-string {
-  color: #a5d6ff;
-}
-
-.hljs-built_in,
-.hljs-symbol {
-  color: #ffa657;
-}
-
-.hljs-comment,
-.hljs-code,
-.hljs-formula {
-  color: #8b949e;
-}
-
-.hljs-name,
-.hljs-quote,
-.hljs-selector-tag,
-.hljs-selector-pseudo {
-  color: #7ee787;
-}
-
-.hljs-subst {
-  color: #c9d1d9;
-}
-
-.hljs-section {
-  color: #1f6feb;
-  font-weight: bold;
-}
-
-.hljs-bullet {
-  color: #f2cc60;
-}
-
-.hljs-emphasis {
-  color: #c9d1d9;
-  font-style: italic;
-}
-
-.hljs-strong {
-  color: #c9d1d9;
-  font-weight: bold;
-}
-
-.hljs-addition {
-  color: #aff5b4;
-  background-color: #033a16;
-}
-
-.hljs-deletion {
-  color: #ffdcd7;
-  background-color: #67060c;
-}
-
-.hljs-char.escape_,
-.hljs-link,
-.hljs-params,
-.hljs-property,
-.hljs-punctuation,
-.hljs-tag {
-  /* purposely ignored */
-}
-
-.prose code.code-transparent {
-  background-color: transparent;
-  padding: 0;
-}
-
-.hljs-light-theme {
-  .hljs {
-    color: #24292e;
-  }
-
-  .hljs-doctag,
-  .hljs-keyword,
-  .hljs-meta .hljs-keyword,
-  .hljs-template-tag,
-  .hljs-template-variable,
-  .hljs-type,
-  .hljs-variable.language_ {
-    color: #d73a49;
-  }
-
-  .hljs-title,
-  .hljs-title.class_,
-  .hljs-title.class_.inherited__,
-  .hljs-title.function_ {
-    color: #6f42c1;
-  }
-
-  .hljs-attr,
-  .hljs-attribute,
-  .hljs-literal,
-  .hljs-meta,
-  .hljs-number,
-  .hljs-operator,
-  .hljs-variable,
-  .hljs-selector-attr,
-  .hljs-selector-class,
-  .hljs-selector-id {
-    color: #005cc5;
-  }
-
-  .hljs-regexp,
-  .hljs-string,
-  .hljs-meta .hljs-string {
-    color: #032f62;
-  }
-
-  .hljs-built_in,
-  .hljs-symbol {
-    color: #e36209;
-  }
-
-  .hljs-comment,
-  .hljs-code,
-  .hljs-formula {
-    color: #6a737d;
-  }
-
-  .hljs-name,
-  .hljs-quote,
-  .hljs-selector-tag,
-  .hljs-selector-pseudo {
-    color: #22863a;
-  }
-
-  .hljs-subst {
-    color: #24292e;
-  }
-
-  .hljs-section {
-    color: #005cc5;
-    font-weight: bold;
-  }
-
-  .hljs-bullet {
-    color: #735c0f;
-  }
-
-  .hljs-emphasis {
-    color: #24292e;
-    font-style: italic;
-  }
-
-  .hljs-strong {
-    color: #24292e;
-    font-weight: bold;
-  }
-
-  .hljs-addition {
-    color: #22863a;
-    background-color: #f0fff4;
-  }
-
-  .hljs-deletion {
-    color: #b31d28;
-    background-color: #ffeef0;
-  }
-
-  .hljs-char.escape_,
-  .hljs-link,
-  .hljs-params,
-  .hljs-property,
-  .hljs-punctuation,
-  .hljs-tag {
-    /* purposely ignored */
-  }
-}
 
 /* ==========================================================================
    Docfy Demo Styles
@@ -655,7 +457,7 @@ html, body {
 
 .docfy-demo__description__header__title {
   @apply mb-4 text-xl font-semibold leading-tight;
-  @apply text-green-700;
+  @apply text-primary-700;
 }
 
 .docfy-demo__description__header__edit-url {
@@ -663,7 +465,7 @@ html, body {
 }
 
 .docfy-demo__description__header__edit-url:hover {
-  @apply text-green-600;
+  @apply text-primary-600;
 }
 
 .docfy-demo__snippets__tabs {
@@ -676,7 +478,7 @@ html, body {
 
 .docfy-demo__snippets__tabs__button--active,
 .docfy-demo__snippets__tabs__button:hover {
-  @apply border-green-700;
+  @apply border-primary-700;
 }
 
 .docfy-demo__snippet {
@@ -706,7 +508,7 @@ html, body {
   }
 
   .docfy-demo__description__header__title {
-    @apply text-green-500;
+    @apply text-primary-500;
   }
 }
 
