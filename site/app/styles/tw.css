@@ -79,28 +79,27 @@
     @apply font-semibold;
   }
 
-  > pre,
-  > ul li pre,
-  > ol li pre {
-    @apply flex;
-    @apply p-0;
-    @apply text-sm leading-normal;
+  pre {
+    @apply text-slate-200;
+    @apply text-sm;
+    @apply leading-relaxed;
+    @apply my-6;
+    @apply rounded-md;
+    @apply py-3 px-4;
     @apply font-mono;
     @apply font-normal;
     @apply subpixel-antialiased;
+    @apply overflow-x-auto;
     @apply -mx-4;
 
     @media (min-width: 1024px) {
       @apply mx-0;
-      @apply rounded-md;
     }
   }
 
-  > pre code,
-  > ul li pre code,
-  > ol li pre code {
-    @apply overflow-x-auto;
-    @apply p-4;
+  pre code {
+    @apply p-0;
+    @apply bg-transparent;
   }
 
   > blockquote,
@@ -704,9 +703,10 @@
    ========================================================================== */
 
 .remark-code-title {
-  @apply py-2 px-4 bg-gray-900 border-b border-gray-800 text-white rounded-t-lg mt-5 text-sm;
+  @apply py-2 px-4 bg-slate-900 border-b border-slate-700 text-slate-300 rounded-t-md mt-6 text-sm font-medium;
 }
 
-.remark-code-title + .prose pre:first-child {
-  @apply rounded-t-none;
+.remark-code-title + pre {
+  @apply mt-0 rounded-t-none;
 }
+

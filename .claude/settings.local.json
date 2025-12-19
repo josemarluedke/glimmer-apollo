@@ -29,7 +29,8 @@
       "WebFetch(domain:frontile.dev)",
       "Bash(pnpm --filter site add:*)",
       "WebFetch(domain:glimmer-apollo.com)",
-      "Bash(pnpm --filter site start)"
+      "Bash(pnpm --filter site start)",
+      "WebFetch(domain:shiki.style)"
     ]
   }
 }
