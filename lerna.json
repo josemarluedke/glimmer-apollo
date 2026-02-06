@@ -1,6 +1,6 @@
 {
   "packages": [
-    "glimmer-apollow",
+    "glimmer-apollo",
     "test-app",
     "site"
   ],
