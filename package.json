@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "eslint-config": "link:@underline/eslint-config",
+    "@underline/eslint-config": "^0.16.0",
     "lerna": "^9.0.3",
     "prettier": "^3.7.4",
     "prettier-plugin-ember-template-tag": "^2.1.2"
