@@ -6,32 +6,32 @@ import {
   waitForPromise,
 } from '../environment.ts';
 import { Resource } from './resource.ts';
-import { ApolloError } from '@apollo/client/core';
 import type {
   DocumentNode,
+  ErrorLike,
+  MaybeMasked,
   OperationVariables,
-  FetchResult,
   SubscriptionOptions as ApolloSubscriptionOptions,
-  ObservableSubscription,
-} from '@apollo/client/core';
+} from '@apollo/client';
+import type { Subscription } from 'rxjs';
 import { equal } from '@wry/equality';
 import { getFastboot, createPromise, settled } from './utils.ts';
 import type { TemplateArgs } from './types';
 
-export interface SubscriptionOptions<TData, TVariables> extends Omit<
-  ApolloSubscriptionOptions<TVariables>,
-  'query'
-> {
+export type SubscriptionOptions<
+  TData,
+  TVariables extends OperationVariables,
+> = Omit<ApolloSubscriptionOptions<TVariables>, 'query'> & {
   ssr?: boolean;
   clientId?: string;
-  onData?: (data: TData | undefined) => void;
-  onError?: (error: ApolloError) => void;
+  onData?: (data: MaybeMasked<TData> | undefined) => void;
+  onError?: (error: ErrorLike) => void;
   onComplete?: () => void;
-}
+};
 
 export type SubscriptionPositionalArgs<
   TData,
-  TVariables = OperationVariables,
+  TVariables extends OperationVariables = OperationVariables,
 > = [DocumentNode, SubscriptionOptions<TData, TVariables>?];
 
 export class SubscriptionResource<
@@ -41,11 +41,11 @@ export class SubscriptionResource<
   TemplateArgs<SubscriptionPositionalArgs<TData, TVariables>>
 > {
   @tracked loading = true;
-  @tracked error?: ApolloError;
-  @tracked data: TData | undefined;
+  @tracked error?: ErrorLike;
+  @tracked data: MaybeMasked<TData> | undefined;
   @tracked promise!: Promise<void>;
 
-  #subscription?: ObservableSubscription;
+  #subscription?: Subscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
   /** @internal */
@@ -63,10 +63,10 @@ export class SubscriptionResource<
 
     let [promise, firstResolve, firstReject] = createPromise(); // eslint-disable-line prefer-const
     this.promise = promise;
-    const observable = client.subscribe({
+    const observable = client.subscribe<TData, TVariables>({
       query,
-      ...(options || {}),
-    });
+      ...options,
+    } as ApolloSubscriptionOptions<TVariables, TData>);
 
     this.#subscription = observable.subscribe({
       next: (result) => {
@@ -79,7 +79,7 @@ export class SubscriptionResource<
           firstResolve = undefined;
         }
       },
-      error: (error: ApolloError) => {
+      error: (error: unknown) => {
         if (isDestroyed(this) || isDestroying(this)) {
           return;
         }
@@ -129,7 +129,15 @@ export class SubscriptionResource<
     return settled(this.promise);
   }
 
-  #onNextResult(result: FetchResult<TData>): void {
+  #onNextResult(result: {
+    data?: MaybeMasked<TData>;
+    error?: ErrorLike;
+  }): void {
+    if (result.error) {
+      this.#onError(result.error);
+      return;
+    }
+
     this.loading = false;
     this.error = undefined;
 
@@ -147,14 +155,10 @@ export class SubscriptionResource<
     }
   }
 
-  #onError(error: ApolloError): void {
-    if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors')) {
-      error = new ApolloError({ networkError: error });
-    }
-
+  #onError(error: unknown): void {
     this.loading = false;
     this.data = undefined;
-    this.error = error;
+    this.error = error instanceof Error ? error : new Error(String(error));
 
     const [, options] = this.args.positional;
     const { onError } = options || {};

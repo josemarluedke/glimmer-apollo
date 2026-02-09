@@ -7,11 +7,11 @@ import { setOwner } from '@ember/owner';
 import type Owner from '@ember/owner';
 import {
   ApolloClient,
-  ApolloError,
   InMemoryCache,
+  type ErrorLike,
   type WatchQueryFetchPolicy,
-  createHttpLink,
-} from '@apollo/client/core';
+  HttpLink,
+} from '@apollo/client';
 import {
   type UserInfoQuery,
   type UserInfoQueryVariables,
@@ -33,7 +33,7 @@ module('useQuery', function (hooks) {
   let ctx = {};
   const owner: Owner = {} as Owner;
 
-  const link = createHttpLink({
+  const link = new HttpLink({
     uri: '/graphql',
   });
 
@@ -168,7 +168,7 @@ module('useQuery', function (hooks) {
   });
 
   test('it calls onError', async function (assert) {
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ErrorLike;
     const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
       USER_INFO,
       {
@@ -189,7 +189,7 @@ module('useQuery', function (hooks) {
 
   test('it returns error with data', async function (assert) {
     let onCompleteCalled: unknown;
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ErrorLike;
     const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
       USER_INFO,
       {
@@ -264,7 +264,7 @@ module('useQuery', function (hooks) {
     const defaultClient = getClient(ctx);
     const customClient = new ApolloClient({
       cache: new InMemoryCache(),
-      link: createHttpLink({
+      link: new HttpLink({
         uri: '/graphql',
       }),
     });
@@ -412,7 +412,26 @@ module('useQuery', function (hooks) {
     });
   });
 
-  test('it refetches the query when skip is true', async function (assert) {
+  test('promise resolves on first emission', async function (assert) {
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1-with-delay' },
+      },
+    ]);
+
+    assert.equal(query.loading, true, 'loading should be true initially');
+
+    await query.promise;
+    assert.equal(
+      query.loading,
+      false,
+      'loading should be false after promise resolves'
+    );
+    assert.ok(query.data?.user, 'data should be present');
+  });
+
+  test('refetch() should work even when skip is true.', async function (assert) {
     const sandbox = sinon.createSandbox();
 
     const requestSpy = sandbox.fake(link.request);

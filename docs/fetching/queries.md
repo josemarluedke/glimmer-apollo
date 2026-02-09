@@ -258,7 +258,7 @@ export default class Notes extends Component {
 
 ### `error`
 
-This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your query. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
+This property that can be `undefined` or an `ErrorLike` object, holds the information about any errors that occurred while executing your query. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
 
 ```gts
 import Component from '@glimmer/component';
@@ -292,7 +292,7 @@ Similar to the error property, `networkStatus` should be used in conjunction wit
 import Component from '@glimmer/component';
 import { useQuery } from 'glimmer-apollo';
 import { GET_NOTES, GetNotesQuery, GetNotesQueryVariables } from './queries';
-import { NetworkStatus } from '@apollo/client/core';
+import { NetworkStatus } from '@apollo/client';
 
 export default class Notes extends Component {
   notes = useQuery<GetNotesQuery, GetNotesQueryVariables>(this, () => [

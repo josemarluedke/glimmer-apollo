@@ -5,7 +5,7 @@ import {
   type SubscriptionPositionalArgs,
   SubscriptionResource,
 } from './subscription.ts';
-import type { OperationVariables } from '@apollo/client/core';
+import type { OperationVariables } from '@apollo/client';
 
 export function useQuery<
   TData = unknown,

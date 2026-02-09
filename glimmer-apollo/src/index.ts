@@ -4,7 +4,7 @@ export {
   clearClient,
   clearClients,
 } from './-private/client.ts';
-export { gql } from '@apollo/client/core';
+export { gql } from '@apollo/client';
 export { useQuery, useMutation, useSubscription } from './-private/usables.ts';
 export type {
   UseQuery,

@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { setClient, getClient, useSubscription, gql } from 'glimmer-apollo';
 import { setOwner } from '@ember/owner';
 import type Owner from '@ember/owner';
-import { ApolloClient, ApolloError, InMemoryCache } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, type ErrorLike } from '@apollo/client';
 import {
   type OnMessageAddedSubscription,
   type OnMessageAddedSubscriptionVariables,
@@ -239,7 +239,7 @@ module('useSubscription', function (hooks) {
 
     link.simulateResult(subscriptionError);
 
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ErrorLike;
     const sub = useSubscription<
       OnMessageAddedSubscription,
       OnMessageAddedSubscriptionVariables
@@ -287,6 +287,46 @@ module('useSubscription', function (hooks) {
       onCompleteCalled,
       true,
       'onComplete should have been called'
+    );
+  });
+
+  test('it handles error delivered via next callback (errorPolicy all)', async function (assert) {
+    // When errorPolicy is 'all', Apollo Client 4 delivers GraphQL errors via
+    // result.error in the next callback rather than the RxJS error callback.
+    const errorResult = {
+      result: {
+        errors: [{ message: 'graphql subscription error' }],
+        data: {
+          messageAdded: {
+            __typename: 'Message',
+            id: '99',
+            message: 'partial data',
+          },
+        },
+      },
+    };
+
+    link.simulateResult(errorResult);
+
+    const sub = useSubscription<
+      OnMessageAddedSubscription,
+      OnMessageAddedSubscriptionVariables
+    >(ctx, () => [
+      SUBSCRIPTION,
+      {
+        variables: { channel: 'error-next' },
+        errorPolicy: 'all',
+      },
+    ]);
+
+    assert.equal(sub.loading, true);
+    await sub.settled();
+    assert.equal(sub.loading, false);
+    assert.equal(sub.error?.message, 'graphql subscription error');
+    assert.equal(
+      sub.data,
+      undefined,
+      'data should be cleared when error is routed via #onError'
     );
   });
 
