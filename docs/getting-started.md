@@ -5,11 +5,15 @@ Getting up and running with Glimmer Apollo.
 ## Installation
 
 ```sh
-yarn add -D glimmer-apollo @apollo/client graphql
+pnpm add -D glimmer-apollo @apollo/client graphql rxjs
 ```
 
 ```sh
-npm install --save-dev glimmer-apollo @apollo/client graphql
+yarn add -D glimmer-apollo @apollo/client graphql rxjs
+```
+
+```sh
+npm install --save-dev glimmer-apollo @apollo/client graphql rxjs
 ```
 
 ## Compatibility
