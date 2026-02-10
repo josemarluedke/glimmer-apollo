@@ -108,10 +108,5 @@
   },
   "msw": {
     "workerDirectory": "public"
-  },
-  "pnpm": {
-    "overrides": {
-      "ember-source": "$ember-source"
-    }
   }
 }
