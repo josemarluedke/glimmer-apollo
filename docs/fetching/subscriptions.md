@@ -87,7 +87,7 @@ Let's define our GraphQL Subscription document.
 ```ts:subscriptions.ts
 import { gql } from 'glimmer-apollo';
 
-export const ON_MESSAGED_ADDED = gql`
+export const ON_MESSAGE_ADDED = gql`
   subscription OnMessageAdded($channel: String!) {
     messageAdded(channel: $channel) {
       id
@@ -118,7 +118,7 @@ Similar to `useQuery` and `useMutation`, `useSubscription` is a utility function
 ```ts:latest-message.ts
 import { useSubscription } from 'glimmer-apollo';
 import {
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   OnMessageAddedSubscription,
   OnMessageAddedSubscriptionVariables
 } from './subscriptions';
@@ -130,7 +130,7 @@ export default class LatestMessage extends Component {
   >(
     this,
     () => [
-      ON_MESSAGED_ADDED,
+      ON_MESSAGE_ADDED,
       {
         /* options */
       }
@@ -147,7 +147,7 @@ export default class LatestMessage extends Component {
 import Component from '@glimmer/component';
 import { useSubscription } from 'glimmer-apollo';
 import {
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   OnMessageAddedSubscription,
   OnMessageAddedSubscriptionVariables
 } from './subscriptions';
@@ -159,7 +159,7 @@ export default class LatestMessage extends Component {
   >(
     this,
     () => [
-      ON_MESSAGED_ADDED,
+      ON_MESSAGE_ADDED,
       {
         variables: {
           channel: 'glimmer-apollo'
@@ -189,7 +189,7 @@ args thunk.
 
 ```ts
 latestMessage = useSubscription(this, () => [
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   { variables: { channel: this.args.channel } }
 ]);
 ```
@@ -202,7 +202,7 @@ Alongside variables, you can pass additional options to `useSubscription`. These
 
 ```ts
 latestMessage = useSubscription(this, () => [
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   {
     variables: { channel: this.args.channel },
     errorPolicy: 'all',
@@ -232,7 +232,7 @@ setClient(
   'my-custom-client'
 );
 // ....
-latestMessages = useSubscription(this, () => [ON_MESSAGED_ADDED, { clientId: 'my-custom-client' }]);
+latestMessages = useSubscription(this, () => [ON_MESSAGE_ADDED, { clientId: 'my-custom-client' }]);
 ```
 
 ## Query Status
@@ -245,7 +245,7 @@ This is a handy property that allows us to inform our interface that we are load
 import Component from '@glimmer/component';
 import { useSubscription } from 'glimmer-apollo';
 import {
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   OnMessageAddedSubscription,
   OnMessageAddedSubscriptionVariables
 } from './subscriptions';
@@ -257,7 +257,7 @@ export default class LatestMessage extends Component {
   >(
     this,
     () => [
-      ON_MESSAGED_ADDED,
+      ON_MESSAGE_ADDED,
       {
         // ...
       }
@@ -282,7 +282,7 @@ This property that can be `undefined` or an `ErrorLike` object, holds the inform
 import Component from '@glimmer/component';
 import { useSubscription } from 'glimmer-apollo';
 import {
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   OnMessageAddedSubscription,
   OnMessageAddedSubscriptionVariables
 } from './subscriptions';
@@ -294,7 +294,7 @@ export default class LatestMessage extends Component {
   >(
     this,
     () => [
-      ON_MESSAGED_ADDED,
+      ON_MESSAGE_ADDED,
       {
         // ...
         errorPolicy: 'all'
@@ -332,7 +332,7 @@ This callback gets called when the subscription receives data.
 
 ```js
 latestMessages = useSubscription(this, () => [
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   {
     variables: { channel: this.args.channel },
     onData: (data): void => {
@@ -348,7 +348,7 @@ This callback gets called when we have an error.
 
 ```ts
 latestMessages = useSubscription(this, () => [
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   {
     variables: { channel: this.args.channel },
     onData: (data): void => {
@@ -368,7 +368,7 @@ happens when the server closes the connection for example.
 
 ```js
 latestMessages = useSubscription(this, () => [
-  ON_MESSAGED_ADDED,
+  ON_MESSAGE_ADDED,
   {
     variables: { channel: this.args.channel },
     onData: (data): void => {
