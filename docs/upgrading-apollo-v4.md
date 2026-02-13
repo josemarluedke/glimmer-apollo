@@ -1,4 +1,6 @@
-# Migrating from 0.7.x (Apollo Client 3) to 0.8.x (Apollo Client 4)
+# Upgrading to Apollo Client 4
+
+Glimmer Apollo v0.7.x supports Apollo Client 3, while glimmer-apollo v0.8.x supports Apollo Client 4.
 
 Before upgrading glimmer-apollo, read the [Apollo Client 4 migration guide](https://www.apollographql.com/docs/react/migrating/apollo-client-4-migration). This document only covers changes specific to glimmer-apollo.
 
@@ -71,12 +73,12 @@ if (CombinedGraphQLErrors.is(error)) {
 
 Apollo Client 4 introduces `VariablesOption<NoInfer<TVariables>>`, a conditional type on all method signatures (`watchQuery`, `mutate`, `subscribe`). This type cannot be satisfied by TypeScript in generic wrapper code — every Apollo Client 4 wrapper library uses `as` casts to work around it:
 
-| Library | Cast Location | Pattern | Source |
-|---------|---------------|---------|--------|
-| React hooks (Apollo's own) | Input side | `clientOptions as ApolloClient.MutateOptions<TData, OperationVariables>` | [useMutation.ts#L311](https://github.com/apollographql/apollo-client/blob/785e2232b4f7d9e561611cd4f45b8fdd1e44319e/src/react/hooks/useMutation.ts#L311-L314) |
-| vue-apollo (v5) | Input side | `as ApolloClient.MutateOptions<TData, TVariables>` | [useMutation.ts#L597](https://github.com/vuejs/apollo/blob/bef7c1c/packages/vue-apollo-composable/src/useMutation.ts#L597) |
-| apollo-angular | Input side | `{ ...options, mutation } as Apollo.MutateOptions<TData, TVariables>` | [mutation.ts#L31](https://github.com/the-guild-org/apollo-angular/blob/a15d21147ed37591d055df597ab41163fe569212/packages/apollo-angular/src/mutation.ts#L31) |
-| glimmer-apollo | Input side | `{ ...options, mutation } as ApolloMutationOptions<TData, TVariables>` | |
+| Library                    | Cast Location | Pattern                                                                  | Source                                                                                                                                                       |
+| -------------------------- | ------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| React hooks (Apollo's own) | Input side    | `clientOptions as ApolloClient.MutateOptions<TData, OperationVariables>` | [useMutation.ts#L311](https://github.com/apollographql/apollo-client/blob/785e2232b4f7d9e561611cd4f45b8fdd1e44319e/src/react/hooks/useMutation.ts#L311-L314) |
+| vue-apollo (v5)            | Input side    | `as ApolloClient.MutateOptions<TData, TVariables>`                       | [useMutation.ts#L597](https://github.com/vuejs/apollo/blob/bef7c1c/packages/vue-apollo-composable/src/useMutation.ts#L597)                                   |
+| apollo-angular             | Input side    | `{ ...options, mutation } as Apollo.MutateOptions<TData, TVariables>`    | [mutation.ts#L31](https://github.com/the-guild-org/apollo-angular/blob/a15d21147ed37591d055df597ab41163fe569212/packages/apollo-angular/src/mutation.ts#L31) |
+| glimmer-apollo             | Input side    | `{ ...options, mutation } as ApolloMutationOptions<TData, TVariables>`   |                                                                                                                                                              |
 
 glimmer-apollo follows the apollo-angular pattern: spread options with an input-side cast and explicit type parameters on Apollo method calls. This gives properly typed results without output-side casts.
 
@@ -102,14 +104,15 @@ const { loading, error, data, networkStatus } = result;
 
 This is the correct behavior — it means `errorPolicy: 'all'` now works as intended, allowing you to render partial data alongside errors. But it has consequences for your templates:
 
-**Always check `error` before rendering `data`.** In 0.7.x, data was cleared on error, so the `{{else}}` branch after `{{#if loading}}` was safe. In 0.8.x, data may persist alongside an error, so skipping the error check means silently rendering stale data.
+**Always check `error` before rendering `data`.** In 0.7.x, data was cleared on error, so the `\{\{else\}\}` branch after `\{\{#if loading\}\}` was safe. In 0.8.x, data may persist alongside an error, so skipping the error check means silently rendering stale data.
 
 ```hbs
 {{! Correct — works in both 0.7.x and 0.8.x }}
 {{#if this.notes.loading}}
   Loading...
 {{else if this.notes.error}}
-  Error: {{this.notes.error.message}}
+  Error:
+  {{this.notes.error.message}}
 {{else}}
   {{#each this.notes.data.notes as |note|}}
     ...
@@ -128,7 +131,7 @@ This is the correct behavior — it means `errorPolicy: 'all'` now works as inte
 {{/if}}
 ```
 
-Similarly, `{{#if data}}` no longer implies "no error" — both can be truthy at the same time. If you have conditional logic that assumes data is only present when there's no error, review it.
+Similarly, `\{\{#if data\}\}` no longer implies "no error" — both can be truthy at the same time. If you have conditional logic that assumes data is only present when there's no error, review it.
 
 The same applies to mutations: errors are now read from `result.error` (provided by Apollo Client 4's `MutateResult`) instead of being constructed from `result.errors`.
 
@@ -142,17 +145,17 @@ In Apollo Client 4, `refetch()` on a query with `fetchPolicy: 'standby'` (i.e. a
 
 ### Subscription error handling
 
-In 0.8.x, `#onNextResult` checks for `result.error` in the subscription's `next` callback and routes it to the error handler if present.
+In 0.8.x, `onNextResult` checks for `result.error` in the subscription's `next` callback and routes it to the error handler if present.
 
 ## Breaking changes summary
 
-| Change | Reason |
-|--------|--------|
-| Requires `@apollo/client` ^4.0.0 | Apollo Client 4 compatibility |
-| `rxjs` ^7.3.0 required (transitive via `@apollo/client`) | Apollo Client 4 migrated from zen-observable to RxJS |
-| Error types changed from `ApolloError` to `ErrorLike` | Apollo Client 4 removed the `ApolloError` class |
+| Change                                                           | Reason                                                                                                 |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Requires `@apollo/client` ^4.0.0                                 | Apollo Client 4 compatibility                                                                          |
+| `rxjs` ^7.3.0 required (transitive via `@apollo/client`)         | Apollo Client 4 migrated from zen-observable to RxJS                                                   |
+| Error types changed from `ApolloError` to `ErrorLike`            | Apollo Client 4 removed the `ApolloError` class                                                        |
 | `data` property typed as `MaybeMasked<TData>` instead of `TData` | Matches Apollo Client 4's data masking support. Resolves to `TData` when data masking is off (default) |
-| `setClient`/`getClient` no longer generic over cache type | Apollo Client 4 removed the `TCache` type parameter from `ApolloClient` |
-| Query/mutation errors no longer clear `data` | Apollo Client 4 provides error state alongside data; `errorPolicy: 'all'` now works correctly |
-| Templates must check `error` before rendering `data` | `data` persists on error; skipping the check renders stale data silently |
-| Subscription `#onNextResult` checks `result.error` | Routes errors delivered via the `next` callback to the error handler |
+| `setClient`/`getClient` no longer generic over cache type        | Apollo Client 4 removed the `TCache` type parameter from `ApolloClient`                                |
+| Query/mutation errors no longer clear `data`                     | Apollo Client 4 provides error state alongside data; `errorPolicy: 'all'` now works correctly          |
+| Templates must check `error` before rendering `data`             | `data` persists on error; skipping the check renders stale data silently                               |
+| Subscription `onNextResult` checks `result.error`                | Routes errors delivered via the `next` callback to the error handler                                   |
