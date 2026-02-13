@@ -1,6 +1,6 @@
 {
   "name": "glimmer-apollo",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Ember and Glimmer integration for Apollo Client",
   "keywords": [
     "ember-addon"
@@ -52,7 +52,6 @@
   },
   "devDependencies": {
     "@apollo/client": "^4.0.0",
-    "rxjs": "^7.0.0",
     "@babel/core": "^7.28.5",
     "@babel/eslint-parser": "^7.28.5",
     "@babel/plugin-transform-typescript": "^7.28.5",
@@ -77,6 +76,7 @@
     "prettier-plugin-ember-template-tag": "^2.1.2",
     "rollup": "^4.53.5",
     "rollup-plugin-copy": "^3.5.0",
+    "rxjs": "^7.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0"
   },
