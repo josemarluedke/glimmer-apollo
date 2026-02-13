@@ -5,7 +5,7 @@ import {
   clearClient,
   clearClients,
 } from 'glimmer-apollo';
-import { ApolloClient, InMemoryCache } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { destroy } from '@ember/destroyable';
 import { setOwner } from '@ember/owner';
 import type Owner from '@ember/owner';
@@ -15,7 +15,8 @@ module('setClient & getClient', function (hooks) {
   const owner: Owner = {} as Owner;
 
   const cache = new InMemoryCache();
-  const client = new ApolloClient({ cache });
+  const link = new HttpLink({ uri: '/graphql' });
+  const client = new ApolloClient({ cache, link });
 
   hooks.beforeEach(() => {
     ctx = {};

@@ -1,4 +1,4 @@
-import { ApolloError, NetworkStatus } from '@apollo/client/core';
+import { NetworkStatus } from '@apollo/client';
 import { equal } from '@wry/equality';
 
 import {
@@ -12,25 +12,26 @@ import ObservableResource from './observable.ts';
 import { createPromise, getFastboot, settled } from './utils.ts';
 
 import type {
-  ApolloQueryResult,
+  ApolloClient,
   DocumentNode,
+  ErrorLike,
+  MaybeMasked,
   OperationVariables,
-  WatchQueryOptions,
-  ObservableSubscription,
   ObservableQuery,
-} from '@apollo/client/core';
+} from '@apollo/client';
+import type { Subscription } from 'rxjs';
 import type { TemplateArgs } from './types';
 
-export interface QueryOptions<
-  TData,
-  TVariables extends OperationVariables,
-> extends Omit<WatchQueryOptions<TVariables>, 'query'> {
+export type QueryOptions<TData, TVariables extends OperationVariables> = Omit<
+  ApolloClient.WatchQueryOptions<TData, TVariables>,
+  'query'
+> & {
   skip?: boolean;
   ssr?: boolean;
   clientId?: string;
-  onComplete?: (data: TData | undefined) => void;
-  onError?: (error: ApolloError) => void;
-}
+  onComplete?: (data: MaybeMasked<TData> | undefined) => void;
+  onError?: (error: ErrorLike) => void;
+};
 
 export type QueryPositionalArgs<
   TData,
@@ -46,12 +47,12 @@ export class QueryResource<
   TemplateArgs<QueryPositionalArgs<TData, TVariables>>
 > {
   @tracked loading = false;
-  @tracked error?: ApolloError;
-  @tracked data: TData | undefined;
+  @tracked error?: ErrorLike;
+  @tracked data: MaybeMasked<TData> | undefined;
   @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
 
-  #subscription?: ObservableSubscription;
+  #subscription?: Subscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
 
   #firstPromiseReject: (() => unknown) | undefined;
@@ -59,7 +60,8 @@ export class QueryResource<
   /** @internal */
   setup(): void {
     this.#previousPositionalArgs = this.args.positional;
-    const [query, options = {}] = this.args.positional;
+    const [query, options = {} as QueryOptions<TData, TVariables>] =
+      this.args.positional;
     const client = getClient(this, options.clientId);
 
     const fastboot = getFastboot(this);
@@ -76,11 +78,10 @@ export class QueryResource<
     this.#firstPromiseReject = firstReject;
     this.promise = promise;
 
-    if (options.skip) {
-      options.fetchPolicy = 'standby';
-    }
+    const isSkipped = options.skip === true;
+    const fetchPolicy = isSkipped ? 'standby' : options.fetchPolicy;
 
-    if (options.fetchPolicy === 'standby') {
+    if (isSkipped || fetchPolicy === 'standby') {
       if (firstResolve) {
         firstResolve();
         firstResolve = undefined;
@@ -89,31 +90,34 @@ export class QueryResource<
       this.loading = true;
     }
 
-    const observable = client.watchQuery({
+    const observable = client.watchQuery<TData, TVariables>({
       query,
       ...options,
+      fetchPolicy,
+      // Apollo Client 4 defaults notifyOnNetworkStatusChange to true.
+      // We preserve the AC3 default to avoid emitting intermediate loading
+      // states during refetch/fetchMore, which would cause consumers relying
+      // on synchronous loading checks to see unexpected flickers. Flipping
+      // to the default true may be the correct approach, but that will require
+      // a breaking change that would require consumers to handle NetworkStatus
+      // transitions differently (e.g. refetch, fetchMore, poll).
+      notifyOnNetworkStatusChange: options.notifyOnNetworkStatusChange ?? false,
+    } as ApolloClient.WatchQueryOptions<TData, TVariables>);
+
+    this._setObservable(observable);
+
+    // Apollo Client 4: errors arrive via result.error, not the error callback.
+    // With notifyOnNetworkStatusChange defaulting to true in AC4, the observable
+    // emits an initial { loading: true } before data arrives. Gate on
+    // !result.loading so the promise resolves only after the first real result,
+    // keeping route model hooks and await patterns working correctly.
+    this.#subscription = observable.subscribe((result) => {
+      this.#onComplete(result);
+      if (firstResolve && !result.loading) {
+        firstResolve();
+        firstResolve = undefined;
+      }
     });
-
-    this._setObservable(
-      observable as ObservableQuery<TData, TVariables>,
-    );
-
-    this.#subscription = observable.subscribe(
-      (result: ApolloQueryResult<TData>) => {
-        this.#onComplete(result);
-        if (firstResolve) {
-          firstResolve();
-          firstResolve = undefined;
-        }
-      },
-      (error: ApolloError) => {
-        this.#onError(error);
-        if (typeof this.#firstPromiseReject === 'function') {
-          this.#firstPromiseReject();
-          this.#firstPromiseReject = undefined;
-        }
-      },
-    );
 
     waitForPromise(promise).catch(() => {
       // We catch by default as the promise is only meant to be used
@@ -148,31 +152,25 @@ export class QueryResource<
     return settled(this.promise);
   }
 
-  #onComplete(result: ApolloQueryResult<TData>): void {
-    const { loading, errors, data, networkStatus } = result;
-    let { error } = result;
-
-    error =
-      errors && errors.length > 0
-        ? new ApolloError({ graphQLErrors: errors })
-        : undefined;
+  #onComplete(result: ObservableQuery.Result<MaybeMasked<TData>>): void {
+    const { loading, error, data, networkStatus } = result;
 
     this.loading = loading;
-    this.data = data;
+    // Cast: Apollo Client 4's result type includes DeepPartial<TData> to
+    // account for returnPartialData. We expose the stricter TData since
+    // consumers who opt into returnPartialData already expect partial shapes.
+    // If AC4 tightens this typing in a future version, revisit this cast.
+    this.data = data as MaybeMasked<TData> | undefined;
     this.networkStatus = networkStatus;
     this.error = error;
-    this.#handleOnCompleteOrOnError();
-  }
 
-  #onError(error: ApolloError): void {
-    if (!Object.prototype.hasOwnProperty.call(error, 'graphQLErrors')) {
-      error = new ApolloError({ networkError: error });
+    if (error) {
+      if (typeof this.#firstPromiseReject === 'function') {
+        this.#firstPromiseReject();
+        this.#firstPromiseReject = undefined;
+      }
     }
 
-    this.loading = false;
-    this.data = undefined;
-    this.networkStatus = NetworkStatus.error;
-    this.error = error;
     this.#handleOnCompleteOrOnError();
   }
 

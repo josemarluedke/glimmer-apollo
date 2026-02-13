@@ -5,18 +5,22 @@ Getting up and running with Glimmer Apollo.
 ## Installation
 
 ```sh
-yarn add -D glimmer-apollo @apollo/client graphql
+pnpm add -D glimmer-apollo @apollo/client graphql rxjs
 ```
 
 ```sh
-npm install --save-dev glimmer-apollo @apollo/client graphql
+yarn add -D glimmer-apollo @apollo/client graphql rxjs
+```
+
+```sh
+npm install --save-dev glimmer-apollo @apollo/client graphql rxjs
 ```
 
 ## Compatibility
 
 Here is what Glimmer Apollo is compatible with:
 
-- Apollo Client v3.0 or above
+- Apollo Client v4.0 or above
 - Ember.js v3.27 or above
 - Ember CLI v2.13 or above
 - Embroider or ember-auto-import v2
@@ -36,12 +40,12 @@ import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
   InMemoryCache,
-  createHttpLink
-} from '@apollo/client/core';
+  HttpLink
+} from '@apollo/client';
 
 export default function setupApolloClient(context: object): void {
   // HTTP connection to the API
-  const httpLink = createHttpLink({
+  const httpLink = new HttpLink({
     uri: 'http://localhost:3000/graphql'
   });
 

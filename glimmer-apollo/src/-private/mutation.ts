@@ -1,5 +1,3 @@
-import { ApolloError } from '@apollo/client/core';
-
 import {
   isDestroyed,
   isDestroying,
@@ -12,23 +10,24 @@ import { settled } from './utils.ts';
 
 import type {
   DocumentNode,
-  FetchResult,
+  ErrorLike,
   MutationOptions as ApolloMutationOptions,
+  MutateResult,
   OperationVariables,
   MaybeMasked,
-} from '@apollo/client/core';
+} from '@apollo/client';
 import type { TemplateArgs } from './types';
 
 type Maybe<T> = T | undefined | null;
 
-export interface MutationOptions<TData, TVariables> extends Omit<
-  ApolloMutationOptions<TData, TVariables>,
-  'mutation'
-> {
+export type MutationOptions<
+  TData,
+  TVariables extends OperationVariables,
+> = Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> & {
   clientId?: string;
   onComplete?: (data: Maybe<MaybeMasked<TData>>) => void;
-  onError?: (error: ApolloError) => void;
-}
+  onError?: (error: ErrorLike) => void;
+};
 
 export type MutationPositionalArgs<
   TData,
@@ -41,7 +40,7 @@ export class MutationResource<
 > extends Resource<TemplateArgs<MutationPositionalArgs<TData, TVariables>>> {
   @tracked loading = false;
   @tracked called = false;
-  @tracked error?: ApolloError;
+  @tracked error?: ErrorLike;
   @tracked data: Maybe<MaybeMasked<TData>>;
   @tracked promise!: Promise<Maybe<MaybeMasked<TData>>>;
 
@@ -50,7 +49,10 @@ export class MutationResource<
     overrideOptions: Omit<
       MutationOptions<TData, TVariables>,
       'variables' | 'mutation'
-    > = {},
+    > = {} as Omit<
+      MutationOptions<TData, TVariables>,
+      'variables' | 'mutation'
+    >,
   ): Promise<Maybe<MaybeMasked<TData>>> {
     this.loading = true;
     const [mutation, originalOptions] = this.args.positional;
@@ -71,13 +73,13 @@ export class MutationResource<
         mutation,
         ...options,
         variables,
-      }),
+      } as ApolloMutationOptions<TData, TVariables>),
     )
       .then((result) => {
         this.#onComplete(result);
         return this.data;
       })
-      .catch((error: ApolloError) => {
+      .catch((error: ErrorLike) => {
         this.#onError(error);
         return this.data;
       });
@@ -89,20 +91,14 @@ export class MutationResource<
     return settled(this.promise);
   }
 
-  #onComplete(result: FetchResult<MaybeMasked<TData>>): void {
-    const { data, errors } = result;
-    const error =
-      errors && errors.length > 0
-        ? new ApolloError({ graphQLErrors: errors })
-        : undefined;
-
-    this.data = data;
-    this.error = error;
+  #onComplete(result: MutateResult<MaybeMasked<TData>>): void {
+    this.data = result.data;
+    this.error = result.error;
 
     this.#handleOnCompleteOrOnError();
   }
 
-  #onError(error: ApolloError): void {
+  #onError(error: ErrorLike): void {
     this.error = error;
     this.data = undefined;
 

@@ -1,17 +1,14 @@
 import { getOwner, registerDestructor } from '../environment.ts';
-import type { ApolloClient } from '@apollo/client/core';
+import type { ApolloClient } from '@apollo/client';
 
 type Owner = object;
 
-const CLIENTS: WeakMap<
-  Owner,
-  Map<string, ApolloClient<unknown>>
-> = new WeakMap();
+const CLIENTS: WeakMap<Owner, Map<string, ApolloClient>> = new WeakMap();
 const DEFAULT_CLIENT_ID = 'default';
 
-export function setClient<TCache = unknown>(
+export function setClient(
   context: object,
-  client: ApolloClient<TCache>,
+  client: ApolloClient,
   clientId: string = DEFAULT_CLIENT_ID,
 ): void {
   const owner = getOwner(context) as Owner | null;
@@ -33,10 +30,10 @@ export function setClient<TCache = unknown>(
   });
 }
 
-export function getClient<TCache = unknown>(
+export function getClient(
   context: object,
   clientId: string = DEFAULT_CLIENT_ID,
-): ApolloClient<TCache> {
+): ApolloClient {
   const owner = getOwner(context);
 
   if (!owner) {
@@ -52,7 +49,7 @@ export function getClient<TCache = unknown>(
     );
   }
 
-  return client as ApolloClient<TCache>;
+  return client;
 }
 
 export function clearClients(context: object): void {

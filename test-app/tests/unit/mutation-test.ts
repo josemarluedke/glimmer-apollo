@@ -13,10 +13,10 @@ import type Owner from '@ember/owner';
 import { tracked } from '@glimmer/tracking';
 import {
   ApolloClient,
-  ApolloError,
   InMemoryCache,
-  createHttpLink,
-} from '@apollo/client/core';
+  HttpLink,
+  type ErrorLike,
+} from '@apollo/client';
 import {
   type LoginMutationVariables,
   type LoginMutation,
@@ -39,7 +39,7 @@ module('useMutation', function (hooks) {
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: createHttpLink({
+    link: new HttpLink({
       uri: '/graphql',
     }),
   });
@@ -220,7 +220,7 @@ module('useMutation', function (hooks) {
   });
 
   test('it calls onError', async function (assert) {
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ErrorLike;
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(
       ctx,
       () => [
@@ -244,7 +244,7 @@ module('useMutation', function (hooks) {
 
   test('it returns error with data', async function (assert) {
     let onCompleteCalled: unknown;
-    let onErrorCalled: ApolloError;
+    let onErrorCalled: ErrorLike;
     const mutation = useMutation<LoginMutation, LoginMutationVariables>(
       ctx,
       () => [
@@ -331,7 +331,7 @@ module('useMutation', function (hooks) {
     const defaultClient = getClient(ctx);
     const customClient = new ApolloClient({
       cache: new InMemoryCache(),
-      link: createHttpLink({
+      link: new HttpLink({
         uri: '/graphql',
       }),
     });

@@ -1,9 +1,5 @@
 import { setClient } from 'glimmer-apollo';
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-} from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import type ApplicationInstance from '@ember/application/instance';
 
 export function initialize(appInstance: ApplicationInstance): void {
@@ -11,7 +7,7 @@ export function initialize(appInstance: ApplicationInstance): void {
     appInstance,
     new ApolloClient({
       cache: new InMemoryCache(),
-      link: createHttpLink({
+      link: new HttpLink({
         uri: '/graphql',
       }),
     })

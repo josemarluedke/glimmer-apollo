@@ -32,9 +32,9 @@ import { setClient } from 'glimmer-apollo';
 import {
   ApolloClient,
   InMemoryCache,
-  createHttpLink,
+  HttpLink,
   split
-} from '@apollo/client/core';
+} from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
@@ -48,7 +48,7 @@ export default function setupApolloClient(context: object): void {
   });
 
   // HTTP connection to the API
-  const httpLink = createHttpLink({
+  const httpLink = new HttpLink({
     uri: 'http://localhost:3000/graphql'
   });
 
@@ -276,7 +276,7 @@ export default class LatestMessage extends Component {
 
 ### `error`
 
-This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your query. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
+This property that can be `undefined` or an `ErrorLike` object, holds the information about any errors that occurred while executing your subscription. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
 
 ```gts
 import Component from '@glimmer/component';

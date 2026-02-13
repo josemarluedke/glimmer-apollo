@@ -304,7 +304,7 @@ export default class CreateNote extends Component {
 
 ### `error`
 
-This property that can be `undefined` or an `ApolloError` object, holds the information about any errors that occurred while executing your mutation. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
+This property that can be `undefined` or an `ErrorLike` object, holds the information about any errors that occurred while executing your mutation. The reported errors are directly reflected from the `errorPolicy` option available from Apollo Client.
 
 ```gts:create-note.gts
 import Component from '@glimmer/component';

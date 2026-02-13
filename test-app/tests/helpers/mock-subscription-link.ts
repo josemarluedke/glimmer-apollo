@@ -1,19 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 // Origianl Implementation: https://github.com/apollographql/apollo-client/blob/main/src/utilities/testing/mocking/mockSubscriptionLink.ts
 
-import { Observable } from '@apollo/client/utilities';
-import {
-  ApolloLink,
-  type FetchResult,
-  type Operation,
-} from '@apollo/client/core';
+import { Observable } from 'rxjs';
+import { ApolloLink } from '@apollo/client';
 
 export interface MockedSubscription {
-  request: Operation;
+  request: ApolloLink.Operation;
 }
 
 export interface MockedSubscriptionResult {
-  result?: FetchResult;
+  result?: ApolloLink.Result;
   error?: Error;
   delay?: number;
 }
@@ -21,12 +17,12 @@ export interface MockedSubscriptionResult {
 export class MockSubscriptionLink extends ApolloLink {
   unsubscribers: any[] = [];
   setups: any[] = [];
-  operation?: Operation;
+  operation?: ApolloLink.Operation;
   private observers: any[] = [];
 
-  request(operation: Operation) {
+  request(operation: ApolloLink.Operation) {
     this.operation = operation;
-    return new Observable<FetchResult>((observer) => {
+    return new Observable<ApolloLink.Result>((observer) => {
       this.setups.forEach((x) => x());
       this.observers.push(observer);
       return () => {

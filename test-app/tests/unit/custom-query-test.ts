@@ -17,11 +17,11 @@ import sinon from 'sinon';
 
 import {
   ApolloClient,
-  ApolloError,
-  createHttpLink,
+  HttpLink,
   InMemoryCache,
+  type ErrorLike,
   type OperationVariables,
-} from '@apollo/client/core';
+} from '@apollo/client';
 
 import {
   type UserInfoQuery,
@@ -66,7 +66,7 @@ module('useCustomQuery', function (hooks) {
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: createHttpLink({
+    link: new HttpLink({
       uri: '/graphql',
     }),
   });
@@ -210,7 +210,7 @@ module('useCustomQuery', function (hooks) {
   });
 
   test('it calls onError', async function (assert) {
-    let onErrorCalled: ApolloError | undefined;
+    let onErrorCalled: ErrorLike | undefined;
     const query = useCustomQuery<UserInfoQuery, UserInfoQueryVariables>(
       ctx,
       () => [
@@ -234,7 +234,7 @@ module('useCustomQuery', function (hooks) {
 
   test('it returns error with data', async function (assert) {
     let onCompleteCalled: unknown;
-    let onErrorCalled: ApolloError | undefined;
+    let onErrorCalled: ErrorLike | undefined;
     const query = useCustomQuery<UserInfoQuery, UserInfoQueryVariables>(
       ctx,
       () => [
@@ -315,7 +315,7 @@ module('useCustomQuery', function (hooks) {
     const defaultClient = getClient(ctx);
     const customClient = new ApolloClient({
       cache: new InMemoryCache(),
-      link: createHttpLink({
+      link: new HttpLink({
         uri: '/graphql',
       }),
     });

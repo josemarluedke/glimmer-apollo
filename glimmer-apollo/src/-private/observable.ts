@@ -1,12 +1,10 @@
 import { Resource } from './resource.ts';
 import type {
-  FetchMoreQueryOptions,
   ObservableQuery,
   OperationVariables,
   SubscribeToMoreOptions,
-  Unmasked,
-  WatchQueryOptions,
-} from '@apollo/client/core';
+  UpdateQueryMapFn,
+} from '@apollo/client';
 import type { TemplateArgs } from './types';
 
 export default class ObservableResource<
@@ -21,6 +19,16 @@ export default class ObservableResource<
   }
 
   refetch = (variables?: Partial<TVariables> | MouseEvent) => {
+    // In Apollo Client 4, refetch() uses a disposable observable that
+    // doesn't emit to RxJS subscribers when fetchPolicy is 'standby'.
+    // https://github.com/apollographql/apollo-client/pull/12384
+    // Use reobserve to permanently switch away from standby so results
+    // reach our subscriber. Note: this permanently un-skips the query —
+    // after refetch(), the query is no longer in standby and will receive
+    // future updates normally.
+    if (this.observable?.options.fetchPolicy === 'standby') {
+      return this.observable.reobserve({ fetchPolicy: 'network-only' });
+    }
     if (variables instanceof MouseEvent) {
       return this.observable?.refetch();
     }
@@ -31,23 +39,16 @@ export default class ObservableResource<
     TFetchData = TData,
     TFetchVars extends OperationVariables = TVariables,
   >(
-    fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {
-      updateQuery?: (
-        previousQueryResult: Unmasked<TData>,
-        options: {
-          fetchMoreResult: Unmasked<TFetchData>;
-          variables: TFetchVars;
-        },
-      ) => Unmasked<TData>;
-    },
+    fetchMoreOptions: ObservableQuery.FetchMoreOptions<
+      TData,
+      TVariables,
+      TFetchData,
+      TFetchVars
+    >,
   ) => this.observable?.fetchMore(fetchMoreOptions);
 
-  updateQuery = (
-    mapFn: (
-      previousQueryResult: Unmasked<TData>,
-      options: Pick<WatchQueryOptions<TVariables, TData>, 'variables'>,
-    ) => Unmasked<TData>,
-  ) => this.observable?.updateQuery(mapFn);
+  updateQuery = (mapFn: UpdateQueryMapFn<TData, TVariables>) =>
+    this.observable?.updateQuery(mapFn);
 
   startPolling = (pollInterval: number) => {
     this.observable?.startPolling(pollInterval);

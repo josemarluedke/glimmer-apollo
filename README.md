@@ -13,7 +13,11 @@ Visit [glimmer-apollo.com](https://glimmer-apollo.com/) to read the docs.
 
 ## Compatibility
 
-- Apollo Client v3.0 or above
+| glimmer-apollo | Apollo Client |
+|----------------|---------------|
+| 0.7.x          | ^3.0.0        |
+| 0.8.x          | ^4.0.0        |
+
 - Ember.js v3.27 or above
 - Ember CLI v2.13 or above
 - Embroider or ember-auto-import v2
@@ -175,7 +179,7 @@ Where `ctx` is an object with owner.
 ```glimmer-ts
 import Component from '@glimmer/component';
 import { setClient } from 'glimmer-apollo';
-import { ApolloClient, InMemoryCache } from '@apollo/client/core';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 export default class App extends Component {
   constructor(owner: unknown, args: object) {
@@ -184,7 +188,7 @@ export default class App extends Component {
     setClient(
       this,
       new ApolloClient({
-        uri: 'https://api.example.com/graphql',
+        link: new HttpLink({ uri: 'https://api.example.com/graphql' }),
         cache: new InMemoryCache()
       })
     );
@@ -203,10 +207,10 @@ Where `ctx` is an object with owner.
 ```glimmer-ts
 import Component from '@glimmer/component';
 import { getClient } from 'glimmer-apollo';
-import type { ApolloClient } from '@apollo/client/core';
+import type { ApolloClient } from '@apollo/client';
 
 export default class MyComponent extends Component {
-  client: ApolloClient<unknown>;
+  client: ApolloClient;
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
