@@ -463,4 +463,96 @@ module('useQuery', function (hooks) {
 
     sandbox.restore();
   });
+
+  test('refetch(variables) overrides the variables when skip is true', async function (assert) {
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1' },
+        skip: true,
+      },
+    ]);
+
+    await query.refetch({ id: '2' });
+    await waitUntil(() => query.data !== undefined);
+
+    assert.equal(query.error, undefined);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick',
+      },
+    });
+  });
+
+  test('refetch(variables) provides the variables when skip is true and none were given', async function (assert) {
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        skip: true,
+      },
+    ]);
+
+    await query.refetch({ id: '2' });
+    await waitUntil(() => query.data !== undefined);
+
+    assert.equal(query.error, undefined);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick',
+      },
+    });
+  });
+
+  test('refetch() ignores a DOM event argument when bound to an event handler', async function (assert) {
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '2' },
+      },
+    ]);
+    await query.settled();
+
+    // `{{on "keyup" this.query.refetch}}` hands the handler the event, not
+    // variables. Any event type must be ignored, not just MouseEvent.
+    await query.refetch(new KeyboardEvent('keyup'));
+
+    assert.equal(query.error, undefined);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick',
+      },
+    });
+  });
+
+  test('refetch() ignores a DOM event argument when skip is true', async function (assert) {
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '2' },
+        skip: true,
+      },
+    ]);
+
+    await query.refetch(new KeyboardEvent('keyup'));
+    await waitUntil(() => query.data !== undefined);
+
+    assert.equal(query.error, undefined);
+    assert.deepEqual(query.data, {
+      user: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick',
+      },
+    });
+  });
 });
