@@ -4,3 +4,20 @@ packages:
   - site
   # - site/lib/docfy-theme
 
+# pnpm >= 10 reads overrides from here; pnpm 9 only reads them from
+# `pnpm.overrides` in package.json. These are deliberately duplicated in both
+# places so a frozen install resolves identically on either, which Netlify's
+# build image depends on. Drop the package.json copy once nothing runs pnpm 9.
+overrides:
+  ember-basic-dropdown: ^8.11.0
+  ember-power-select: ^8.3.0
+  '@frontile/core': npm:@frontile/theme@0.17.1
+  '@frontile/overlays': 0.17.1
+
+# pnpm 11 requires dependency build scripts to be approved explicitly.
+# msw needs its postinstall to write the service worker used by test-app.
+allowBuilds:
+  core-js: false
+  esbuild: false
+  msw: true
+  nx: false

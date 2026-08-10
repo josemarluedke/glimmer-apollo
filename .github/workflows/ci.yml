@@ -18,13 +18,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9
-      - uses: actions/setup-node@v4
+          version: 11
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -41,13 +41,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9
-      - uses: actions/setup-node@v4
+          version: 11
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - name: Install Dependencies
         run: pnpm install --no-lockfile
@@ -73,13 +73,13 @@ jobs:
           - ember-canary
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9
-      - uses: actions/setup-node@v4
+          version: 11
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
