@@ -39,7 +39,7 @@ export default class ObservableResource<
               variables: {
                 ...this.observable.options.variables,
                 ...variables,
-              } as TVariables,
+              },
             }
           : {}),
       });

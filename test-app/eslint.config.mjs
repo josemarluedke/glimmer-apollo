@@ -107,6 +107,25 @@ export default [
         qunit,
       },
     },
+    {
+      files: ['tests/**/*.ts'],
+      rules: {
+        /**
+         * False positives here, in two shapes, both of which the rule's
+         * autofix silently breaks:
+         *
+         * - `assert.deepEqual(query.data as unknown, expected)` — deepEqual is
+         *   `<T>(actual: T, expected: T)`, so dropping the cast infers T from
+         *   the first argument and the expected literal stops type-checking.
+         *   The rule only considers whether the receiver accepts the original
+         *   type, not the cross-argument inference.
+         * - `useQuery as useQuery.Signatures.Modern` — Classic and Modern are
+         *   mutually assignable, so the rule sees no change, but the cast is
+         *   what pins the variable to Modern for the type assertions below it.
+         */
+        '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+      },
+    },
     /**
      * CJS node files
      */
