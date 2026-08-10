@@ -4,3 +4,18 @@ packages:
   - site
   # - site/lib/docfy-theme
 
+# Moved here from `pnpm.overrides` in package.json: pnpm 11 only reads
+# overrides from this file, and silently ignores the package.json block.
+overrides:
+  ember-basic-dropdown: ^8.11.0
+  ember-power-select: ^8.3.0
+  '@frontile/core': npm:@frontile/theme@0.17.1
+  '@frontile/overlays': 0.17.1
+
+# pnpm 11 requires dependency build scripts to be approved explicitly.
+# msw needs its postinstall to write the service worker used by test-app.
+allowBuilds:
+  core-js: false
+  esbuild: false
+  msw: true
+  nx: false
