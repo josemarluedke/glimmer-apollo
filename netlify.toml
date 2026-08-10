@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "25"
+  PNPM_VERSION = "11.1.2"
 [[redirects]]
   from = "/*"
   to = "/index.html"

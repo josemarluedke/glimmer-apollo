@@ -1,7 +1,6 @@
 {
   "private": true,
   "license": "MIT",
-  "packageManager": "pnpm@11.1.2",
   "scripts": {
     "build": "pnpm --filter glimmer-apollo build",
     "lint": "pnpm --filter '*' lint",
