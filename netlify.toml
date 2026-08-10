@@ -1,5 +1,5 @@
 [build]
-  command = "npx --yes pnpm@11 install && npx --yes pnpm@11 --filter site build"
+  command = "pnpm install && pnpm --filter site build"
   publish = "site/dist"
 
 [build.environment]

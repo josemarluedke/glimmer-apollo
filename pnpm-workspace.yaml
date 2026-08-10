@@ -4,8 +4,10 @@ packages:
   - site
   # - site/lib/docfy-theme
 
-# Moved here from `pnpm.overrides` in package.json: pnpm 11 only reads
-# overrides from this file, and silently ignores the package.json block.
+# pnpm >= 10 reads overrides from here; pnpm 9 only reads them from
+# `pnpm.overrides` in package.json. These are deliberately duplicated in both
+# places so a frozen install resolves identically on either, which Netlify's
+# build image depends on. Drop the package.json copy once nothing runs pnpm 9.
 overrides:
   ember-basic-dropdown: ^8.11.0
   ember-power-select: ^8.3.0
