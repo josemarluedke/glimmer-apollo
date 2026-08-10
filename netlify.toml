@@ -1,10 +1,9 @@
 [build]
-  command = "pnpm install && pnpm --filter site build"
+  command = "npx --yes pnpm@11 install && npx --yes pnpm@11 --filter site build"
   publish = "site/dist"
 
 [build.environment]
   NODE_VERSION = "25"
-  PNPM_VERSION = "11.1.2"
 [[redirects]]
   from = "/*"
   to = "/index.html"
