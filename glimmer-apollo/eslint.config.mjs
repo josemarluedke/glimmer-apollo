@@ -88,6 +88,20 @@ export default ts.config(
       'import/extensions': ['error', 'always', { ignorePackages: true }],
     },
   },
+  {
+    files: ['src/-private/resource.ts', 'src/-private/use-resource.ts'],
+    rules: {
+      /**
+       * These call into `@ember/helper` (setHelperManager, invokeHelper),
+       * whose types resolve under glint's ember-tsc — which is what builds
+       * the published declarations — but not under typescript-eslint's plain
+       * project service. It therefore sees unresolved types here and reports
+       * the calls as unsafe and the casts that compensate as redundant.
+       */
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+    },
+  },
   /**
    * CJS node files
    */
