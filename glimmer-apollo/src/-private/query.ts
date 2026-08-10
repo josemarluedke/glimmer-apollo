@@ -18,6 +18,7 @@ import type {
   MaybeMasked,
   OperationVariables,
   ObservableQuery,
+  TypedDocumentNode,
 } from '@apollo/client';
 import type { Subscription } from 'rxjs';
 import type { TemplateArgs } from './types';
@@ -36,7 +37,10 @@ export type QueryOptions<TData, TVariables extends OperationVariables> = Omit<
 export type QueryPositionalArgs<
   TData,
   TVariables extends OperationVariables = OperationVariables,
-> = [DocumentNode, QueryOptions<TData, TVariables>?];
+> = [
+  DocumentNode | TypedDocumentNode<TData, TVariables>,
+  QueryOptions<TData, TVariables>?,
+];
 
 export class QueryResource<
   TData,

@@ -1,4 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unsafe-member-access --
+   sinon's `spy.args` is typed as `any[][]` (sinon's TS types don't extract
+   parameters from Apollo Client's `MutateOptions` cleanly), so member access
+   on the captured call args reports as unsafe. Tests assert behavior, not
+   typing — silencing the rule for the file. */
 import { module, test } from 'qunit';
 import { destroy } from '@ember/destroyable';
 import {

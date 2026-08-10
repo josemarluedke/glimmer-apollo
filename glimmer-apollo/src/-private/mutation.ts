@@ -15,6 +15,7 @@ import type {
   MutateResult,
   OperationVariables,
   MaybeMasked,
+  TypedDocumentNode,
 } from '@apollo/client';
 import type { TemplateArgs } from './types';
 
@@ -23,7 +24,8 @@ type Maybe<T> = T | undefined | null;
 export type MutationOptions<
   TData,
   TVariables extends OperationVariables,
-> = Omit<ApolloMutationOptions<TData, TVariables>, 'mutation'> & {
+> = Omit<ApolloMutationOptions<TData, TVariables>, 'mutation' | 'variables'> & {
+  variables?: TVariables;
   clientId?: string;
   onComplete?: (data: Maybe<MaybeMasked<TData>>) => void;
   onError?: (error: ErrorLike) => void;
@@ -32,7 +34,10 @@ export type MutationOptions<
 export type MutationPositionalArgs<
   TData,
   TVariables extends OperationVariables = OperationVariables,
-> = [DocumentNode, MutationOptions<TData, TVariables>?];
+> = [
+  DocumentNode | TypedDocumentNode<TData, TVariables>,
+  MutationOptions<TData, TVariables>?,
+];
 
 export class MutationResource<
   TData,

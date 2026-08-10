@@ -6,6 +6,8 @@ order: 2
 
 Now that we've learned how to [fetch data](./queries.md), the next step is to learn how to update that data with mutations.
 
+> The examples below use the **classic** signature style (the default), where `<TData, TVariables>` generics are passed explicitly. If you'd rather have them inferred from a `TypedDocumentNode`, see [Modern signatures](../modern-signatures.md).
+
 ## Executing a Mutation
 
 Let's define our GraphQL Mutation document.

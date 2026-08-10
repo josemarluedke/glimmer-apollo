@@ -12,6 +12,7 @@ import type {
   MaybeMasked,
   OperationVariables,
   SubscriptionOptions as ApolloSubscriptionOptions,
+  TypedDocumentNode,
 } from '@apollo/client';
 import type { Subscription } from 'rxjs';
 import { equal } from '@wry/equality';
@@ -32,7 +33,10 @@ export type SubscriptionOptions<
 export type SubscriptionPositionalArgs<
   TData,
   TVariables extends OperationVariables = OperationVariables,
-> = [DocumentNode, SubscriptionOptions<TData, TVariables>?];
+> = [
+  DocumentNode | TypedDocumentNode<TData, TVariables>,
+  SubscriptionOptions<TData, TVariables>?,
+];
 
 export class SubscriptionResource<
   TData,

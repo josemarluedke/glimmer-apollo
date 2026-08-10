@@ -10,6 +10,8 @@ Subscriptions enable you to fetch data for long-lasting operations that can chan
 
 Subscriptions help notify your client in real-time about changes to back-end data, such as adding new objects, updated fields, and so on.
 
+> The examples below pass `<TData, TVariables>` generics explicitly. If you'd rather have them inferred from a `TypedDocumentNode`, see [Modern signatures](../modern-signatures.md). Unlike `useQuery`/`useMutation`, `useSubscription` does not have a Classic/Modern split — the inference improvement applies to all callers.
+
 ## Client Setup
 
 As subscriptions usually maintain a persistent connection, they shouldn't use 

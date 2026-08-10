@@ -13,6 +13,8 @@ For the purpose of this guide, we will be using GTS (Glimmer TypeScript) format
 with inline templates instead of separated template files. This approach uses
 the modern `<template>` syntax available in Ember.js.
 
+> The examples below use the **classic** signature style (the default), where `<TData, TVariables>` generics are passed explicitly. If you'd rather have them inferred from a `TypedDocumentNode`, see [Modern signatures](../modern-signatures.md).
+
 ## Executing a Query
 
 Let's first define our GraphQL Query document.
