@@ -25,8 +25,9 @@ import type { TemplateArgs } from './types';
 
 export type QueryOptions<TData, TVariables extends OperationVariables> = Omit<
   ApolloClient.WatchQueryOptions<TData, TVariables>,
-  'query'
+  'query' | 'variables'
 > & {
+  variables?: TVariables;
   skip?: boolean;
   ssr?: boolean;
   clientId?: string;

@@ -18,7 +18,11 @@ export default class ObservableResource<
     this.observable = observable;
   }
 
-  refetch = (variables?: Partial<TVariables> | MouseEvent) => {
+  refetch = (variables?: Partial<TVariables> | Event) => {
+    if (variables instanceof Event) {
+      variables = undefined;
+    }
+
     // In Apollo Client 4, refetch() uses a disposable observable that
     // doesn't emit to RxJS subscribers when fetchPolicy is 'standby'.
     // https://github.com/apollographql/apollo-client/pull/12384
@@ -27,11 +31,20 @@ export default class ObservableResource<
     // after refetch(), the query is no longer in standby and will receive
     // future updates normally.
     if (this.observable?.options.fetchPolicy === 'standby') {
-      return this.observable.reobserve({ fetchPolicy: 'network-only' });
+      return this.observable.reobserve({
+        fetchPolicy: 'network-only',
+        // reobserve() replaces variables where refetch() merges them.
+        ...(variables
+          ? {
+              variables: {
+                ...this.observable.options.variables,
+                ...variables,
+              } as TVariables,
+            }
+          : {}),
+      });
     }
-    if (variables instanceof MouseEvent) {
-      return this.observable?.refetch();
-    }
+
     return this.observable?.refetch(variables);
   };
 
