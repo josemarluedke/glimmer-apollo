@@ -157,14 +157,14 @@ importers:
         specifier: ^7.29.7
         version: 7.29.7
       '@docfy/ember':
-        specifier: ^0.11.0
-        version: 0.11.0(@babel/core@7.29.7)(@glint/template@1.8.0)(ember-source@6.9.0(@glimmer/component@2.1.1)(rsvp@4.8.5))
+        specifier: ^0.12.0
+        version: 0.12.0(@babel/core@7.29.7)(@glint/template@1.8.0)(ember-source@6.9.0(@glimmer/component@2.1.1)(rsvp@4.8.5))
       '@docfy/ember-vite':
-        specifier: ^0.11.0
-        version: 0.11.0(@embroider/vite@1.4.4(@embroider/core@4.4.1(@glint/template@1.8.0))(@glint/template@1.8.0)(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0)))(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0))
+        specifier: ^0.12.0
+        version: 0.12.0(@embroider/vite@1.4.4(@embroider/core@4.4.1(@glint/template@1.8.0))(@glint/template@1.8.0)(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0)))(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0))
       '@docfy/plugin-with-prose':
-        specifier: ^0.11.0
-        version: 0.11.0
+        specifier: ^0.12.0
+        version: 0.12.0
       '@ember/optional-features':
         specifier: ^2.3.0
         version: 2.3.0
@@ -1524,28 +1524,28 @@ packages:
       }
     engines: { node: '>= 12.*' }
 
-  '@docfy/ember-vite@0.11.0':
+  '@docfy/ember-vite@0.12.0':
     resolution:
       {
-        integrity: sha512-AcDRwPucQ8oMp7O8dD0ngqK4aNH8dNJ4kpaVpGju4Ohuq9CNyDvxOEcyDJCZUG/M3SMWsuNPe30Hk7YWGkLQNA==
+        integrity: sha512-o2zcIKawUL8Si7wUuhdnqWld8ULhR0HgThTBgJLxBnWeV3LJ24TzBs95tMYkNul8rPKqT4UVdBUkpgPfqSWHxg==
       }
     engines: { node: '>= 16' }
     peerDependencies:
       '@embroider/vite': ^1.0.0
       vite: '>= 6.0.0'
 
-  '@docfy/ember@0.11.0':
+  '@docfy/ember@0.12.0':
     resolution:
       {
-        integrity: sha512-ogz9AUKRcAi7ho/CI4jQYqLwuITsZ0ttQ6YqFT3e4DQi/d88Q9rGY42p0N2u88NOojor3anyoH4ra07xkt8SBg==
+        integrity: sha512-dwPJ+1JTPqP4IMuePGcMmXF7TXPpU5ePZyTJjh4Rn+XvzZ3CU6lZTdl2oV0BcOfwtsPowpqnswCuPZksNj9row==
       }
     peerDependencies:
       ember-source: '>= 6.5.0'
 
-  '@docfy/plugin-with-prose@0.11.0':
+  '@docfy/plugin-with-prose@0.12.0':
     resolution:
       {
-        integrity: sha512-bWqTijJLCRAG4mrPjw/7+NDG6XMdPUZVdLTe5ZIQGk8LJ+v1R0UMqx2TZwwyc6enr2xgjs+HdHYkXS0hip45Uw==
+        integrity: sha512-GBvJLRUsf1RkLZUbWVQucgjyXkrTppC0sMm9XSLMBhEGHNLBFycHKIyWLVTTWzw7C+vxJ1l7V3P0taXhcgOeCA==
       }
     engines: { node: '>= 12.*' }
 
@@ -17148,7 +17148,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@docfy/ember-vite@0.11.0(@embroider/vite@1.4.4(@embroider/core@4.4.1(@glint/template@1.8.0))(@glint/template@1.8.0)(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0)))(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0))':
+  '@docfy/ember-vite@0.12.0(@embroider/vite@1.4.4(@embroider/core@4.4.1(@glint/template@1.8.0))(@glint/template@1.8.0)(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0)))(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0))':
     dependencies:
       '@docfy/core': 0.11.0
       '@embroider/vite': 1.4.4(@embroider/core@4.4.1(@glint/template@1.8.0))(@glint/template@1.8.0)(rollup@4.62.4)(vite@7.3.6(@types/node@26.2.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.49.2)(yaml@2.9.0))
@@ -17165,8 +17165,9 @@ snapshots:
       - rollup
       - supports-color
 
-  '@docfy/ember@0.11.0(@babel/core@7.29.7)(@glint/template@1.8.0)(ember-source@6.9.0(@glimmer/component@2.1.1)(rsvp@4.8.5))':
+  '@docfy/ember@0.12.0(@babel/core@7.29.7)(@glint/template@1.8.0)(ember-source@6.9.0(@glimmer/component@2.1.1)(rsvp@4.8.5))':
     dependencies:
+      '@docfy/core': 0.11.0
       '@embroider/addon-shim': 1.10.3
       '@embroider/macros': 1.20.6(@babel/core@7.29.7)(@glint/template@1.8.0)
       decorator-transforms: 2.4.0(@babel/core@7.29.7)
@@ -17176,7 +17177,7 @@ snapshots:
       - '@glint/template'
       - supports-color
 
-  '@docfy/plugin-with-prose@0.11.0':
+  '@docfy/plugin-with-prose@0.12.0':
     dependencies:
       '@docfy/core': 0.11.0
     transitivePeerDependencies:
