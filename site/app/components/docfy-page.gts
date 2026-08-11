@@ -4,6 +4,7 @@ import { DocfyOutput } from '@docfy/ember';
 import { pageTitle } from 'ember-page-title';
 import DocfySidebarNav from './docfy-sidebar-nav';
 import DocfyPageHeadings from './docfy-page-headings';
+import DocfyCopyPage from './docfy-copy-page';
 import docfyIntersectHeadings from '../modifiers/docfy-intersect-headings';
 
 interface Signature {
@@ -37,8 +38,15 @@ export default class DocfyPage extends Component<Signature> {
           </DocfyOutput>
         </div>
 
-        <div class="flex-1 w-full min-w-0 px-0 pt-12 lg:px-10">
+        <div class="relative flex-1 w-full min-w-0 px-0 pt-12 lg:px-10">
           <DocfyOutput @fromCurrentURL={{true}} as |page|>
+            {{! In flow above the title on small screens, where overlaying it
+                would collide with a long heading. }}
+            <div
+              class="flex justify-end mb-4 lg:mb-0 lg:absolute lg:top-0 lg:right-0 lg:pr-10 lg:pt-14"
+            >
+              <DocfyCopyPage @url={{page.url}} @title={{page.title}} />
+            </div>
             <div
               class="markdown max-w-none"
               {{docfyIntersectHeadings

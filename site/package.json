@@ -85,6 +85,8 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
+    "@frontile/buttons": "0.17.1",
+    "@frontile/collections": "0.17.1",
     "@frontile/overlays": "0.17.1",
     "ember-modifier": "^4.3.0"
   }
