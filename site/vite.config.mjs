@@ -63,6 +63,14 @@ export default defineConfig({
         url: 'https://github.com/josemarluedke/glimmer-apollo',
         editBranch: 'main',
       },
+      // Emit per-page .md files, llms.txt and llms-full.txt at build time so
+      // crawlers and AI agents get the docs content, not just the app shell.
+      staticExport: {
+        enabled: true,
+        siteUrl: 'https://glimmer-apollo.com',
+        projectName: 'Glimmer Apollo',
+        projectDescription: 'Ember and Glimmer integration for Apollo Client',
+      },
       tocMaxDepth: 3,
       labels: {
         docs: 'Docs',
