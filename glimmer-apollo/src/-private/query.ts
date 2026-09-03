@@ -4,6 +4,7 @@ import { equal } from '@wry/equality';
 import {
   isDestroyed,
   isDestroying,
+  next,
   tracked,
   waitForPromise,
 } from '../environment.ts';
@@ -62,6 +63,13 @@ export class QueryResource<
 
   #firstPromiseReject: (() => unknown) | undefined;
 
+  /**
+   * True only while subscribe() is replaying a cached result synchronously
+   * from inside setup(), i.e. while we are still in the resource's tracking
+   * computation.
+   */
+  #inSetup = false;
+
   /** @internal */
   setup(): void {
     this.#previousPositionalArgs = this.args.positional;
@@ -116,6 +124,7 @@ export class QueryResource<
     // emits an initial { loading: true } before data arrives. Gate on
     // !result.loading so the promise resolves only after the first real result,
     // keeping route model hooks and await patterns working correctly.
+    this.#inSetup = true;
     this.#subscription = observable.subscribe((result) => {
       this.#onComplete(result);
       if (firstResolve && !result.loading) {
@@ -123,6 +132,7 @@ export class QueryResource<
         firstResolve = undefined;
       }
     });
+    this.#inSetup = false;
 
     waitForPromise(promise).catch(() => {
       // We catch by default as the promise is only meant to be used
@@ -190,10 +200,32 @@ export class QueryResource<
     const { onComplete, onError } = options || {};
     const { data, error } = this;
 
-    if (onComplete && !error) {
-      onComplete(data);
-    } else if (onError && error) {
-      onError(error);
+    const invoke = (): void => {
+      if (onComplete && !error) {
+        onComplete(data);
+      } else if (onError && error) {
+        onError(error);
+      }
+    };
+
+    if (!this.#inSetup) {
+      invoke();
+      return;
     }
+
+    // Apollo Client 4 replays the current cache result synchronously from
+    // subscribe(), so this call arrives inside the resource's tracking
+    // computation. Consumers commonly read tracked state in the options thunk
+    // and write to it here -- clearing a poll interval once the data arrives --
+    // which would trip Ember's backtracking assertion. Hand just that replay to
+    // the runloop; settled() still waits for it. Callbacks for later, async
+    // emissions keep running synchronously, as they always have.
+    next(() => {
+      if (isDestroyed(this) || isDestroying(this)) {
+        return;
+      }
+
+      invoke();
+    });
   }
 }

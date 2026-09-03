@@ -12,6 +12,7 @@ export {
   associateDestroyableChild,
 } from '@ember/destroyable';
 export { waitForPromise } from '@ember/test-waiters';
+export { next } from '@ember/runloop';
 
 export {
   invokeHelper,
