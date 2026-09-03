@@ -1,5 +1,5 @@
 {
   "packages": ["glimmer-apollo", "test-app", "site"],
-  "version": "0.9.0",
+  "version": "0.9.1",
   "npmClient": "pnpm"
 }
