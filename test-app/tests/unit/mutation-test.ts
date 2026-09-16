@@ -246,6 +246,53 @@ module('useMutation', function (hooks) {
     assert.equal(onErrorCalled!.message, 'User not found with given username');
   });
 
+  test('it calls onComplete passed into mutate', async function (assert) {
+    let onCompleteCalled: unknown;
+    const mutation = useMutation<LoginMutation, LoginMutationVariables>(
+      ctx,
+      () => [LOGIN, { variables: { username: 'john' } }]
+    );
+
+    assert.equal(mutation.data, undefined);
+    mutation.mutate(undefined, {
+      onComplete: (data) => {
+        onCompleteCalled = data;
+      },
+    });
+    await mutation.settled();
+
+    const expectedData = {
+      login: {
+        __typename: 'User',
+        firstName: 'Joth',
+        id: '2',
+        lastName: 'Maverick',
+      },
+    };
+
+    assert.deepEqual(mutation.data as unknown, expectedData);
+    assert.deepEqual(onCompleteCalled, expectedData);
+  });
+
+  test('it calls onError passed into mutate', async function (assert) {
+    let onErrorCalled: ErrorLike;
+    const mutation = useMutation<LoginMutation, LoginMutationVariables>(
+      ctx,
+      () => [LOGIN, { variables: { username: 'non-existing' } }]
+    );
+
+    assert.equal(mutation.error, undefined);
+    mutation.mutate(undefined, {
+      onError: (error) => {
+        onErrorCalled = error;
+      },
+    });
+    await mutation.settled();
+
+    assert.equal(mutation.error?.message, 'User not found with given username');
+    assert.equal(onErrorCalled!.message, 'User not found with given username');
+  });
+
   test('it returns error with data', async function (assert) {
     let onCompleteCalled: unknown;
     let onErrorCalled: ErrorLike;
