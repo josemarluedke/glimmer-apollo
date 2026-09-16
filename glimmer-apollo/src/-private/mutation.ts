@@ -49,6 +49,16 @@ export class MutationResource<
   @tracked data: Maybe<MaybeMasked<TData>>;
   @tracked promise!: Promise<Maybe<MaybeMasked<TData>>>;
 
+  /**
+   * The callbacks from the most recent `mutate()` call, where the options
+   * passed into `mutate()` are merged over the positional ones. Used so
+   * callbacks passed into `mutate()` are honored.
+   */
+  #lastCallbacks?: Pick<
+    MutationOptions<TData, TVariables>,
+    'onComplete' | 'onError'
+  >;
+
   async mutate(
     variables?: TVariables,
     overrideOptions: Omit<
@@ -62,6 +72,7 @@ export class MutationResource<
     this.loading = true;
     const [mutation, originalOptions] = this.args.positional;
     const options = { ...originalOptions, ...overrideOptions };
+    this.#lastCallbacks = options;
     const client = getClient(this, options.clientId);
 
     if (!variables) {
@@ -120,8 +131,9 @@ export class MutationResource<
       return;
     }
 
-    const [, options] = this.args.positional;
-    const { onComplete, onError } = options || {};
+    const [, positionalOptions] = this.args.positional;
+    const { onComplete, onError } =
+      this.#lastCallbacks ?? positionalOptions ?? {};
     const { data, error } = this;
 
     if (onComplete && !error) {
