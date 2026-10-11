@@ -70,6 +70,15 @@ export class QueryResource<
    */
   #inSetup = false;
 
+  /**
+   * True while update() replaces the observable because the variables changed.
+   * The render that triggered it may already have used this instance's state.
+   */
+  #replacing = false;
+
+  /** Identifies the current subscription, so a deferred replay of an old one is dropped. */
+  #generation = 0;
+
   /** @internal */
   setup(): void {
     this.#previousPositionalArgs = this.args.positional;
@@ -124,13 +133,32 @@ export class QueryResource<
     // emits an initial { loading: true } before data arrives. Gate on
     // !result.loading so the promise resolves only after the first real result,
     // keeping route model hooks and await patterns working correctly.
-    this.#inSetup = true;
-    this.#subscription = observable.subscribe((result) => {
+    const generation = ++this.#generation;
+    const handle = (result: ObservableQuery.Result<MaybeMasked<TData>>) => {
       this.#onComplete(result);
       if (firstResolve && !result.loading) {
         firstResolve();
         firstResolve = undefined;
       }
+    };
+    this.#inSetup = true;
+    this.#subscription = observable.subscribe((result) => {
+      // When the variables change mid-render, an earlier part of that render
+      // may already have used `data`, so a cached result replayed synchronously
+      // here must not be written yet. Apply it in the next run loop instead.
+      if (this.#inSetup && this.#replacing) {
+        next(() => {
+          if (
+            generation !== this.#generation ||
+            isDestroyed(this) ||
+            isDestroying(this)
+          )
+            return;
+          handle(result);
+        });
+        return;
+      }
+      handle(result);
     });
     this.#inSetup = false;
 
@@ -148,7 +176,12 @@ export class QueryResource<
   update(): void {
     if (!equal(this.#previousPositionalArgs, this.args.positional)) {
       this.teardown();
-      this.setup();
+      this.#replacing = true;
+      try {
+        this.setup();
+      } finally {
+        this.#replacing = false;
+      }
     }
   }
 

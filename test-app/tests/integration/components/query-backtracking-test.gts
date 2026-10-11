@@ -4,6 +4,7 @@ import { render, settled } from '@ember/test-helpers';
 import Component from '@glimmer/component';
 import type { TOC } from '@ember/component/template-only';
 import { tracked } from '@glimmer/tracking';
+import { modifier } from 'ember-modifier';
 import { useQuery, gql } from 'glimmer-apollo';
 
 import type {
@@ -105,3 +106,54 @@ module('Integration | Components | query backtracking', function (hooks) {
     assert.dom('[data-test-id="name"]').exists({ count: 2 });
   });
 });
+
+class UserSwitcher {
+  @tracked id = '1';
+}
+
+class UserPage extends Component<{ Args: { switcher: UserSwitcher } }> {
+  query = useQuery<UserInfoQuery, UserInfoQueryVariables>(this, () => [
+    USER_INFO,
+    { variables: { id: this.args.switcher.id } },
+  ]);
+
+  // Reads the data before anything below reads the query, e.g. to fetch the
+  // next page once the current one has rendered.
+  readData = modifier(() => {
+    void this.query.data;
+  });
+
+  <template>
+    <div {{this.readData}}></div>
+    <p
+      data-test-id="busy"
+      aria-busy={{if this.query.loading "true" "false"}}
+    ></p>
+    <div data-test-id="name">{{this.query.data.user.firstName}}</div>
+  </template>
+}
+
+module(
+  'Integration | Components | query variables back to a cached result',
+  function (hooks) {
+    setupRenderingTest(hooks);
+
+    test('switching back to cached variables shows the cached result', async function (assert) {
+      const switcher = new UserSwitcher();
+
+      await render(<template><UserPage @switcher={{switcher}} /></template>);
+      assert.dom('[data-test-id="name"]').hasText('Cathaline');
+
+      switcher.id = '2';
+      await settled();
+      assert.dom('[data-test-id="name"]').hasText('Joth');
+
+      // User 1 is cached, so Apollo Client 4 replays it synchronously from
+      // subscribe(), inside the update() that the aria-busy read triggers --
+      // after the modifier above has already used `data` in this render.
+      switcher.id = '1';
+      await settled();
+      assert.dom('[data-test-id="name"]').hasText('Cathaline');
+    });
+  }
+);
