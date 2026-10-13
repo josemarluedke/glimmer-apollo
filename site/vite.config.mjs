@@ -43,10 +43,6 @@ const highlighter = createHighlighterCoreSync({
 });
 
 export default defineConfig({
-  build: {
-    // Use esbuild for minification (handles modern JS like static blocks)
-    minify: 'esbuild',
-  },
   plugins: [
     // Docfy plugin must run BEFORE ember plugin so templates are available
     docfy({
