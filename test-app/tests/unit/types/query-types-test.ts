@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { useQuery } from 'glimmer-apollo';
-import type { QueryResource } from 'glimmer-apollo';
-import type { TypedDocumentNode } from '@apollo/client';
+import type { PartialQueryResource, QueryResource } from 'glimmer-apollo';
+import type { DataValue, TypedDocumentNode } from '@apollo/client';
 import type {
   UserInfoQuery,
   UserInfoQueryVariables,
@@ -42,6 +42,69 @@ function _typeAssertions() {
   expectTypeOf(qc).toEqualTypeOf<
     QueryResource<UserInfoQuery, UserInfoQueryVariables>
   >();
+
+  // returnPartialData: data may miss fields.
+  const qp = useQueryModern(ctx, () => [
+    USER_INFO,
+    { variables: { id: '1' }, returnPartialData: true },
+  ]);
+  expectTypeOf(qp).toEqualTypeOf<
+    PartialQueryResource<UserInfoQuery, UserInfoQueryVariables>
+  >();
+  expectTypeOf(qp.data).toEqualTypeOf<
+    DataValue.Partial<UserInfoQuery> | undefined
+  >();
+  if (qp.data?.user) {
+    // @ts-expect-error - a field of partial data may be missing
+    takesString(qp.data.user.firstName);
+  }
+  if (q.data?.user) {
+    takesString(q.data.user.firstName);
+  }
+
+  const qcp = useQueryClassic<UserInfoQuery, UserInfoQueryVariables>(
+    ctx,
+    () => [USER_INFO, { variables: { id: '1' }, returnPartialData: true }]
+  );
+  expectTypeOf(qcp.data).toEqualTypeOf<
+    DataValue.Partial<UserInfoQuery> | undefined
+  >();
+
+  // A boolean flag, not only the literal true, selects the partial shape.
+  const flag = Boolean(ctx);
+  const qf = useQueryModern(ctx, () => [
+    USER_INFO,
+    { variables: { id: '1' }, returnPartialData: flag },
+  ]);
+  expectTypeOf(qf.data).toEqualTypeOf<
+    DataValue.Partial<UserInfoQuery> | undefined
+  >();
+
+  // onComplete receives the same partial shape as data.
+  useQueryModern(ctx, () => [
+    USER_INFO,
+    {
+      variables: { id: '1' },
+      returnPartialData: true,
+      onComplete: (data) => {
+        expectTypeOf(data).toEqualTypeOf<
+          DataValue.Partial<UserInfoQuery> | undefined
+        >();
+      },
+    },
+  ]);
+
+  // A complete resource fits where a partial one is expected, not the reverse.
+  expectTypeOf(q).toExtend<
+    PartialQueryResource<UserInfoQuery, UserInfoQueryVariables>
+  >();
+  expectTypeOf(qp).not.toExtend<
+    QueryResource<UserInfoQuery, UserInfoQueryVariables>
+  >();
+}
+
+function takesString(value: string) {
+  return value;
 }
 
 // Default (no TypeOverrides augmentation): the exported `useQuery` resolves to

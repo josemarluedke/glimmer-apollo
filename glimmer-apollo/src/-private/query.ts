@@ -14,6 +14,7 @@ import { createPromise, getFastboot, settled } from './utils.ts';
 
 import type {
   ApolloClient,
+  DataValue,
   DocumentNode,
   ErrorLike,
   MaybeMasked,
@@ -24,7 +25,15 @@ import type {
 import type { Subscription } from 'rxjs';
 import type { TemplateArgs } from './types';
 
-export type QueryOptions<TData, TVariables extends OperationVariables> = Omit<
+/**
+ * `TResultData` is the shape `data` (and `onComplete`'s argument) is typed
+ * as: complete by default, `DataValue.Partial` when `returnPartialData` is set.
+ */
+export type QueryOptions<
+  TData,
+  TVariables extends OperationVariables,
+  TResultData = MaybeMasked<TData>,
+> = Omit<
   ApolloClient.WatchQueryOptions<TData, TVariables>,
   'query' | 'variables'
 > & {
@@ -32,21 +41,33 @@ export type QueryOptions<TData, TVariables extends OperationVariables> = Omit<
   skip?: boolean;
   ssr?: boolean;
   clientId?: string;
-  onComplete?: (data: MaybeMasked<TData> | undefined) => void;
+  onComplete?: (data: TResultData | undefined) => void;
   onError?: (error: ErrorLike) => void;
 };
 
 export type QueryPositionalArgs<
   TData,
   TVariables extends OperationVariables = OperationVariables,
+  TResultData = MaybeMasked<TData>,
 > = [
   DocumentNode | TypedDocumentNode<TData, TVariables>,
-  QueryOptions<TData, TVariables>?,
+  QueryOptions<TData, TVariables, TResultData>?,
 ];
+
+/**
+ * A query read with `returnPartialData`: `data` can miss fields, whether it is
+ * a cache read before the network answers, a result with `errorPolicy: 'all'`
+ * where a field errored, or a cache read after an eviction.
+ */
+export type PartialQueryResource<
+  TData,
+  TVariables extends OperationVariables = OperationVariables,
+> = QueryResource<TData, TVariables, DataValue.Partial<MaybeMasked<TData>>>;
 
 export class QueryResource<
   TData,
   TVariables extends OperationVariables = OperationVariables,
+  TResultData = MaybeMasked<TData>,
 > extends ObservableResource<
   TData,
   TVariables,
@@ -54,7 +75,7 @@ export class QueryResource<
 > {
   @tracked loading = false;
   @tracked error?: ErrorLike;
-  @tracked data: MaybeMasked<TData> | undefined;
+  @tracked data: TResultData | undefined;
   @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
   @tracked promise!: Promise<void>;
 
@@ -171,11 +192,9 @@ export class QueryResource<
     const { loading, error, data, networkStatus } = result;
 
     this.loading = loading;
-    // Cast: Apollo Client 4's result type includes DeepPartial<TData> to
-    // account for returnPartialData. We expose the stricter TData since
-    // consumers who opt into returnPartialData already expect partial shapes.
-    // If AC4 tightens this typing in a future version, revisit this cast.
-    this.data = data as MaybeMasked<TData> | undefined;
+    // Apollo types every result's data as complete | partial; the overload
+    // that built this resource decided which of the two TResultData is.
+    this.data = data as TResultData | undefined;
     this.networkStatus = networkStatus;
     this.error = error;
 
@@ -202,7 +221,10 @@ export class QueryResource<
 
     const invoke = (): void => {
       if (onComplete && !error) {
-        onComplete(data);
+        // args keep the default options type so a complete resource stays
+        // assignable to a partial one; the overload matched onComplete's
+        // parameter to TResultData already.
+        onComplete(data as MaybeMasked<TData> | undefined);
       } else if (onError && error) {
         onError(error);
       }

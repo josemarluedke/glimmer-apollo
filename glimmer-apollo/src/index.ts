@@ -12,6 +12,7 @@ export type {
   UseSubscription,
 } from './-private/usables.ts';
 export type {
+  PartialQueryResource,
   QueryOptions,
   QueryResource,
   QueryPositionalArgs,

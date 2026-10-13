@@ -5,6 +5,7 @@ import {
   MutationResource,
 } from './mutation.ts';
 import {
+  type PartialQueryResource,
   type QueryOptions,
   type QueryPositionalArgs,
   QueryResource,
@@ -13,11 +14,25 @@ import {
   type SubscriptionPositionalArgs,
   SubscriptionResource,
 } from './subscription.ts';
-import type { OperationVariables, TypedDocumentNode } from '@apollo/client';
 import type {
-  NoInfer,
-  SignatureStyle,
-} from '@apollo/client/utilities/internal';
+  DataValue,
+  MaybeMasked,
+  OperationVariables,
+  TypedDocumentNode,
+} from '@apollo/client';
+import type { SignatureStyle } from '@apollo/client/utilities/internal';
+
+/**
+ * Options that select the partial overload. `returnPartialData: boolean`
+ * rather than `true` so a flag variable also lands here, as in Apollo's own
+ * `useQuery` overloads.
+ */
+type PartialQueryOptions<
+  TData,
+  TVariables extends OperationVariables,
+> = QueryOptions<TData, TVariables, DataValue.Partial<MaybeMasked<TData>>> & {
+  returnPartialData: boolean;
+};
 
 /* eslint-disable @typescript-eslint/no-namespace, @typescript-eslint/no-empty-object-type --
    Namespaces and the empty-extends interface mirror Apollo Client 4.2's own
@@ -33,10 +48,30 @@ export namespace useQuery {
         TVariables extends OperationVariables = OperationVariables,
       >(
         parentDestroyable: object,
+        args: () => [
+          QueryPositionalArgs<TData, TVariables>[0],
+          PartialQueryOptions<TData, TVariables>,
+        ],
+      ): PartialQueryResource<TData, TVariables>;
+      <
+        TData = unknown,
+        TVariables extends OperationVariables = OperationVariables,
+      >(
+        parentDestroyable: object,
         args: () => QueryPositionalArgs<TData, TVariables>,
       ): QueryResource<TData, TVariables>;
     }
     export interface Modern {
+      <
+        TData = unknown,
+        TVariables extends OperationVariables = OperationVariables,
+      >(
+        parentDestroyable: object,
+        args: () => [
+          TypedDocumentNode<TData, TVariables>,
+          PartialQueryOptions<TData, NoInfer<TVariables>>,
+        ],
+      ): PartialQueryResource<TData, TVariables>;
       <
         TData = unknown,
         TVariables extends OperationVariables = OperationVariables,

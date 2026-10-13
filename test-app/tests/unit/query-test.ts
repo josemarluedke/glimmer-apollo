@@ -102,6 +102,42 @@ module('useQuery', function (hooks) {
     assert.equal(query.data?.user?.id, '2');
   });
 
+  test('it reports partial data from the cache, then complete', async function (assert) {
+    const partialClient = new ApolloClient({
+      cache: new InMemoryCache(),
+      link,
+    });
+    setClient(ctx, partialClient);
+    partialClient.writeQuery({
+      query: gql`
+        query UserFirstName($id: ID!) {
+          user(id: $id) {
+            id
+            firstName
+          }
+        }
+      `,
+      variables: { id: '1' },
+      data: { user: { __typename: 'User', id: '1', firstName: 'Cathaline' } },
+    });
+
+    const lastNames: (string | undefined)[] = [];
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1' },
+        returnPartialData: true,
+        onComplete: (data) => lastNames.push(data?.user?.lastName),
+      },
+    ]);
+
+    assert.equal(query.data?.user?.firstName, 'Cathaline');
+    assert.equal(query.data?.user?.lastName, undefined);
+    await query.promise;
+    assert.equal(query.data?.user?.lastName, 'McCoy');
+    assert.deepEqual(lastNames, [undefined, 'McCoy']);
+  });
+
   test('it returns error', async function (assert) {
     const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
       USER_INFO,
