@@ -91,6 +91,12 @@ export class QueryResource<
    */
   #inSetup = false;
 
+  /**
+   * Callbacks for setup replays, waiting for the runloop. A later emission
+   * flushes them first so callbacks always run in emission order.
+   */
+  #deferredCallbacks: (() => void)[] = [];
+
   /** @internal */
   setup(): void {
     this.#previousPositionalArgs = this.args.positional;
@@ -231,6 +237,9 @@ export class QueryResource<
     };
 
     if (!this.#inSetup) {
+      // The network can answer before the runloop tick a setup replay was
+      // handed to; run that replay first so callbacks keep emission order.
+      this.#flushDeferredCallbacks();
       invoke();
       return;
     }
@@ -242,12 +251,18 @@ export class QueryResource<
     // which would trip Ember's backtracking assertion. Hand just that replay to
     // the runloop; settled() still waits for it. Callbacks for later, async
     // emissions keep running synchronously, as they always have.
-    next(() => {
-      if (isDestroyed(this) || isDestroying(this)) {
-        return;
-      }
+    this.#deferredCallbacks.push(invoke);
+    next(() => this.#flushDeferredCallbacks());
+  }
 
-      invoke();
-    });
+  #flushDeferredCallbacks(): void {
+    const callbacks = this.#deferredCallbacks;
+    this.#deferredCallbacks = [];
+
+    if (isDestroyed(this) || isDestroying(this)) {
+      return;
+    }
+
+    callbacks.forEach((invoke) => invoke());
   }
 }

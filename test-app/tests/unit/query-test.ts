@@ -7,6 +7,7 @@ import { setOwner } from '@ember/owner';
 import type Owner from '@ember/owner';
 import {
   ApolloClient,
+  ApolloLink,
   InMemoryCache,
   type ErrorLike,
   type WatchQueryFetchPolicy,
@@ -17,6 +18,7 @@ import {
   type UserInfoQueryVariables,
 } from '../../app/mocks/handlers';
 import sinon from 'sinon';
+import { Observable } from 'rxjs';
 import { waitUntil } from '@ember/test-helpers';
 
 const USER_INFO = gql`
@@ -135,6 +137,62 @@ module('useQuery', function (hooks) {
     assert.equal(query.data?.user?.lastName, undefined);
     await query.promise;
     assert.equal(query.data?.user?.lastName, 'McCoy');
+    assert.deepEqual(lastNames, [undefined, 'McCoy']);
+  });
+
+  test('it calls onComplete for the cache replay before a network result that beats the runloop', async function (assert) {
+    // The network answers on a microtask, ahead of the runloop tick that the
+    // synchronous cache replay is handed to.
+    const microtaskLink = new ApolloLink(
+      () =>
+        new Observable<ApolloLink.Result>((observer) => {
+          void Promise.resolve().then(() => {
+            observer.next({
+              data: {
+                user: {
+                  __typename: 'User',
+                  id: '1',
+                  firstName: 'Cathaline',
+                  lastName: 'McCoy',
+                },
+              },
+            });
+            observer.complete();
+          });
+        })
+    );
+    const partialClient = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: microtaskLink,
+    });
+    setClient(ctx, partialClient);
+    partialClient.writeQuery({
+      query: gql`
+        query UserFirstName($id: ID!) {
+          user(id: $id) {
+            id
+            firstName
+          }
+        }
+      `,
+      variables: { id: '1' },
+      data: { user: { __typename: 'User', id: '1', firstName: 'Cathaline' } },
+    });
+
+    const lastNames: (string | undefined)[] = [];
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      {
+        variables: { id: '1' },
+        returnPartialData: true,
+        onComplete: (data) => lastNames.push(data?.user?.lastName),
+      },
+    ]);
+
+    await query.promise;
+    assert.equal(query.data?.user?.lastName, 'McCoy');
+    assert.deepEqual(lastNames, [undefined, 'McCoy']);
+    await query.settled();
     assert.deepEqual(lastNames, [undefined, 'McCoy']);
   });
 
