@@ -60,7 +60,7 @@
     "postcss-nested": "^7.0.2",
     "prettier": "^3.9.10",
     "prettier-plugin-ember-template-tag": "^2.1.8",
-    "qunit": "^2.26.0",
+    "qunit": "^3.0.0",
     "qunit-dom": "^3.6.0",
     "remark-autolink-headings": "^8.0.0",
     "remark-code-titles": "^0.1.2",

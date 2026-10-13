@@ -1,4 +1,5 @@
-import { graphql, delay, HttpResponse } from 'msw';
+import { delay, HttpResponse } from 'msw';
+import { graphql } from 'msw/graphql';
 
 type Maybe<T> = T | null;
 type Exact<T extends { [key: string]: unknown }> = {
@@ -62,59 +63,59 @@ const USERS: User[] = [
   },
 ];
 
-export const handlers = [
-  graphql.query<UserInfoQuery, UserInfoQueryVariables>(
-    'UserInfo',
-    async (req) => {
-      const user = USERS[Number(req.variables.id.charAt(0)) - 1];
+// Every test's HttpLink points here; msw 3 scopes GraphQL handlers to a URL.
+const api = graphql.link('/graphql');
 
-      if (user && req.variables.id.includes('with-error')) {
-        return HttpResponse.json({
-          errors: [
-            {
-              message: 'Data With Error',
-            },
-          ],
-          data: {
-            user: {
-              __typename: 'User',
-              ...user,
-            },
+export const handlers = [
+  api.query<UserInfoQuery, UserInfoQueryVariables>('UserInfo', async (req) => {
+    const user = USERS[Number(req.variables.id.charAt(0)) - 1];
+
+    if (user && req.variables.id.includes('with-error')) {
+      return HttpResponse.json({
+        errors: [
+          {
+            message: 'Data With Error',
           },
-        });
-      } else if (user && req.variables.id.includes('with-delay')) {
-        await delay(300);
-        return HttpResponse.json({
-          data: {
-            user: {
-              __typename: 'User',
-              ...user,
-            },
+        ],
+        data: {
+          user: {
+            __typename: 'User',
+            ...user,
           },
-        });
-      } else if (user) {
-        return HttpResponse.json({
-          data: {
-            user: {
-              __typename: 'User',
-              ...user,
-            },
+        },
+      });
+    } else if (user && req.variables.id.includes('with-delay')) {
+      await delay(300);
+      return HttpResponse.json({
+        data: {
+          user: {
+            __typename: 'User',
+            ...user,
           },
-        });
-      } else {
-        return HttpResponse.json({
-          errors: [
-            {
-              message: 'User not found',
-            },
-          ],
-        });
-      }
+        },
+      });
+    } else if (user) {
+      return HttpResponse.json({
+        data: {
+          user: {
+            __typename: 'User',
+            ...user,
+          },
+        },
+      });
+    } else {
+      return HttpResponse.json({
+        errors: [
+          {
+            message: 'User not found',
+          },
+        ],
+      });
     }
-  ),
+  }),
 
   // Capture a "Login" mutation
-  graphql.mutation('Login', (req) => {
+  api.mutation('Login', (req) => {
     const { username } = req.variables;
 
     if (username === 'non-existing') {
@@ -154,7 +155,7 @@ export const handlers = [
   }),
 
   // Handles a "GetUserInfo" query
-  graphql.query('GetUserInfo', async () => {
+  api.query('GetUserInfo', async () => {
     await delay(300);
     return HttpResponse.json({
       data: {
