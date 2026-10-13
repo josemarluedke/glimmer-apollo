@@ -22,7 +22,7 @@
   "devDependencies": {
     "@underline/eslint-config": "^0.16.0",
     "concurrently": "^10.0.6",
-    "lerna": "^10.1.0",
+    "lerna": "^10.1.1",
     "prettier": "^3.9.10",
     "prettier-plugin-ember-template-tag": "^2.1.8"
   },
