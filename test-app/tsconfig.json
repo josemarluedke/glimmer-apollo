@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/ember/tsconfig.json",
+  "extends": "@ember/app-tsconfig/tsconfig.json",
   "include": [
     "app", "tests", "types"
   ],
@@ -21,6 +21,13 @@
       can do the proper transformations on those files.
     */
     "allowImportingTsExtensions": true,
+
+    /**
+      @tsconfig/ember enabled this; its @ember/app-tsconfig successor does
+      not. Kept to preserve the previous strictness.
+    */
+    "noPropertyAccessFromIndexSignature": true,
+
     "paths": {
       "test-app/tests/*": [
         "./tests/*"

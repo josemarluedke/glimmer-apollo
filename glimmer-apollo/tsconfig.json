@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/ember/tsconfig.json",
+  "extends": "@ember/library-tsconfig/tsconfig.json",
   "include": ["src/**/*", "unpublished-development-types/**/*"],
   "compilerOptions": {
     "allowJs": true,
@@ -45,6 +45,18 @@
     */
     "allowImportingTsExtensions": true,
 
-    "types": ["ember-source/types"]
+    "types": ["ember-source/types"],
+
+    /**
+      @tsconfig/ember enabled this; its @ember/library-tsconfig successor
+      does not. Kept to preserve the previous strictness.
+    */
+    "noPropertyAccessFromIndexSignature": true,
+
+    /**
+      @ember/library-tsconfig turns declaration maps on; keep the published
+      package's declarations unchanged.
+    */
+    "declarationMap": false
   }
 }
