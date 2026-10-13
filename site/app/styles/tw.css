@@ -6,6 +6,9 @@
 @import '@fontsource/inter/700.css';
 @import '@fontsource/inter/800.css';
 
+/* Layout for docfy's code blocks (copy button, collapse, line highlights). */
+@import '@docfy/ember/code-block.css';
+
 @import 'tailwindcss' source('../../');
 
 /* Frontile's own components (ButtonGroup and Dropdown in DocfyCopyPage) build
@@ -529,7 +532,25 @@ html, body {
 
 }
 
-.remark-code-title + pre {
+.remark-code-title + pre,
+.remark-code-title + .docfy-code-block pre {
   @apply mt-0 rounded-t-none;
+}
+
+.remark-code-title + .docfy-code-block {
+  @apply mt-0;
+}
+
+/* ==========================================================================
+   Docfy Code Block
+   ========================================================================== */
+
+.docfy-code-block {
+  /* Matches Shiki's github-dark background so the collapse fade blends in. */
+  --docfy-code-block-background: #24292e;
+}
+
+.docfy-code-block__copy {
+  @apply z-10 rounded px-2 py-1 text-xs font-medium text-slate-300 bg-slate-800/80 border border-slate-600 hover:bg-slate-700 hover:text-white transition-colors;
 }
 

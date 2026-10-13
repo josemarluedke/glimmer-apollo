@@ -193,11 +193,11 @@ export default class DocfyCopyPage extends Component<DocfyCopyPageSignature> {
 
   <template>
     <div class="inline-flex" data-test-id="docfy-copy-page" ...attributes>
-      {{! ButtonGroup only binds isInGroup to its children, so appearance and
+      {{! ButtonGroup only binds isInGroup to its children, so variant and
           size are repeated on each button. }}
-      <ButtonGroup @appearance="outlined" @size="xs" as |g|>
+      <ButtonGroup @variant="outline" @size="xs" as |g|>
         <g.Button
-          @appearance="outlined"
+          @variant="outline"
           @size="xs"
           @onPress={{this.copyPage}}
           class="inline-flex items-center gap-1"
@@ -213,7 +213,7 @@ export default class DocfyCopyPage extends Component<DocfyCopyPageSignature> {
 
         <Dropdown as |d|>
           <d.Trigger
-            @appearance="outlined"
+            @variant="outline"
             @size="xs"
             @isInGroup={{true}}
             aria-label="More page actions"

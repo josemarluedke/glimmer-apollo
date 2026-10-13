@@ -5,8 +5,8 @@
     "overrides": {
       "ember-basic-dropdown": "^8.11.0",
       "ember-power-select": "^8.3.0",
-      "@frontile/core": "npm:@frontile/theme@0.17.1",
-      "@frontile/overlays": "0.17.1"
+      "@frontile/core": "npm:@frontile/theme@0.18.1",
+      "@frontile/overlays": "0.18.1"
     }
   },
   "scripts": {
