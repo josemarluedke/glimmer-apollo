@@ -525,6 +525,28 @@ module('useQuery', function (hooks) {
     assert.ok(query.data?.user, 'data should be present');
   });
 
+  test('result is the result object of Apollo Client', async function (assert) {
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      { variables: { id: '1' } },
+    ]);
+
+    assert.true(query.result.loading);
+    assert.strictEqual(query.result.dataState, 'empty');
+
+    await query.settled();
+
+    assert.false(query.result.loading);
+    assert.strictEqual(query.result.dataState, 'complete');
+    assert.strictEqual(query.result.networkStatus, query.networkStatus);
+    assert.strictEqual(query.result.data, query.data);
+
+    if (query.result.dataState === 'complete') {
+      // `dataState` narrows `data`: no optional chaining needed.
+      assert.strictEqual(query.result.data.user?.firstName, 'Cathaline');
+    }
+  });
+
   test('refetch() should work even when skip is true.', async function (assert) {
     const sandbox = sinon.createSandbox();
 
