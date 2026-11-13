@@ -119,6 +119,15 @@ export class QueryResource<
     return this.#result.current.networkStatus;
   }
 
+  /**
+   * The result as Apollo Client reports it, with the fields above plus
+   * `dataState`, which narrows `data`. While new variables load, this is the
+   * previous result with `loading: true`.
+   */
+  get result(): ObservableQuery.Result<MaybeMasked<TData>> {
+    return this.#result.current;
+  }
+
   promise!: Promise<void>;
 
   #subscription?: Subscription;

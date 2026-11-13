@@ -326,6 +326,20 @@ export default class Notes extends Component {
 }
 ```
 
+### `result`
+
+This property is the result object as Apollo Client reports it. It has `loading`, `error`, `data` and `networkStatus`, and also `dataState`.
+`dataState` is `'empty'`, `'partial'`, `'streaming'` or `'complete'`, and TypeScript narrows `data` when you compare it.
+
+```ts
+get firstNote() {
+  const { result } = this.notes;
+  return result.dataState === 'complete' ? result.data.notes[0] : undefined;
+}
+```
+
+While new variables load, `result` is the previous result with `loading: true`.
+
 ### `promise`
 
 This property holds a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves when the query finishes fetching the data from the network.
