@@ -64,11 +64,24 @@ export type PartialQueryResource<
   TVariables extends OperationVariables = OperationVariables,
 > = QueryResource<TData, TVariables, DataValue.Partial<MaybeMasked<TData>>>;
 
-interface QueryState<TResultData> {
-  loading: boolean;
-  error: ErrorLike | undefined;
-  data: TResultData | undefined;
-  networkStatus: NetworkStatus;
+/**
+ * The state of one observable. `start` is what it began with: setup() runs
+ * inside the resource's own computation, where a tracked write would change
+ * state the running render may already have used. Every reader goes through
+ * that computation, so a plain field that only changes there is always
+ * current. `latest` is the last result that arrived afterwards.
+ */
+class ObservedResult<TResult> {
+  @tracked latest?: TResult;
+  start: TResult;
+
+  constructor(start: TResult) {
+    this.start = start;
+  }
+
+  get current(): TResult {
+    return this.latest ?? this.start;
+  }
 }
 
 export class QueryResource<
@@ -80,49 +93,30 @@ export class QueryResource<
   TVariables,
   TemplateArgs<QueryPositionalArgs<TData, TVariables>>
 > {
-  /**
-   * The state the current observable started with. setup() runs inside the
-   * resource's own computation, where a tracked write would change state the
-   * running render may already have used. Every reader goes through that
-   * computation, so a plain field that only changes there is always current.
-   */
-  #initial: QueryState<TResultData> = {
-    loading: false,
-    error: undefined,
+  #result = new ObservedResult<ObservableQuery.Result<MaybeMasked<TData>>>({
     data: undefined,
+    dataState: 'empty',
+    loading: false,
     networkStatus: NetworkStatus.loading,
-  };
-
-  /** Counts observables, so a result is only read for the one it came from. */
-  #generation = 0;
-
-  /** The last result that arrived after setup(), outside the computation. */
-  @tracked private emitted?: {
-    generation: number;
-    state: QueryState<TResultData>;
-  };
-
-  get #state(): QueryState<TResultData> {
-    const emitted = this.emitted;
-    return emitted?.generation === this.#generation
-      ? emitted.state
-      : this.#initial;
-  }
+    partial: true,
+  });
 
   get loading(): boolean {
-    return this.#state.loading;
+    return this.#result.current.loading;
   }
 
   get error(): ErrorLike | undefined {
-    return this.#state.error;
+    return this.#result.current.error;
   }
 
   get data(): TResultData | undefined {
-    return this.#state.data;
+    // Apollo types every result's data as complete | partial; the overload
+    // that built this resource decided which of the two TResultData is.
+    return this.#result.current.data as TResultData | undefined;
   }
 
   get networkStatus(): NetworkStatus {
-    return this.#state.networkStatus;
+    return this.#result.current.networkStatus;
   }
 
   promise!: Promise<void>;
@@ -170,17 +164,19 @@ export class QueryResource<
     const fetchPolicy = isSkipped ? 'standby' : options.fetchPolicy;
 
     // The previous result stays readable until the new observable answers.
-    const previous = this.#state;
-    const generation = ++this.#generation;
+    const previous = this.#result.current;
+    const observed = new ObservedResult(
+      isSkipped || fetchPolicy === 'standby'
+        ? previous
+        : { ...previous, loading: true },
+    );
+    this.#result = observed;
 
     if (isSkipped || fetchPolicy === 'standby') {
-      this.#initial = previous;
       if (firstResolve) {
         firstResolve();
         firstResolve = undefined;
       }
-    } else {
-      this.#initial = { ...previous, loading: true };
     }
 
     const observable = client.watchQuery<TData, TVariables>({
@@ -206,7 +202,7 @@ export class QueryResource<
     // keeping route model hooks and await patterns working correctly.
     this.#inSetup = true;
     this.#subscription = observable.subscribe((result) => {
-      this.#onComplete(result, generation);
+      this.#onComplete(result, observed);
       if (firstResolve && !result.loading) {
         firstResolve();
         firstResolve = undefined;
@@ -249,38 +245,28 @@ export class QueryResource<
 
   #onComplete(
     result: ObservableQuery.Result<MaybeMasked<TData>>,
-    generation: number,
+    observed: ObservedResult<ObservableQuery.Result<MaybeMasked<TData>>>,
   ): void {
-    const { loading, error, data, networkStatus } = result;
-    // Apollo types every result's data as complete | partial; the overload
-    // that built this resource decided which of the two TResultData is.
-    const state = {
-      loading,
-      error,
-      data: data as TResultData | undefined,
-      networkStatus,
-    };
-
     // Apollo Client 4 replays the current cache result synchronously from
     // subscribe(), inside the resource's computation: that result is where
     // this observable starts. Later results arrive outside it.
     if (this.#inSetup) {
-      this.#initial = state;
+      observed.start = result;
     } else {
-      this.emitted = { generation, state };
+      observed.latest = result;
     }
 
-    if (error) {
+    if (result.error) {
       if (typeof this.#firstPromiseReject === 'function') {
         this.#firstPromiseReject();
         this.#firstPromiseReject = undefined;
       }
     }
 
-    this.#handleOnCompleteOrOnError(state);
+    this.#handleOnCompleteOrOnError();
   }
 
-  #handleOnCompleteOrOnError({ data, error }: QueryState<TResultData>): void {
+  #handleOnCompleteOrOnError(): void {
     // We want to avoid calling the callbacks when this is destroyed.
     // If the resource is destroyed, the callback context might not be defined anymore.
     if (isDestroyed(this) || isDestroying(this)) {
@@ -289,6 +275,7 @@ export class QueryResource<
 
     const [, options] = this.args.positional;
     const { onComplete, onError } = options || {};
+    const { data, error } = this;
     const invoke = (): void => {
       if (onComplete && !error) {
         // args keep the default options type so a complete resource stays
