@@ -153,10 +153,13 @@ export class QueryResource<
     return this.result.error;
   }
 
-  /** The data of `result`, or the previous data while it loads. */
+  /**
+   * The data of `result`, or the previous data while it loads or while the
+   * query is skipped.
+   */
   get data(): TResultData | undefined {
     const { data, loading } = this.result;
-    return data === undefined && loading
+    return data === undefined && (loading || this.#isSkipped)
       ? this.previousData
       : (data as TResultData | undefined);
   }
@@ -166,6 +169,13 @@ export class QueryResource<
   }
 
   promise!: Promise<void>;
+
+  /** refetch() takes a skipped query out of standby, so this is read live. */
+  get #isSkipped(): boolean {
+    return this.#watched?.options.fetchPolicy === 'standby';
+  }
+
+  #watched?: ObservableQuery<TData, TVariables>;
 
   #subscription?: Subscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
@@ -231,6 +241,7 @@ export class QueryResource<
     } as ApolloClient.WatchQueryOptions<TData, TVariables>);
 
     this._setObservable(observable);
+    this.#watched = observable;
 
     const observed = new Observed(
       snapshot(this.#observed.current, observable.getCurrentResult()),

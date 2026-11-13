@@ -215,7 +215,7 @@ The `ssr` option allows disabling fetching of the query when running in SSR with
 
 The query will skip the execution while the `skip` option is true.
 
-A skipped query has no `data`. The data that it had is available as `previousData`.
+A query that had data before it was skipped keeps that `data`. `result.data` is `undefined` for a skipped query.
 
 ### `clientId`
 
@@ -340,7 +340,7 @@ get firstNote() {
 }
 ```
 
-`result.data` is `undefined` while new variables load. The `data` property of the resource keeps the previous data during that time, so a list does not become empty between two searches.
+`result.data` is `undefined` while new variables load and while the query is skipped. The `data` property of the resource keeps the previous data during that time, so a list does not become empty between two searches.
 
 ### `previousData`
 

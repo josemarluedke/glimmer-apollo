@@ -460,10 +460,10 @@ module('useQuery', function (hooks) {
 
     await query.settled();
     assert.equal(query.loading, false);
-    // A skipped query has no data, as in Apollo Client. The data it had is
-    // still there as previousData.
-    assert.equal(query.data, undefined);
-    assert.deepEqual(query.previousData, {
+    // Apollo Client reports no data for a skipped query. The resource keeps
+    // showing the data it had.
+    assert.equal(query.result.data, undefined);
+    assert.deepEqual(query.data, {
       user: {
         __typename: 'User',
         firstName: 'Cathaline',
