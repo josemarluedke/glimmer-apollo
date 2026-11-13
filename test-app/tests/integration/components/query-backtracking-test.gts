@@ -119,8 +119,8 @@ class UserPage extends Component<{ Args: { switcher: UserSwitcher } }> {
 
   // Reads the data before anything below reads the query, e.g. to fetch the
   // next page once the current one has rendered.
-  readData = modifier(() => {
-    void this.query.data;
+  readData = modifier((element: HTMLElement) => {
+    element.dataset['loaded'] = String(this.query.data !== undefined);
   });
 
   <template>
