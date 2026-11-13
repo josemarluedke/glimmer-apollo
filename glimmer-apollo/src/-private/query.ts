@@ -64,6 +64,26 @@ export type PartialQueryResource<
   TVariables extends OperationVariables = OperationVariables,
 > = QueryResource<TData, TVariables, DataValue.Partial<MaybeMasked<TData>>>;
 
+/**
+ * The state of one observable. `start` is what it began with: setup() runs
+ * inside the resource's own computation, where a tracked write would change
+ * state the running render may already have used. Every reader goes through
+ * that computation, so a plain field that only changes there is always
+ * current. `latest` is the last result that arrived afterwards.
+ */
+class ObservedResult<TResult> {
+  @tracked latest?: TResult;
+  start: TResult;
+
+  constructor(start: TResult) {
+    this.start = start;
+  }
+
+  get current(): TResult {
+    return this.latest ?? this.start;
+  }
+}
+
 export class QueryResource<
   TData,
   TVariables extends OperationVariables = OperationVariables,
@@ -73,11 +93,33 @@ export class QueryResource<
   TVariables,
   TemplateArgs<QueryPositionalArgs<TData, TVariables>>
 > {
-  @tracked loading = false;
-  @tracked error?: ErrorLike;
-  @tracked data: TResultData | undefined;
-  @tracked networkStatus: NetworkStatus = NetworkStatus.loading;
-  @tracked promise!: Promise<void>;
+  #result = new ObservedResult<ObservableQuery.Result<MaybeMasked<TData>>>({
+    data: undefined,
+    dataState: 'empty',
+    loading: false,
+    networkStatus: NetworkStatus.loading,
+    partial: true,
+  });
+
+  get loading(): boolean {
+    return this.#result.current.loading;
+  }
+
+  get error(): ErrorLike | undefined {
+    return this.#result.current.error;
+  }
+
+  get data(): TResultData | undefined {
+    // Apollo types every result's data as complete | partial; the overload
+    // that built this resource decided which of the two TResultData is.
+    return this.#result.current.data as TResultData | undefined;
+  }
+
+  get networkStatus(): NetworkStatus {
+    return this.#result.current.networkStatus;
+  }
+
+  promise!: Promise<void>;
 
   #subscription?: Subscription;
   #previousPositionalArgs: typeof this.args.positional | undefined;
@@ -121,13 +163,20 @@ export class QueryResource<
     const isSkipped = options.skip === true;
     const fetchPolicy = isSkipped ? 'standby' : options.fetchPolicy;
 
+    // The previous result stays readable until the new observable answers.
+    const previous = this.#result.current;
+    const observed = new ObservedResult(
+      isSkipped || fetchPolicy === 'standby'
+        ? previous
+        : { ...previous, loading: true },
+    );
+    this.#result = observed;
+
     if (isSkipped || fetchPolicy === 'standby') {
       if (firstResolve) {
         firstResolve();
         firstResolve = undefined;
       }
-    } else {
-      this.loading = true;
     }
 
     const observable = client.watchQuery<TData, TVariables>({
@@ -153,7 +202,7 @@ export class QueryResource<
     // keeping route model hooks and await patterns working correctly.
     this.#inSetup = true;
     this.#subscription = observable.subscribe((result) => {
-      this.#onComplete(result);
+      this.#onComplete(result, observed);
       if (firstResolve && !result.loading) {
         firstResolve();
         firstResolve = undefined;
@@ -194,17 +243,20 @@ export class QueryResource<
     return settled(this.promise);
   }
 
-  #onComplete(result: ObservableQuery.Result<MaybeMasked<TData>>): void {
-    const { loading, error, data, networkStatus } = result;
+  #onComplete(
+    result: ObservableQuery.Result<MaybeMasked<TData>>,
+    observed: ObservedResult<ObservableQuery.Result<MaybeMasked<TData>>>,
+  ): void {
+    // Apollo Client 4 replays the current cache result synchronously from
+    // subscribe(), inside the resource's computation: that result is where
+    // this observable starts. Later results arrive outside it.
+    if (this.#inSetup) {
+      observed.start = result;
+    } else {
+      observed.latest = result;
+    }
 
-    this.loading = loading;
-    // Apollo types every result's data as complete | partial; the overload
-    // that built this resource decided which of the two TResultData is.
-    this.data = data as TResultData | undefined;
-    this.networkStatus = networkStatus;
-    this.error = error;
-
-    if (error) {
+    if (result.error) {
       if (typeof this.#firstPromiseReject === 'function') {
         this.#firstPromiseReject();
         this.#firstPromiseReject = undefined;
@@ -224,7 +276,6 @@ export class QueryResource<
     const [, options] = this.args.positional;
     const { onComplete, onError } = options || {};
     const { data, error } = this;
-
     const invoke = (): void => {
       if (onComplete && !error) {
         // args keep the default options type so a complete resource stays
