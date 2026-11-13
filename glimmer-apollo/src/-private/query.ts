@@ -64,6 +64,29 @@ export type PartialQueryResource<
   TVariables extends OperationVariables = OperationVariables,
 > = QueryResource<TData, TVariables, DataValue.Partial<MaybeMasked<TData>>>;
 
+/** A result as Apollo Client reports it, with the data it replaced. */
+interface Snapshot<TData> {
+  result: ObservableQuery.Result<MaybeMasked<TData>>;
+  previousData: MaybeMasked<TData> | undefined;
+}
+
+/** Same rule as Apollo's React `useQuery`: the last data before it changed. */
+function snapshot<TData>(
+  previous: Snapshot<TData> | undefined,
+  result: ObservableQuery.Result<MaybeMasked<TData>>,
+): Snapshot<TData> {
+  const replaced =
+    previous?.result.data !== undefined &&
+    !equal(previous.result.data, result.data);
+
+  return {
+    result,
+    previousData: (replaced
+      ? previous.result.data
+      : previous?.previousData) as MaybeMasked<TData> | undefined,
+  };
+}
+
 /**
  * The state of one observable. `start` is what it began with: setup() runs
  * inside the resource's own computation, where a tracked write would change
@@ -71,15 +94,15 @@ export type PartialQueryResource<
  * that computation, so a plain field that only changes there is always
  * current. `latest` is the last result that arrived afterwards.
  */
-class ObservedResult<TResult> {
-  @tracked latest?: TResult;
-  start: TResult;
+class Observed<TData> {
+  @tracked latest?: Snapshot<TData>;
+  start: Snapshot<TData>;
 
-  constructor(start: TResult) {
+  constructor(start: Snapshot<TData>) {
     this.start = start;
   }
 
-  get current(): TResult {
+  get current(): Snapshot<TData> {
     return this.latest ?? this.start;
   }
 }
@@ -93,39 +116,53 @@ export class QueryResource<
   TVariables,
   TemplateArgs<QueryPositionalArgs<TData, TVariables>>
 > {
-  #result = new ObservedResult<ObservableQuery.Result<MaybeMasked<TData>>>({
-    data: undefined,
-    dataState: 'empty',
-    loading: false,
-    networkStatus: NetworkStatus.loading,
-    partial: true,
+  #observed = new Observed<TData>({
+    result: {
+      data: undefined,
+      dataState: 'empty',
+      loading: false,
+      networkStatus: NetworkStatus.loading,
+      partial: true,
+    },
+    previousData: undefined,
   });
 
-  get loading(): boolean {
-    return this.#result.current.loading;
-  }
-
-  get error(): ErrorLike | undefined {
-    return this.#result.current.error;
-  }
-
-  get data(): TResultData | undefined {
-    // Apollo types every result's data as complete | partial; the overload
-    // that built this resource decided which of the two TResultData is.
-    return this.#result.current.data as TResultData | undefined;
-  }
-
-  get networkStatus(): NetworkStatus {
-    return this.#result.current.networkStatus;
+  /**
+   * The result as Apollo Client reports it. `dataState` narrows its `data`,
+   * which is `undefined` while new variables load.
+   */
+  get result(): ObservableQuery.Result<MaybeMasked<TData>> {
+    return this.#observed.current.result;
   }
 
   /**
-   * The result as Apollo Client reports it, with the fields above plus
-   * `dataState`, which narrows `data`. While new variables load, this is the
-   * previous result with `loading: true`.
+   * The last `data` before it changed, as in Apollo's React `useQuery`. Kept
+   * across a change of variables.
    */
-  get result(): ObservableQuery.Result<MaybeMasked<TData>> {
-    return this.#result.current;
+  get previousData(): TResultData | undefined {
+    // Apollo types every result's data as complete | partial; the overload
+    // that built this resource decided which of the two TResultData is.
+    return this.#observed.current.previousData as TResultData | undefined;
+  }
+
+  get loading(): boolean {
+    return this.result.loading;
+  }
+
+  get error(): ErrorLike | undefined {
+    return this.result.error;
+  }
+
+  /** The data of `result`, or the previous data while it loads. */
+  get data(): TResultData | undefined {
+    const { data, loading } = this.result;
+    return data === undefined && loading
+      ? this.previousData
+      : (data as TResultData | undefined);
+  }
+
+  get networkStatus(): NetworkStatus {
+    return this.result.networkStatus;
   }
 
   promise!: Promise<void>;
@@ -172,15 +209,6 @@ export class QueryResource<
     const isSkipped = options.skip === true;
     const fetchPolicy = isSkipped ? 'standby' : options.fetchPolicy;
 
-    // The previous result stays readable until the new observable answers.
-    const previous = this.#result.current;
-    const observed = new ObservedResult(
-      isSkipped || fetchPolicy === 'standby'
-        ? previous
-        : { ...previous, loading: true },
-    );
-    this.#result = observed;
-
     if (isSkipped || fetchPolicy === 'standby') {
       if (firstResolve) {
         firstResolve();
@@ -203,6 +231,11 @@ export class QueryResource<
     } as ApolloClient.WatchQueryOptions<TData, TVariables>);
 
     this._setObservable(observable);
+
+    const observed = new Observed(
+      snapshot(this.#observed.current, observable.getCurrentResult()),
+    );
+    this.#observed = observed;
 
     // Apollo Client 4: errors arrive via result.error, not the error callback.
     // With notifyOnNetworkStatusChange defaulting to true in AC4, the observable
@@ -254,15 +287,15 @@ export class QueryResource<
 
   #onComplete(
     result: ObservableQuery.Result<MaybeMasked<TData>>,
-    observed: ObservedResult<ObservableQuery.Result<MaybeMasked<TData>>>,
+    observed: Observed<TData>,
   ): void {
     // Apollo Client 4 replays the current cache result synchronously from
     // subscribe(), inside the resource's computation: that result is where
     // this observable starts. Later results arrive outside it.
     if (this.#inSetup) {
-      observed.start = result;
+      observed.start = snapshot(observed.start, result);
     } else {
-      observed.latest = result;
+      observed.latest = snapshot(observed.current, result);
     }
 
     if (result.error) {
@@ -284,7 +317,7 @@ export class QueryResource<
 
     const [, options] = this.args.positional;
     const { onComplete, onError } = options || {};
-    const { data, error } = this;
+    const { data, error } = this.result;
     const invoke = (): void => {
       if (onComplete && !error) {
         // args keep the default options type so a complete resource stays

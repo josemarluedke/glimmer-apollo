@@ -460,7 +460,10 @@ module('useQuery', function (hooks) {
 
     await query.settled();
     assert.equal(query.loading, false);
-    assert.deepEqual(query.data, {
+    // A skipped query has no data, as in Apollo Client. The data it had is
+    // still there as previousData.
+    assert.equal(query.data, undefined);
+    assert.deepEqual(query.previousData, {
       user: {
         __typename: 'User',
         firstName: 'Cathaline',
@@ -523,6 +526,37 @@ module('useQuery', function (hooks) {
       'loading should be false after promise resolves'
     );
     assert.ok(query.data?.user, 'data should be present');
+  });
+
+  test('data keeps the previous value while new variables load', async function (assert) {
+    class Obj {
+      @tracked id = '1';
+    }
+    const options = new Obj();
+
+    const query = useQuery<UserInfoQuery, UserInfoQueryVariables>(ctx, () => [
+      USER_INFO,
+      { variables: { id: options.id } },
+    ]);
+
+    await query.settled();
+    const first = query.data;
+    assert.strictEqual(first?.user?.firstName, 'Cathaline');
+    assert.strictEqual(query.previousData, undefined);
+
+    options.id = '2';
+
+    assert.true(query.loading);
+    assert.strictEqual(query.result.data, undefined);
+    assert.strictEqual(query.result.dataState, 'empty');
+    assert.strictEqual(query.data, first);
+    assert.strictEqual(query.previousData, first);
+
+    await query.settled();
+
+    assert.strictEqual(query.data?.user?.firstName, 'Joth');
+    assert.strictEqual(query.result.data, query.data);
+    assert.strictEqual(query.previousData, first);
   });
 
   test('result is the result object of Apollo Client', async function (assert) {

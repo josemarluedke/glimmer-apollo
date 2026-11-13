@@ -215,6 +215,8 @@ The `ssr` option allows disabling fetching of the query when running in SSR with
 
 The query will skip the execution while the `skip` option is true.
 
+A skipped query has no `data`. The data that it had is available as `previousData`.
+
 ### `clientId`
 
 This option specifies which Apollo Client should be used for the given query. Glimmer Apollo supports defining multiple Apollo Clients that are distinguished by a custom identifier while setting the client to Glimmer Apollo.
@@ -338,7 +340,11 @@ get firstNote() {
 }
 ```
 
-While new variables load, `result` is the previous result with `loading: true`.
+`result.data` is `undefined` while new variables load. The `data` property of the resource keeps the previous data during that time, so a list does not become empty between two searches.
+
+### `previousData`
+
+This property holds the last `data` before it changed, as in `useQuery` of Apollo Client for React. It stays when the variables change and when the query is skipped.
 
 ### `promise`
 
